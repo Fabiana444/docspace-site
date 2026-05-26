@@ -206,21 +206,41 @@
 
         // 2. CARREGAR MENUS BASEADO EM PERMISSÃO
         async function loadMenus(userId) {
-            // Busca quais ambientes o usuário pode ver
-            const { data: access } = await _supabase.from('user_access').select('environments(id, name, slug)').eq('user_id', userId);
-            
-            if (access) {
-                envMenu.innerHTML = '<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold px-3 mb-2">Seus Ambientes</p>';
-                access.forEach(item => {
-                    const env = item.environments;
-                    const btn = document.createElement('button');
-                    btn.className = "sidebar-item w-full flex items-center gap-3 p-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition mb-1";
-                    btn.innerHTML = `<i class="lucide-folder w-4 h-4"></i> <span>${env.name}</span>`;
-                    btn.onclick = () => loadContent(env.id, env.name);
-                    envMenu.appendChild(btn);
-                });
+    console.log("Tentando carregar menus para o usuário:", userId);
+    
+    // Consulta simplificada para evitar erros de relacionamento
+    const { data: access, error } = await _supabase
+        .from('user_access')
+        .select('env_id, environments(id, name, slug)')
+        .eq('user_id', userId);
+
+    if (error) {
+        console.error("Erro ao buscar acessos:", error);
+        return;
+    }
+
+    console.log("Ambientes encontrados:", access);
+
+    if (access && access.length > 0) {
+        envMenu.innerHTML = '<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold px-3 mb-4">Seus Ambientes</p>';
+        access.forEach(item => {
+            const env = item.environments;
+            if (env) {
+                const btn = document.createElement('button');
+                btn.className = "sidebar-item w-full flex items-center gap-3 p-3.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all mb-1 group";
+                btn.innerHTML = `
+                    <div class="w-2 h-2 rounded-full bg-slate-600 group-hover:bg-indigo-500"></div>
+                    <span class="text-sm font-medium">${env.name}</span>
+                `;
+                btn.onclick = () => loadContent(env.id, env.name);
+                envMenu.appendChild(btn);
             }
-        }
+        });
+    } else {
+        console.warn("Nenhum acesso vinculado a este ID de usuário no banco de dados.");
+        envMenu.innerHTML = '<p class="text-xs text-slate-500 px-3">Nenhum ambiente liberado.</p>';
+    }
+}
 
         // 3. CARREGAR CONTEÚDO DO AMBIENTE (SINGLE PAGE)
         async function loadContent(envId, envName) {
