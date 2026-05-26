@@ -206,42 +206,52 @@
 
         // 2. CARREGAR MENUS BASEADO EM PERMISSÃO
         async function loadMenus(userId) {
-    console.log("Tentando carregar menus para o usuário:", userId);
+    console.log("Iniciando carga de menus...");
     
-    // Consulta simplificada para evitar erros de relacionamento
-    const { data: access, error } = await _supabase
+    // Passo A: Pega apenas os IDs dos ambientes que eu tenho acesso
+    const { data: myAccess, error: accessError } = await _supabase
         .from('user_access')
-        .select('env_id, environments(id, name, slug)')
+        .select('env_id')
         .eq('user_id', userId);
 
-    if (error) {
-        console.error("Erro ao buscar acessos:", error);
+    if (accessError) {
+        console.error("Erro na tabela user_access:", accessError);
         return;
     }
 
-    console.log("Ambientes encontrados:", access);
+    const envIds = myAccess.map(a => a.env_id);
+    console.log("IDs de ambientes autorizados:", envIds);
 
-    if (access && access.length > 0) {
+    if (envIds.length > 0) {
+        // Passo B: Pega os detalhes desses ambientes na outra tabela
+        const { data: envs, error: envError } = await _supabase
+            .from('environments')
+            .select('*')
+            .in('id', envIds);
+
+        if (envError) {
+            console.error("Erro na tabela environments:", envError);
+            return;
+        }
+
+        console.log("Dados dos ambientes recebidos:", envs);
+
         envMenu.innerHTML = '<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold px-3 mb-4">Seus Ambientes</p>';
-        access.forEach(item => {
-            const env = item.environments;
-            if (env) {
-                const btn = document.createElement('button');
-                btn.className = "sidebar-item w-full flex items-center gap-3 p-3.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all mb-1 group";
-                btn.innerHTML = `
-                    <div class="w-2 h-2 rounded-full bg-slate-600 group-hover:bg-indigo-500"></div>
-                    <span class="text-sm font-medium">${env.name}</span>
-                `;
-                btn.onclick = () => loadContent(env.id, env.name);
-                envMenu.appendChild(btn);
-            }
+        envs.forEach(env => {
+            const btn = document.createElement('button');
+            btn.className = "sidebar-item w-full flex items-center gap-3 p-3.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all mb-1 group";
+            btn.innerHTML = `
+                <div class="w-2 h-2 rounded-full bg-slate-600 group-hover:bg-indigo-500"></div>
+                <span class="text-sm font-medium">${env.name}</span>
+            `;
+            btn.onclick = () => loadContent(env.id, env.name);
+            envMenu.appendChild(btn);
         });
     } else {
-        console.warn("Nenhum acesso vinculado a este ID de usuário no banco de dados.");
-        envMenu.innerHTML = '<p class="text-xs text-slate-500 px-3">Nenhum ambiente liberado.</p>';
+        envMenu.innerHTML = '<p class="text-xs text-slate-500 px-3">Aguardando liberação de acesso...</p>';
     }
 }
-
+        
         // 3. CARREGAR CONTEÚDO DO AMBIENTE (SINGLE PAGE)
         async function loadContent(envId, envName) {
             contentArea.innerHTML = `<div class="animate-pulse text-slate-500">Carregando conteúdo de ${envName}...</div>`;
