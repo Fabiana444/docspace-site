@@ -21,21 +21,47 @@
 <body>
 
     <!-- TELA DE LOGIN (Aparece se não estiver logado) -->
-    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-[#020617]">
-        <div class="glass p-8 rounded-2xl w-full max-w-md text-center">
-            <div class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center">
-                <i class="lucide-lock text-white w-8 h-8"></i>
+    <!-- TELA DE LOGIN & SOLICITAÇÃO -->
+<div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-[#020617] p-4">
+    <div class="glass p-8 rounded-2xl w-full max-w-md">
+        
+        <!-- ABA DE SELEÇÃO -->
+        <div class="flex mb-8 bg-slate-900/50 p-1 rounded-xl">
+            <button onclick="toggleAuthMode('login')" id="btn-tab-login" class="flex-1 py-2 rounded-lg bg-indigo-600 text-white text-sm font-bold transition">Entrar</button>
+            <button onclick="toggleAuthMode('request')" id="btn-tab-request" class="flex-1 py-2 rounded-lg text-slate-400 text-sm font-bold transition">Solicitar Acesso</button>
+        </div>
+
+        <!-- FORMULÁRIO DE LOGIN -->
+        <div id="form-login" class="space-y-4">
+            <div class="text-center mb-6">
+                <h1 class="text-2xl font-bold">Bem-vindo ao DocSpace</h1>
+                <p class="text-slate-400 text-sm">Acesse sua central de inteligência.</p>
             </div>
-            <h1 class="text-2xl font-bold mb-2">Bem-vindo ao DocSpace</h1>
-            <p class="text-slate-400 mb-8 text-sm">Insira suas credenciais para acessar seus ambientes.</p>
             <form id="login-form" class="space-y-4">
                 <input type="email" id="email" placeholder="E-mail" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 focus:border-indigo-500 outline-none transition" required>
                 <input type="password" id="password" placeholder="Senha" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 focus:border-indigo-500 outline-none transition" required>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 p-3 rounded-xl font-bold transition shadow-lg shadow-indigo-500/20">Entrar na Plataforma</button>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 p-3 rounded-xl font-bold transition shadow-lg shadow-indigo-500/20">Entrar</button>
             </form>
-            <p id="login-error" class="text-red-400 mt-4 text-sm hidden"></p>
         </div>
+
+        <!-- FORMULÁRIO DE SOLICITAÇÃO (ESCONDIDO) -->
+        <div id="form-request" class="space-y-4 hidden">
+            <div class="text-center mb-6">
+                <h1 class="text-2xl font-bold">Solicite seu Acesso</h1>
+                <p class="text-slate-400 text-sm">Preencha os dados para análise do perfil.</p>
+            </div>
+            <form id="request-access-form" class="space-y-3">
+                <input type="text" id="req-name" placeholder="Nome Completo" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none" required>
+                <input type="email" id="req-email" placeholder="E-mail Corporativo" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none" required>
+                <input type="url" id="req-linkedin" placeholder="Link do seu LinkedIn" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
+                <input type="text" id="req-company" placeholder="Empresa / Cargo" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
+                <button type="submit" class="w-full border border-indigo-500 text-indigo-400 hover:bg-indigo-500 hover:text-white p-3 rounded-xl font-bold transition">Enviar Solicitação</button>
+            </form>
+        </div>
+
+        <p id="auth-message" class="text-center mt-6 text-sm hidden"></p>
     </div>
+</div>
 
     <!-- ESTRUTURA PRINCIPAL (Escondida até logar) -->
     <div id="main-app" class="flex h-screen hidden">
