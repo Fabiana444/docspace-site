@@ -22,6 +22,7 @@
 
     <!-- TELA DE LOGIN (Aparece se não estiver logado) -->
     <!-- TELA DE LOGIN & SOLICITAÇÃO -->
+<!-- TELA DE LOGIN & SOLICITAÇÃO (VERSÃO REFINADA) -->
 <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-[#020617] p-4">
     <div class="glass p-8 rounded-2xl w-full max-w-md">
         
@@ -34,8 +35,8 @@
         <!-- FORMULÁRIO DE LOGIN -->
         <div id="form-login" class="space-y-4">
             <div class="text-center mb-6">
-                <h1 class="text-2xl font-bold">Bem-vindo ao DocSpace</h1>
-                <p class="text-slate-400 text-sm">Acesse sua central de inteligência.</p>
+                <h1 class="text-2xl font-bold">Acesse sua Central</h1>
+                <p class="text-slate-400 text-sm">Seu conhecimento, organizado.</p>
             </div>
             <form id="login-form" class="space-y-4">
                 <input type="email" id="email" placeholder="E-mail" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 focus:border-indigo-500 outline-none transition" required>
@@ -43,6 +44,25 @@
                 <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 p-3 rounded-xl font-bold transition shadow-lg shadow-indigo-500/20">Entrar</button>
             </form>
         </div>
+
+        <!-- FORMULÁRIO DE SOLICITAÇÃO (ESCONDIDO) -->
+        <div id="form-request" class="space-y-4 hidden">
+            <div class="text-center mb-6">
+                <h1 class="text-2xl font-bold">Peça seu Convite</h1>
+                <p class="text-slate-400 text-sm">Preencha os dados para análise do perfil.</p>
+            </div>
+            <form id="request-access-form" class="space-y-3">
+                <input type="text" id="req-name" placeholder="Seu nome completo" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none" required>
+                <input type="email" id="req-email" placeholder="Seu melhor e-mail" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none" required>
+                <input type="url" id="req-linkedin" placeholder="Ex: https://linkedin.com/in/seuperfil" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
+                <input type="text" id="req-company" placeholder="Empresa ou área de atuação (Opcional)" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
+                <button type="submit" class="w-full border border-indigo-500 text-indigo-400 hover:bg-indigo-500 hover:text-white p-3 rounded-xl font-bold transition">Enviar Solicitação</button>
+            </form>
+        </div>
+
+        <p id="auth-message" class="text-center mt-6 text-sm hidden"></p>
+    </div>
+</div>
 
         <!-- FORMULÁRIO DE SOLICITAÇÃO (ESCONDIDO) -->
         <div id="form-request" class="space-y-4 hidden">
