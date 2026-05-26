@@ -208,6 +208,40 @@
             const { data: { user } } = await _supabase.auth.getUser();
             if (user) initApp(user);
         };
+
+        // Alternar entre Login e Solicitação
+function toggleAuthMode(mode) {
+    const isLogin = mode === 'login';
+    document.getElementById('form-login').classList.toggle('hidden', !isLogin);
+    document.getElementById('form-request').classList.toggle('hidden', isLogin);
+    
+    // UI Feedback nos botões
+    document.getElementById('btn-tab-login').className = isLogin ? 'flex-1 py-2 rounded-lg bg-indigo-600 text-white text-sm font-bold transition' : 'flex-1 py-2 rounded-lg text-slate-400 text-sm font-bold transition';
+    document.getElementById('btn-tab-request').className = !isLogin ? 'flex-1 py-2 rounded-lg bg-indigo-600 text-white text-sm font-bold transition' : 'flex-1 py-2 rounded-lg text-slate-400 text-sm font-bold transition';
+}
+
+// Enviar Solicitação de Acesso
+document.getElementById('request-access-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('auth-message');
+    
+    const { error } = await _supabase.from('access_requests').insert({
+        full_name: document.getElementById('req-name').value,
+        email: document.getElementById('req-email').value,
+        linkedin_url: document.getElementById('req-linkedin').value,
+        company: document.getElementById('req-company').value
+    });
+
+    if (error) {
+        msg.innerText = "Erro ao enviar. Verifique se o e-mail já foi solicitado.";
+        msg.className = "text-center mt-6 text-sm text-red-400";
+    } else {
+        msg.innerText = "Solicitação enviada! Analisaremos seu perfil em breve.";
+        msg.className = "text-center mt-6 text-sm text-emerald-400";
+        e.target.reset();
+    }
+    msg.classList.remove('hidden');
+};
     </script>
 </body>
 </html>
