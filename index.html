@@ -3,51 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DocSpace | Gestão de Conhecimento</title>
+    <title>DocSpace | Inteligência & Documentação</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/font/lucide.min.css" rel="stylesheet">
     <style>
-        body { background-color: #0f172a; color: white; font-family: sans-serif; }
-        .sidebar { background-color: #1e293b; transition: 0.3s; }
-        .active-env { border-left: 4px solid #6366f1; background: #334155; }
+        :root { --primary: #6366f1; --bg: #0f172a; --card: #1e293b; }
+        body { background-color: var(--bg); color: #e2e8f0; font-family: 'Inter', sans-serif; overflow: hidden; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-item.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+        .hidden { display: none; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
 <body>
-    <div id="app" class="flex h-screen overflow-hidden">
-        <!-- O código do Layout que te mostrei antes entra aqui formatado para HTML puro -->
-        <aside class="w-64 sidebar flex flex-col border-r border-slate-800">
-            <div class="p-6 font-bold text-xl text-indigo-400 border-b border-slate-800">DocSpace</div>
-            <nav class="flex-1 p-4 space-y-2">
-                <div onclick="changeEnv('port')" class="p-3 cursor-pointer hover:bg-slate-700 rounded">Portfolio</div>
-                <div onclick="changeEnv('docs')" class="p-3 cursor-pointer hover:bg-slate-700 rounded">Docs SaaS</div>
-                <div onclick="changeEnv('course')" class="p-3 cursor-pointer hover:bg-slate-700 rounded">Academy</div>
+
+    <!-- TELA DE LOGIN (Aparece se não estiver logado) -->
+    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-[#020617]">
+        <div class="glass p-8 rounded-2xl w-full max-w-md text-center">
+            <div class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center">
+                <i class="lucide-lock text-white w-8 h-8"></i>
+            </div>
+            <h1 class="text-2xl font-bold mb-2">Bem-vindo ao DocSpace</h1>
+            <p class="text-slate-400 mb-8 text-sm">Insira suas credenciais para acessar seus ambientes.</p>
+            <form id="login-form" class="space-y-4">
+                <input type="email" id="email" placeholder="E-mail" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 focus:border-indigo-500 outline-none transition" required>
+                <input type="password" id="password" placeholder="Senha" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 focus:border-indigo-500 outline-none transition" required>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 p-3 rounded-xl font-bold transition shadow-lg shadow-indigo-500/20">Entrar na Plataforma</button>
+            </form>
+            <p id="login-error" class="text-red-400 mt-4 text-sm hidden"></p>
+        </div>
+    </div>
+
+    <!-- ESTRUTURA PRINCIPAL (Escondida até logar) -->
+    <div id="main-app" class="flex h-screen hidden">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-72 glass flex flex-col border-r border-slate-800">
+            <div class="p-6 border-b border-slate-800 flex items-center gap-3">
+                <div class="w-8 h-8 bg-indigo-500 rounded-lg"></div>
+                <span class="font-bold text-xl tracking-tight">DocSpace</span>
+            </div>
+
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto" id="env-menu">
+                <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold px-3 mb-2">Seus Ambientes</p>
+                <!-- Menus serão injetados aqui via JS -->
             </nav>
+
+            <div class="p-4 border-t border-slate-800">
+                <button onclick="logout()" class="flex items-center gap-3 text-slate-400 hover:text-white transition w-full p-2">
+                    <i class="lucide-log-out w-4 h-4"></i> Sair
+                </button>
+            </div>
         </aside>
 
-        <main class="flex-1 flex flex-col">
-            <header class="h-16 border-b border-slate-800 flex items-center px-8 justify-between">
-                <input type="text" placeholder="Busca global..." class="bg-slate-900 border border-slate-700 rounded-full px-4 py-1 text-sm w-64">
-                <div id="user-area">Login</div>
+        <!-- CONTEÚDO -->
+        <main class="flex-1 flex flex-col relative">
+            <header class="h-16 glass flex items-center justify-between px-8 z-10">
+                <div class="relative w-96">
+                    <i class="lucide-search absolute left-3 top-2.5 text-slate-500 w-4 h-4"></i>
+                    <input type="text" placeholder="Pesquisar..." class="w-full bg-slate-900/50 border border-slate-700 rounded-full py-1.5 pl-10 pr-4 text-sm focus:border-indigo-500 outline-none">
+                </div>
+                <div id="user-profile" class="flex items-center gap-3 text-sm">
+                    <span id="user-name" class="text-slate-300">Carregando...</span>
+                    <div class="w-8 h-8 rounded-full bg-indigo-500 border border-slate-700"></div>
+                </div>
             </header>
-            <section id="content" class="flex-1 p-10 overflow-y-auto">
-                <h1 class="text-3xl font-bold">Bem-vindo ao DocSpace</h1>
-                <p class="mt-4 text-slate-400">Selecione um ambiente ao lado para começar.</p>
-            </section>
+
+            <div id="content-area" class="flex-1 overflow-y-auto p-12 scroll-smooth">
+                <!-- Conteúdo dinâmico aqui -->
+                <div class="max-w-4xl mx-auto text-center mt-20">
+                    <h2 class="text-4xl font-bold mb-4">Bem-vindo de volta!</h2>
+                    <p class="text-slate-400">Selecione um ambiente na barra lateral para começar sua jornada.</p>
+                </div>
+            </div>
+
+            <!-- FEEDBACK FLOATING -->
+            <div class="absolute bottom-6 right-8 flex gap-2">
+                <button class="glass p-2 rounded-full hover:bg-slate-700"><i class="lucide-thumbs-up w-4 h-4"></i></button>
+                <button class="glass p-2 rounded-full hover:bg-slate-700"><i class="lucide-thumbs-down w-4 h-4"></i></button>
+            </div>
         </main>
     </div>
 
     <script>
-        // Aqui você colará as chaves que o Supabase vai te dar
-        const SUPABASE_URL = 'https://eazqkdyqqfffzlwaojbp.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_9ytsES7Dg4enpHJdbnqPwQ_ANUTNLR0';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // CONFIGURAÇÃO SUPABASE
+        const SUPABASE_URL = 'https://SUA_URL.supabase.co'; 
+        const SUPABASE_KEY = 'SUA_CHAVE_ANONIMA';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        function changeEnv(env) {
-            const content = document.getElementById('content');
-            if(env === 'port') {
-                content.innerHTML = "<h1>Meu Portfólio</h1><p>Carregando cases...</p>";
-            } // ... lógica para os outros ambientes
+        const loginScreen = document.getElementById('login-screen');
+        const mainApp = document.getElementById('main-app');
+        const loginForm = document.getElementById('login-form');
+        const envMenu = document.getElementById('env-menu');
+        const contentArea = document.getElementById('content-area');
+
+        // 1. LÓGICA DE LOGIN
+        loginForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+
+            if (error) {
+                const errEl = document.getElementById('login-error');
+                errEl.innerText = "Acesso negado. Verifique seus dados.";
+                errEl.classList.remove('hidden');
+            } else {
+                initApp(data.user);
+            }
+        };
+
+        async function initApp(user) {
+            loginScreen.classList.add('hidden');
+            mainApp.classList.remove('hidden');
+            document.getElementById('user-name').innerText = user.email.split('@')[0];
+            loadMenus(user.id);
         }
+
+        // 2. CARREGAR MENUS BASEADO EM PERMISSÃO
+        async function loadMenus(userId) {
+            // Busca quais ambientes o usuário pode ver
+            const { data: access } = await _supabase.from('user_access').select('environments(id, name, slug)').eq('user_id', userId);
+            
+            if (access) {
+                envMenu.innerHTML = '<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold px-3 mb-2">Seus Ambientes</p>';
+                access.forEach(item => {
+                    const env = item.environments;
+                    const btn = document.createElement('button');
+                    btn.className = "sidebar-item w-full flex items-center gap-3 p-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition mb-1";
+                    btn.innerHTML = `<i class="lucide-folder w-4 h-4"></i> <span>${env.name}</span>`;
+                    btn.onclick = () => loadContent(env.id, env.name);
+                    envMenu.appendChild(btn);
+                });
+            }
+        }
+
+        // 3. CARREGAR CONTEÚDO DO AMBIENTE (SINGLE PAGE)
+        async function loadContent(envId, envName) {
+            contentArea.innerHTML = `<div class="animate-pulse text-slate-500">Carregando conteúdo de ${envName}...</div>`;
+            
+            const { data: contents } = await _supabase
+                .from('content')
+                .select('*')
+                .eq('env_id', envId)
+                .eq('status', 'public');
+
+            if (contents && contents.length > 0) {
+                contentArea.innerHTML = `<h1 class="text-3xl font-bold mb-8">${envName}</h1><div class="grid gap-6"></div>`;
+                const grid = contentArea.querySelector('div');
+                contents.forEach(doc => {
+                    const card = document.createElement('div');
+                    card.className = "glass p-6 rounded-2xl hover:border-indigo-500/50 transition cursor-pointer";
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">v${doc.version}</span>
+                            <span class="text-xs text-slate-500">${doc.reading_time} min leitura</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">${doc.title}</h3>
+                        <p class="text-slate-400 text-sm line-clamp-2">${doc.slug}</p>
+                    `;
+                    grid.appendChild(card);
+                });
+            } else {
+                contentArea.innerHTML = `<div class="mt-20 text-center"><i class="lucide-ghost w-12 h-12 mx-auto text-slate-700 mb-4"></i><p class="text-slate-500">Nenhum documento público encontrado neste ambiente.</p></div>`;
+            }
+        }
+
+        async function logout() {
+            await _supabase.auth.signOut();
+            window.location.reload();
+        }
+
+        // Verifica se já está logado ao abrir
+        window.onload = async () => {
+            const { data: { user } } = await _supabase.auth.getUser();
+            if (user) initApp(user);
+        };
     </script>
 </body>
 </html>
