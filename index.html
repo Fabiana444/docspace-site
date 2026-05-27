@@ -3,330 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DocSpace | Inteligência & Documentação</title>
+    <title>Fabiana | UX & Tech Writer - DocSpace</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/font/lucide.min.css" rel="stylesheet">
     <style>
-        :root { --primary: #6366f1; --bg: #0f172a; --card: #1e293b; }
-        body { background-color: var(--bg); color: #e2e8f0; font-family: 'Inter', sans-serif; overflow: hidden; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .sidebar-item.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
-        .hidden { display: none; }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        :root { --primary: #6366f1; --bg: #020617; }
+        body { background-color: var(--bg); color: #f8fafc; font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+        .gradient-text { background: linear-gradient(90deg, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-glow { position: absolute; top: -10%; left: 50%; transform: translateX(-50%); width: 600px; height: 400px; background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%); z-index: -1; }
+        .hidden { display: none !important; }
     </style>
 </head>
-<body>
+<body class="overflow-x-hidden">
 
-    <!-- TELA DE LOGIN (Aparece se não estiver logado) -->
-    <!-- TELA DE LOGIN & SOLICITAÇÃO -->
-<!-- TELA DE LOGIN & SOLICITAÇÃO (VERSÃO REFINADA) -->
-<!-- TELA DE LOGIN & SOLICITAÇÃO -->
-<div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-[#020617] p-4">
-    <div class="glass p-8 rounded-2xl w-full max-w-md shadow-2xl border border-slate-800">
+    <!-- HEADER / NAV -->
+    <nav class="fixed top-0 w-full z-40 glass px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2 font-bold text-xl tracking-tighter cursor-pointer" onclick="showSection('home')">
+            <div class="w-6 h-6 bg-indigo-500 rounded-md"></div>
+            <span>DocSpace <span class="text-indigo-400">.</span></span>
+        </div>
+        <div class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
+            <a href="#cases" class="hover:text-white transition">Cases</a>
+            <a href="#apps" class="hover:text-white transition">Apps & Automações</a>
+            <button onclick="checkGate('docs')" class="hover:text-indigo-400 transition flex items-center gap-1"><i class="lucide-lock w-3 h-3"></i> Documentações</button>
+            <button onclick="checkGate('academy')" class="hover:text-indigo-400 transition flex items-center gap-1"><i class="lucide-lock w-3 h-3"></i> Academy</button>
+        </div>
+        <div id="auth-status">
+            <button onclick="openLogin()" class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-full text-xs font-bold transition">Entrar</button>
+        </div>
+    </nav>
+
+    <!-- ÁREA PÚBLICA: PORTFÓLIO -->
+    <main id="public-portfolio" class="pt-32 pb-20 px-6 max-w-6xl mx-auto relative">
+        <div class="hero-glow"></div>
         
-        <!-- SELETOR DE ABA -->
-        <div class="flex mb-10 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800">
-            <button onclick="toggleAuthMode('login')" id="btn-tab-login" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-bold shadow-lg transition-all duration-300">Entrar</button>
-            <button onclick="toggleAuthMode('request')" id="btn-tab-request" class="flex-1 py-2.5 rounded-xl text-slate-400 text-sm font-bold transition-all duration-300">Solicite acesso</button>
-        </div>
-
-        <!-- FORMULÁRIO DE LOGIN -->
-        <div id="form-login" class="space-y-6">
-            <div class="text-center mb-8">
-                <h1 class="text-2xl font-bold text-white tracking-tight">DocSpace</h1>
-                <p class="text-slate-400 text-sm mt-1">Seu conhecimento, organizado.</p>
+        <!-- HERO -->
+        <section id="home" class="text-center mb-32">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight">Seu conhecimento, <span class="gradient-text">organizado.</span></h1>
+            <p class="text-slate-400 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+                Olá, eu sou Fabiana. Web Designer e UX Strategist transformando documentações técnicas em experiências memoráveis.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#cases" class="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-slate-200 transition">Ver Cases</a>
+                <button onclick="checkGate('docs')" class="glass px-8 py-3 rounded-full font-bold hover:bg-slate-800 transition">Explorar Documentação</button>
             </div>
-            <form id="login-form" class="space-y-4">
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-slate-500 ml-1">E-MAIL</label>
-                    <input type="email" id="email" placeholder="nome@exemplo.com" class="w-full p-3.5 rounded-xl bg-slate-900 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition text-white" required>
+        </section>
+
+        <!-- CASES SEÇÃO -->
+        <section id="cases" class="mb-32">
+            <h2 class="text-2xl font-bold mb-12 flex items-center gap-3"><i class="lucide-briefcase text-indigo-500"></i> Cases em Destaque</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="glass p-8 rounded-3xl group hover:border-indigo-500/50 transition cursor-pointer">
+                    <div class="h-48 bg-slate-800 rounded-2xl mb-6 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1551288049-bbb652167014?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Arquitetura SaaS: Redesign Estrutural</h3>
+                    <p class="text-slate-400 text-sm mb-4">Como reduzi o churn de um software de logística através da reorganização da documentação técnica e UI.</p>
+                    <span class="text-indigo-400 font-bold text-xs">UX DESIGN • TECH WRITING</span>
                 </div>
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-slate-500 ml-1">SENHA</label>
-                    <input type="password" id="password" placeholder="••••••••" class="w-full p-3.5 rounded-xl bg-slate-900 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition text-white" required>
+                <div class="glass p-8 rounded-3xl group hover:border-indigo-500/50 transition cursor-pointer">
+                    <div class="h-48 bg-slate-800 rounded-2xl mb-6 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Plataforma E-learning</h3>
+                    <p class="text-slate-400 text-sm mb-4">Design de interface e experiência de aprendizagem para cursos de tecnologia avançada.</p>
+                    <span class="text-indigo-400 font-bold text-xs">EDTECH • PRODUCT DESIGN</span>
                 </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-xl font-bold transition-all transform active:scale-95 shadow-xl shadow-indigo-500/20 text-white mt-4">Acessar Plataforma</button>
-            </form>
-        </div>
-
-        <!-- FORMULÁRIO DE SOLICITAÇÃO -->
-        <div id="form-request" class="space-y-6 hidden">
-            <div class="text-center mb-8">
-                <h1 class="text-2xl font-bold text-white">Solicite acesso</h1>
-                <p class="text-slate-400 text-sm mt-1">Preencha os dados para validar sua entrada.</p>
             </div>
-            <form id="request-access-form" class="space-y-4">
-                <input type="text" id="req-name" placeholder="Seu nome completo" class="w-full p-3.5 rounded-xl bg-slate-900 border border-slate-800 outline-none text-white focus:border-indigo-500" required>
-                <input type="email" id="req-email" placeholder="E-mail" class="w-full p-3.5 rounded-xl bg-slate-900 border border-slate-800 outline-none text-white focus:border-indigo-500" required>
-                
-                <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-500 ml-1">LINKEDIN (Obrigatório)</label>
-                    <input type="url" id="req-linkedin" placeholder="ex: linkedin.com/in/seu-perfil" class="w-full p-3.5 rounded-xl bg-slate-900 border border-slate-800 outline-none text-white focus:border-indigo-500" required>
+        </section>
+
+        <!-- APPS SEÇÃO -->
+        <section id="apps" class="mb-32">
+            <h2 class="text-2xl font-bold mb-12 flex items-center gap-3"><i class="lucide-cpu text-indigo-500"></i> Automações & Apps</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass p-6 rounded-2xl text-center">
+                    <div class="w-12 h-12 bg-indigo-500/20 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-4"><i class="lucide-bot"></i></div>
+                    <h4 class="font-bold mb-2">Bot de Pré-Entrevista</h4>
+                    <p class="text-xs text-slate-500 mb-4">IA que qualifica candidatos em tempo real.</p>
+                    <button class="text-indigo-400 text-xs font-bold hover:underline">TESTAR APP →</button>
                 </div>
-
-                <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-500 ml-1">EMPRESA / ATUAÇÃO (Obrigatório)</label>
-                    <input type="text" id="req-company" placeholder="Ex: Microsoft / Recrutador" class="w-full p-3.5 rounded-xl bg-slate-900 border border-slate-800 outline-none text-white focus:border-indigo-500" required>
-                </div>
-
-                <button type="submit" class="w-full bg-transparent border-2 border-indigo-500 text-indigo-400 hover:bg-indigo-500 hover:text-white p-4 rounded-xl font-bold transition-all transform active:scale-95 mt-4">Enviar solicitação</button>
-            </form>
-        </div>
-
-        <p id="auth-message" class="text-center mt-6 text-sm hidden font-medium"></p>
-    </div>
-</div>
-
-        <!-- FORMULÁRIO DE SOLICITAÇÃO (ESCONDIDO) -->
-        <div id="form-request" class="space-y-4 hidden">
-            <div class="text-center mb-6">
-                <h1 class="text-2xl font-bold">Peça seu Convite</h1>
-                <p class="text-slate-400 text-sm">Preencha os dados para análise do perfil.</p>
+                <!-- Mais apps aqui... -->
             </div>
-            <form id="request-access-form" class="space-y-3">
-                <input type="text" id="req-name" placeholder="Seu nome completo" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none" required>
-                <input type="email" id="req-email" placeholder="Seu melhor e-mail" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none" required>
-                <input type="url" id="req-linkedin" placeholder="Ex: https://linkedin.com/in/seuperfil" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
-                <input type="text" id="req-company" placeholder="Empresa ou área de atuação" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
-                <button type="submit" class="w-full border border-indigo-500 text-indigo-400 hover:bg-indigo-500 hover:text-white p-3 rounded-xl font-bold transition">Enviar Solicitação</button>
-            </form>
-        </div>
+        </section>
+    </main>
 
-        <p id="auth-message" class="text-center mt-6 text-sm hidden"></p>
-    </div>
-</div>
-
-        <!-- FORMULÁRIO DE SOLICITAÇÃO (ESCONDIDO) -->
-        <div id="form-request" class="space-y-4 hidden">
-            <div class="text-center mb-6">
-                <h1 class="text-2xl font-bold">Solicite seu Acesso</h1>
-                <p class="text-slate-400 text-sm">Preencha os dados para análise do perfil.</p>
+    <!-- ÁREA RESTRITA: DOCS / ACADEMY (Escondida por padrão) -->
+    <main id="private-area" class="hidden h-screen flex overflow-hidden">
+        <aside class="w-64 glass border-r border-slate-800 p-6 flex flex-col">
+            <div id="private-menu" class="flex-1 mt-20 space-y-2 text-sm text-slate-400">
+                <!-- Injetado via JS -->
             </div>
-            <form id="request-access-form" class="space-y-3">
-                <input type="text" id="req-name" placeholder="Nome Completo" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none" required>
-                <input type="email" id="req-email" placeholder="E-mail Corporativo" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none" required>
-                <input type="url" id="req-linkedin" placeholder="Link do seu LinkedIn" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
-                <input type="text" id="req-company" placeholder="Empresa / Cargo" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 outline-none">
-                <button type="submit" class="w-full border border-indigo-500 text-indigo-400 hover:bg-indigo-500 hover:text-white p-3 rounded-xl font-bold transition">Enviar Solicitação</button>
-            </form>
-        </div>
-
-        <p id="auth-message" class="text-center mt-6 text-sm hidden"></p>
-    </div>
-</div>
-
-    <!-- ESTRUTURA PRINCIPAL (Escondida até logar) -->
-    <div id="main-app" class="flex h-screen hidden">
-        
-        <!-- SIDEBAR -->
-        <aside class="w-72 glass flex flex-col border-r border-slate-800">
-            <div class="p-6 border-b border-slate-800 flex items-center gap-3">
-                <div class="w-8 h-8 bg-indigo-500 rounded-lg"></div>
-                <span class="font-bold text-xl tracking-tight">DocSpace</span>
-            </div>
-
-            <nav class="flex-1 p-4 space-y-2 overflow-y-auto" id="env-menu">
-                <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold px-3 mb-2">Seus Ambientes</p>
-                <!-- Menus serão injetados aqui via JS -->
-            </nav>
-
-            <div class="p-4 border-t border-slate-800">
-                <button onclick="logout()" class="flex items-center gap-3 text-slate-400 hover:text-white transition w-full p-2">
-                    <i class="lucide-log-out w-4 h-4"></i> Sair
-                </button>
-            </div>
+            <button onclick="window.location.reload()" class="text-xs text-slate-500 hover:text-white">Voltar ao Portfólio</button>
         </aside>
+        <section id="private-content" class="flex-1 p-20 overflow-y-auto mt-16">
+            <!-- Conteúdo do banco aqui -->
+        </section>
+    </main>
 
-        <!-- CONTEÚDO -->
-        <main class="flex-1 flex flex-col relative">
-            <header class="h-16 glass flex items-center justify-between px-8 z-10">
-                <div class="relative w-96">
-                    <i class="lucide-search absolute left-3 top-2.5 text-slate-500 w-4 h-4"></i>
-                    <input type="text" placeholder="Pesquisar..." class="w-full bg-slate-900/50 border border-slate-700 rounded-full py-1.5 pl-10 pr-4 text-sm focus:border-indigo-500 outline-none">
-                </div>
-                <div id="user-profile" class="flex items-center gap-3 text-sm">
-                    <span id="user-name" class="text-slate-300">Carregando...</span>
-                    <div class="w-8 h-8 rounded-full bg-indigo-500 border border-slate-700"></div>
-                </div>
-            </header>
-
-            <div id="content-area" class="flex-1 overflow-y-auto p-12 scroll-smooth">
-                <!-- Conteúdo dinâmico aqui -->
-                <div class="max-w-4xl mx-auto text-center mt-20">
-                    <h2 class="text-4xl font-bold mb-4">Bem-vindo de volta!</h2>
-                    <p class="text-slate-400">Selecione um ambiente na barra lateral para começar sua jornada.</p>
-                </div>
+    <!-- MODAL DE LOGIN / SOLICITAÇÃO -->
+    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 hidden">
+        <div class="glass p-8 rounded-3xl w-full max-w-md relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="lucide-x"></i></button>
+            <div id="modal-content">
+                <!-- Conteúdo de Login/Cadastro aqui (O mesmo formulário anterior) -->
             </div>
-
-            <!-- FEEDBACK FLOATING -->
-            <div class="absolute bottom-6 right-8 flex gap-2">
-                <button class="glass p-2 rounded-full hover:bg-slate-700"><i class="lucide-thumbs-up w-4 h-4"></i></button>
-                <button class="glass p-2 rounded-full hover:bg-slate-700"><i class="lucide-thumbs-down w-4 h-4"></i></button>
-            </div>
-        </main>
+        </div>
     </div>
 
     <script>
-        // CONFIGURAÇÃO SUPABASE
-        const SUPABASE_URL = 'https://eazqkdyqqfffzlwaojbp.supabase.co'; 
-        const SUPABASE_KEY = 'sb_publishable_9ytsES7Dg4enpHJdbnqPwQ_ANUTNLR0';
+        const SUPABASE_URL = 'SUA_URL';
+        const SUPABASE_KEY = 'SUA_KEY';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        const loginScreen = document.getElementById('login-screen');
-        const mainApp = document.getElementById('main-app');
-        const loginForm = document.getElementById('login-form');
-        const envMenu = document.getElementById('env-menu');
-        const contentArea = document.getElementById('content-area');
-
-        // 1. LÓGICA DE LOGIN
-        loginForm.onsubmit = async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
-
-            if (error) {
-                const errEl = document.getElementById('login-error');
-                errEl.innerText = "Acesso negado. Verifique seus dados.";
-                errEl.classList.remove('hidden');
+        async function checkGate(envSlug) {
+            const { data: { user } } = await _supabase.auth.getUser();
+            if (!user) {
+                openLogin(`Para acessar a área de ${envSlug}, faça login ou solicite seu acesso.`);
             } else {
-                initApp(data.user);
+                enterPrivateArea(envSlug);
             }
-        };
-
-        async function initApp(user) {
-            loginScreen.classList.add('hidden');
-            mainApp.classList.remove('hidden');
-            document.getElementById('user-name').innerText = user.email.split('@')[0];
-            loadMenus(user.id);
         }
 
-        // 2. CARREGAR MENUS BASEADO EM PERMISSÃO
-        async function loadMenus(userId) {
-    console.log("Iniciando carga de menus...");
-    
-    // Passo A: Pega apenas os IDs dos ambientes que eu tenho acesso
-    const { data: myAccess, error: accessError } = await _supabase
-        .from('user_access')
-        .select('env_id')
-        .eq('user_id', userId);
-
-    if (accessError) {
-        console.error("Erro na tabela user_access:", accessError);
-        return;
-    }
-
-    const envIds = myAccess.map(a => a.env_id);
-    console.log("IDs de ambientes autorizados:", envIds);
-
-    if (envIds.length > 0) {
-        // Passo B: Pega os detalhes desses ambientes na outra tabela
-        const { data: envs, error: envError } = await _supabase
-            .from('environments')
-            .select('*')
-            .in('id', envIds);
-
-        if (envError) {
-            console.error("Erro na tabela environments:", envError);
-            return;
-        }
-
-        console.log("Dados dos ambientes recebidos:", envs);
-
-        envMenu.innerHTML = '<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold px-3 mb-4">Seus Ambientes</p>';
-        envs.forEach(env => {
-            const btn = document.createElement('button');
-            btn.className = "sidebar-item w-full flex items-center gap-3 p-3.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all mb-1 group";
-            btn.innerHTML = `
-                <div class="w-2 h-2 rounded-full bg-slate-600 group-hover:bg-indigo-500"></div>
-                <span class="text-sm font-medium">${env.name}</span>
+        function openLogin(message = "") {
+            document.getElementById('auth-modal').classList.remove('hidden');
+            // Aqui você reinjeta o formulário de login/solicitação que criamos antes
+            document.getElementById('modal-content').innerHTML = `
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold">Acesso Restrito</h2>
+                    <p class="text-slate-400 text-sm mt-2">${message}</p>
+                </div>
+                <!-- Form de login aqui -->
+                <button onclick="toggleAuth('login')" class="w-full bg-indigo-600 p-4 rounded-xl font-bold">Fazer Login</button>
+                <button onclick="toggleAuth('request')" class="w-full border border-slate-700 p-4 rounded-xl font-bold mt-4">Solicitar Acesso</button>
             `;
-            btn.onclick = () => loadContent(env.id, env.name);
-            envMenu.appendChild(btn);
-        });
-    } else {
-        envMenu.innerHTML = '<p class="text-xs text-slate-500 px-3">Aguardando liberação de acesso...</p>';
-    }
-}
-        
-        // 3. CARREGAR CONTEÚDO DO AMBIENTE (SINGLE PAGE)
-        async function loadContent(envId, envName) {
-            contentArea.innerHTML = `<div class="animate-pulse text-slate-500">Carregando conteúdo de ${envName}...</div>`;
-            
-            const { data: contents } = await _supabase
-                .from('content')
-                .select('*')
-                .eq('env_id', envId)
-                .eq('status', 'public');
-
-            if (contents && contents.length > 0) {
-                contentArea.innerHTML = `<h1 class="text-3xl font-bold mb-8">${envName}</h1><div class="grid gap-6"></div>`;
-                const grid = contentArea.querySelector('div');
-                contents.forEach(doc => {
-                    const card = document.createElement('div');
-                    card.className = "glass p-6 rounded-2xl hover:border-indigo-500/50 transition cursor-pointer";
-                    card.innerHTML = `
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">v${doc.version}</span>
-                            <span class="text-xs text-slate-500">${doc.reading_time} min leitura</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">${doc.title}</h3>
-                        <p class="text-slate-400 text-sm line-clamp-2">${doc.slug}</p>
-                    `;
-                    grid.appendChild(card);
-                });
-            } else {
-                contentArea.innerHTML = `<div class="mt-20 text-center"><i class="lucide-ghost w-12 h-12 mx-auto text-slate-700 mb-4"></i><p class="text-slate-500">Nenhum documento público encontrado neste ambiente.</p></div>`;
-            }
         }
 
-        async function logout() {
-            await _supabase.auth.signOut();
-            window.location.reload();
+        function closeModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
         }
 
-        // Verifica se já está logado ao abrir
+        function enterPrivateArea(env) {
+            document.getElementById('public-portfolio').classList.add('hidden');
+            document.getElementById('private-area').classList.remove('hidden');
+            // Lógica para carregar o menu do Supabase aqui
+        }
+
+        // Auto-check on load
         window.onload = async () => {
             const { data: { user } } = await _supabase.auth.getUser();
-            if (user) initApp(user);
+            if (user) {
+                document.getElementById('auth-status').innerHTML = `<span class="text-xs text-slate-400 mr-4">${user.email}</span><button onclick="logout()" class="text-xs text-red-400">Sair</button>`;
+            }
         };
-
-        // Alternar entre Login e Solicitação
-function toggleAuthMode(mode) {
-    const isLogin = mode === 'login';
-    document.getElementById('form-login').classList.toggle('hidden', !isLogin);
-    document.getElementById('form-request').classList.toggle('hidden', isLogin);
-    
-    // UI Feedback nos botões
-    document.getElementById('btn-tab-login').className = isLogin ? 'flex-1 py-2 rounded-lg bg-indigo-600 text-white text-sm font-bold transition' : 'flex-1 py-2 rounded-lg text-slate-400 text-sm font-bold transition';
-    document.getElementById('btn-tab-request').className = !isLogin ? 'flex-1 py-2 rounded-lg bg-indigo-600 text-white text-sm font-bold transition' : 'flex-1 py-2 rounded-lg text-slate-400 text-sm font-bold transition';
-}
-
-// Enviar Solicitação de Acesso
-document.getElementById('request-access-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const msg = document.getElementById('auth-message');
-    
-    const { error } = await _supabase.from('access_requests').insert({
-        full_name: document.getElementById('req-name').value,
-        email: document.getElementById('req-email').value,
-        linkedin_url: document.getElementById('req-linkedin').value,
-        company: document.getElementById('req-company').value
-    });
-
-    if (error) {
-        msg.innerText = "Erro ao enviar. Verifique se o e-mail já foi solicitado.";
-        msg.className = "text-center mt-6 text-sm text-red-400";
-    } else {
-        msg.innerText = "Solicitação enviada! Analisaremos seu perfil em breve.";
-        msg.className = "text-center mt-6 text-sm text-emerald-400";
-        e.target.reset();
-    }
-    msg.classList.remove('hidden');
-};
     </script>
 </body>
 </html>
