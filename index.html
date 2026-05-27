@@ -46,4 +46,169 @@
     <!-- HEADER -->
     <nav class="fixed top-0 w-full z-50 glass px-12 py-5 flex items-center justify-between min-h-[90px]">
         <div class="logo-container cursor-pointer" onclick="showView('portfolio')">
-            <div class="logo-te
+            <div class="logo-text">
+                Doc<span class="text-indigo-500">Space</span>
+                <div class="logo-cursor"></div>
+            </div>
+            <!-- Tagline oculta no portfólio, aparece nos outros ambientes -->
+            <span id="header-tagline" class="tagline hidden">Documentação como ativo estratégico de negócio</span>
+        </div>
+
+        <div class="hidden lg:flex nav-center">
+            <span class="nav-explorar">Explorar</span>
+            <button onclick="gateCheck('docs')" class="nav-link">Documentação Técnica</button>
+            <button onclick="gateCheck('academy')" class="nav-link">Academy Tech Writer</button>
+        </div>
+
+        <div class="flex items-center gap-8">
+            <div class="flex gap-3 text-[10px] font-black text-slate-600">
+                <button class="hover:text-white">PT</button>
+                <button class="hover:text-white">EN</button>
+                <button class="hover:text-white">ES</button>
+            </div>
+            <div id="auth-area">
+                <button onclick="openAuthModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-2.5 rounded-full text-xs font-bold transition shadow-lg shadow-indigo-500/20">Entrar</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PORTFÓLIO (HOME) -->
+    <main id="view-portfolio" class="pt-48 pb-20 px-6 max-w-6xl mx-auto">
+        <header class="flex flex-col md:flex-row items-center gap-20 mb-32">
+            <div class="flex-1 text-center md:text-left">
+                <h1 class="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.95] text-white">Simplificando o que é <span class="text-indigo-500">complexo.</span></h1>
+                <p class="text-xl text-slate-400 leading-relaxed max-w-xl">
+                    <strong class="text-white">Fabiana Nonjah.</strong> Senior Technical Writer & Documentation Analyst. Especialista em unir a curiosidade investigativa do jornalismo com o pragmatismo da engenharia para criar documentação escalável focada em clientes SaaS e eficiência operacional.
+                </p>
+            </div>
+            <div class="shrink-0 shadow-2xl rounded-full">
+                <img src="https://via.placeholder.com/400" alt="Fabiana Nonjah" class="profile-circle">
+            </div>
+        </header>
+
+        <!-- IA ASSISTANT EM DESTAQUE -->
+        <section class="mb-32">
+            <div class="glass p-2 rounded-[2.5rem] shadow-2xl border border-white/5 overflow-hidden">
+                <div class="p-8 bg-slate-900/40 flex justify-between items-center border-b border-slate-800">
+                    <h3 class="font-bold flex items-center gap-3 tracking-tight"><i class="lucide-bot text-indigo-400"></i> IA Assistant: Experiência de Pré-Entrevista</h3>
+                    <span class="text-[10px] bg-indigo-500 text-white px-3 py-1 rounded-full font-bold">DEMO INTERATIVA</span>
+                </div>
+                <iframe src="https://aistudio.google.com/apps/1e4ca1d4-e221-471a-bbeb-bfd85ab7c7d5?showPreview=true" class="w-full h-[650px] border-none bg-slate-950"></iframe>
+            </div>
+        </section>
+
+        <!-- CASES EM DESTAQUE -->
+        <section class="mb-40">
+            <h2 class="text-3xl font-extrabold mb-12 tracking-tight">Cases em Destaque</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="glass p-8 rounded-3xl group hover:border-indigo-500/50 transition">
+                    <div class="h-56 bg-slate-900 rounded-2xl mb-6 overflow-hidden"><img src="https://images.unsplash.com/photo-1551288049-bbb652167014?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition duration-700"></div>
+                    <h3 class="text-xl font-bold mb-3">Arquitetura SaaS: Redesign Estrutural</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">Otimização de fluxos de documentação para redução de churn e melhoria do Onboarding.</p>
+                </div>
+                <div class="glass p-8 rounded-3xl group hover:border-indigo-500/50 transition">
+                    <div class="h-56 bg-slate-900 rounded-2xl mb-6 overflow-hidden"><img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition duration-700"></div>
+                    <h3 class="text-xl font-bold mb-3">Plataforma E-learning</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">Arquitetura de informação e UX Writing para trilhas educacionais técnicas de alta complexidade.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ÁREAS RESTRITAS (CLAUDE DOCS STYLE) -->
+    <div id="view-restricted" class="hidden flex h-screen overflow-hidden">
+        <aside class="w-72 glass border-r border-slate-800 pt-32 px-6 fixed h-full overflow-y-auto">
+            <div id="sidebar-nav" class="space-y-1"></div>
+        </aside>
+        <main class="ml-72 flex-1 pt-40 px-12 overflow-y-auto">
+            <div id="doc-content" class="max-w-3xl"></div>
+        </main>
+    </div>
+
+    <!-- RODAPÉ CORRIGIDO (CONFORME IMAGEM 5) -->
+    <footer class="border-t border-slate-900 py-20 bg-[#010411]">
+        <div class="footer-container px-6">
+            <!-- Esquerda: Marca e Tagline -->
+            <div class="flex flex-col">
+                <p class="font-bold text-xl mb-2 tracking-tighter">DocSpace</p>
+                <p class="text-[10px] text-slate-600 font-bold uppercase tracking-widest max-w-[200px] leading-relaxed">Documentação como ativo estratégico de negócio</p>
+            </div>
+
+            <!-- Direita: Explorar e Contato Agrupados para evitar o "vazio" -->
+            <div class="flex gap-20">
+                <div class="flex flex-col gap-4">
+                    <p class="text-slate-700 uppercase text-[10px] font-black tracking-widest">Explorar</p>
+                    <button onclick="gateCheck('docs')" class="text-sm font-semibold text-slate-500 hover:text-white text-left transition">Documentação Técnica</button>
+                    <button onclick="gateCheck('academy')" class="text-sm font-semibold text-slate-500 hover:text-white text-left transition">Academy</button>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <p class="text-slate-700 uppercase text-[10px] font-black tracking-widest">Contato</p>
+                    <a href="https://linkedin.com/in/SEUPERFIL" class="text-sm font-semibold text-slate-500 hover:text-white transition">LinkedIn</a>
+                    <a href="mailto:fabiana.nonjah@outlook.com" class="text-sm font-semibold text-slate-500 hover:text-white transition">E-mail</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL AUTH -->
+    <div id="auth-modal" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="glass p-12 rounded-[3.5rem] w-full max-w-md relative border border-white/5">
+            <button onclick="closeAuthModal()" class="absolute top-10 right-10 text-slate-500 hover:text-white transition"><i class="lucide-x w-6 h-6"></i></button>
+            <div class="flex bg-slate-900 p-2 rounded-2xl mb-10 border border-slate-800">
+                <button id="tab-login" onclick="setAuthMode('login')" class="flex-1 py-3 rounded-xl bg-indigo-600 text-white text-xs font-bold transition">Entrar</button>
+                <button id="tab-request" onclick="setAuthMode('request')" class="flex-1 py-3 rounded-xl text-slate-500 text-xs font-bold transition">Solicitar</button>
+            </div>
+            <div id="form-login" class="space-y-4">
+                <input type="email" placeholder="E-mail" class="w-full p-5 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white">
+                <input type="password" placeholder="Senha" class="w-full p-5 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white">
+                <button class="w-full bg-indigo-600 p-5 rounded-2xl font-bold shadow-xl">Acessar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://SUA_URL.supabase.co';
+        const SUPABASE_KEY = 'SUA_KEY';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        function showView(view) {
+            document.getElementById('view-portfolio').classList.add('hidden');
+            document.getElementById('view-restricted').classList.add('hidden');
+            const tagline = document.getElementById('header-tagline');
+            
+            if(view === 'portfolio') {
+                document.getElementById('view-portfolio').classList.remove('hidden');
+                tagline.classList.add('hidden'); 
+            } else {
+                document.getElementById('view-restricted').classList.remove('hidden');
+                tagline.classList.remove('hidden'); 
+                buildRestrictedView(view);
+            }
+            window.scrollTo(0,0);
+        }
+
+        async function gateCheck(env) {
+            const { data: { user } } = await _supabase.auth.getUser();
+            if (!user) openAuthModal();
+            else showView(env);
+        }
+
+        function buildRestrictedView(env) {
+            const nav = document.getElementById('sidebar-nav');
+            const content = document.getElementById('doc-content');
+            if(env === 'docs') {
+                nav.innerHTML = `<p class="text-[10px] font-bold text-slate-500 uppercase p-3 tracking-widest">Documentação SaaS</p><a class="block p-3 rounded-xl font-bold bg-indigo-500/10 text-indigo-400">Cases de Redesign</a>`;
+                content.innerHTML = `<h1 class="text-4xl font-bold mb-6">Arquitetura de Conhecimento</h1><p class="text-slate-400 leading-relaxed">Bem-vindo à área de documentação restrita.</p>`;
+            } else {
+                nav.innerHTML = `<p class="text-[10px] font-bold text-slate-500 uppercase p-3 tracking-widest">Academy</p><a class="block p-3 rounded-xl font-bold bg-indigo-500/10 text-indigo-400">Curso: Tech Writer Sênior</a>`;
+                content.innerHTML = `<h1 class="text-4xl font-bold mb-6">Academy Online</h1><p class="text-slate-400 leading-relaxed">Trilhas de formação especializada.</p>`;
+            }
+        }
+
+        function openAuthModal() { document.getElementById('auth-modal').classList.remove('hidden'); }
+        function closeAuthModal() { document.getElementById('auth-modal').classList.add('hidden'); }
+        function setAuthMode(mode) { /* lógica de troca */ }
+        window.onload = async () => { /* check user */ };
+    </script>
+</body>
+</html>
