@@ -1,162 +1,91 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fabiana | UX & Tech Writer - DocSpace</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/font/lucide.min.css" rel="stylesheet">
-    <style>
-        :root { --primary: #6366f1; --bg: #020617; }
-        body { background-color: var(--bg); color: #f8fafc; font-family: 'Inter', sans-serif; }
-        .glass { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .gradient-text { background: linear-gradient(90deg, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-glow { position: absolute; top: -10%; left: 50%; transform: translateX(-50%); width: 600px; height: 400px; background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%); z-index: -1; }
-        .hidden { display: none !important; }
-    </style>
-</head>
-<body class="overflow-x-hidden">
-
-    <!-- HEADER / NAV -->
-    <nav class="fixed top-0 w-full z-40 glass px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-2 font-bold text-xl tracking-tighter cursor-pointer" onclick="showSection('home')">
-            <div class="w-6 h-6 bg-indigo-500 rounded-md"></div>
-            <span>DocSpace <span class="text-indigo-400">.</span></span>
-        </div>
-        <div class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
-            <a href="#cases" class="hover:text-white transition">Cases</a>
-            <a href="#apps" class="hover:text-white transition">Apps & Automações</a>
-            <button onclick="checkGate('docs')" class="hover:text-indigo-400 transition flex items-center gap-1"><i class="lucide-lock w-3 h-3"></i> Documentações</button>
-            <button onclick="checkGate('academy')" class="hover:text-indigo-400 transition flex items-center gap-1"><i class="lucide-lock w-3 h-3"></i> Academy</button>
-        </div>
-        <div id="auth-status">
-            <button onclick="openLogin()" class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-full text-xs font-bold transition">Entrar</button>
-        </div>
-    </nav>
-
-    <!-- ÁREA PÚBLICA: PORTFÓLIO -->
-    <main id="public-portfolio" class="pt-32 pb-20 px-6 max-w-6xl mx-auto relative">
-        <div class="hero-glow"></div>
+<!-- VIEW: PORTFÓLIO (PÁGINA ÚNICA) -->
+    <main id="view-portfolio" class="pt-32 pb-20 px-6 max-w-6xl mx-auto">
         
-        <!-- HERO -->
-        <section id="home" class="text-center mb-32">
-            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight">Seu conhecimento, <span class="gradient-text">organizado.</span></h1>
-            <p class="text-slate-400 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-                Olá, eu sou Fabiana. Web Designer e UX Strategist transformando documentações técnicas em experiências memoráveis.
+        <!-- HERO SECTION: APRESENTAÇÃO -->
+        <header class="text-center mb-16">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight">
+                Simplificando o que é <span class="text-indigo-500">complexo.</span>
+            </h1>
+            <p class="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+                <strong class="text-white">Fabiana Nonjah.</strong> Senior Technical Writer & Documentation Analyst. 
+                Unindo a curiosidade investigativa do jornalismo com o pragmatismo da engenharia para criar documentação escalável 
+                focada em clientes SaaS e eficiência operacional.
             </p>
-            <div class="flex justify-center gap-4">
-                <a href="#cases" class="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-slate-200 transition">Ver Cases</a>
-                <button onclick="checkGate('docs')" class="glass px-8 py-3 rounded-full font-bold hover:bg-slate-800 transition">Explorar Documentação</button>
+        </header>
+
+        <!-- DESTAQUE PRINCIPAL: APP DE PRÉ-ENTREVISTA -->
+        <section id="ai-app" class="mb-24">
+            <div class="glass p-2 rounded-[2.5rem] shadow-2xl border border-indigo-500/20 overflow-hidden">
+                <div class="p-6 bg-slate-900/50 flex justify-between items-center border-b border-slate-800">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-indigo-500/20 text-indigo-400 rounded-lg"><i class="lucide-bot w-5 h-5"></i></div>
+                        <div>
+                            <h3 class="font-bold text-lg">IA Assistant: Experiência de Pré-Entrevista</h3>
+                            <p class="text-xs text-slate-500">Teste agora o assistente inteligente que desenvolvi para recrutadores.</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-indigo-500 text-white px-3 py-1 rounded-full font-bold animate-pulse">LIVE DEMO</span>
+                </div>
+                <!-- Embed do seu link do AI Studio -->
+                <iframe src="https://aistudio.google.com/apps/1e4ca1d4-e221-471a-bbeb-bfd85ab7c7d5?showPreview=true" class="w-full h-[600px] border-none bg-white"></iframe>
             </div>
         </section>
 
-        <!-- CASES SEÇÃO -->
-        <section id="cases" class="mb-32">
-            <h2 class="text-2xl font-bold mb-12 flex items-center gap-3"><i class="lucide-briefcase text-indigo-500"></i> Cases em Destaque</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="glass p-8 rounded-3xl group hover:border-indigo-500/50 transition cursor-pointer">
-                    <div class="h-48 bg-slate-800 rounded-2xl mb-6 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1551288049-bbb652167014?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Arquitetura SaaS: Redesign Estrutural</h3>
-                    <p class="text-slate-400 text-sm mb-4">Como reduzi o churn de um software de logística através da reorganização da documentação técnica e UI.</p>
-                    <span class="text-indigo-400 font-bold text-xs">UX DESIGN • TECH WRITING</span>
-                </div>
-                <div class="glass p-8 rounded-3xl group hover:border-indigo-500/50 transition cursor-pointer">
-                    <div class="h-48 bg-slate-800 rounded-2xl mb-6 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Plataforma E-learning</h3>
-                    <p class="text-slate-400 text-sm mb-4">Design de interface e experiência de aprendizagem para cursos de tecnologia avançada.</p>
-                    <span class="text-indigo-400 font-bold text-xs">EDTECH • PRODUCT DESIGN</span>
-                </div>
+        <!-- GRADE DE CASES (MIOLO DO PORTFÓLIO) -->
+        <section id="cases-grid" class="mb-32">
+            <div class="flex items-center gap-4 mb-12">
+                <h2 class="text-2xl font-bold tracking-tight">Cases de Sucesso</h2>
+                <div class="h-[1px] flex-1 bg-slate-800"></div>
             </div>
-        </section>
 
-        <!-- APPS SEÇÃO -->
-        <section id="apps" class="mb-32">
-            <h2 class="text-2xl font-bold mb-12 flex items-center gap-3"><i class="lucide-cpu text-indigo-500"></i> Automações & Apps</h2>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="glass p-6 rounded-2xl text-center">
-                    <div class="w-12 h-12 bg-indigo-500/20 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-4"><i class="lucide-bot"></i></div>
-                    <h4 class="font-bold mb-2">Bot de Pré-Entrevista</h4>
-                    <p class="text-xs text-slate-500 mb-4">IA que qualifica candidatos em tempo real.</p>
-                    <button class="text-indigo-400 text-xs font-bold hover:underline">TESTAR APP →</button>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Case 1 -->
+                <div class="glass p-6 rounded-3xl group hover:border-indigo-500/50 transition-all duration-300">
+                    <div class="h-44 bg-slate-800 rounded-2xl mb-6 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1551288049-bbb652167014?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-60">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent"></div>
+                    </div>
+                    <div class="flex gap-2 mb-3">
+                        <span class="text-[10px] font-bold bg-indigo-500/10 text-indigo-400 px-2 py-1 rounded uppercase tracking-wider">UX Writing</span>
+                        <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded uppercase tracking-wider">SaaS</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 group-hover:text-indigo-400 transition">Arquitetura SaaS: Redesign Estrutural</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Reorganização completa de documentação técnica para reduzir o churn e acelerar o autoatendimento de clientes finais.
+                    </p>
                 </div>
-                <!-- Mais apps aqui... -->
+
+                <!-- Case 2 -->
+                <div class="glass p-6 rounded-3xl group hover:border-indigo-500/50 transition-all duration-300">
+                    <div class="h-44 bg-slate-800 rounded-2xl mb-6 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-60">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent"></div>
+                    </div>
+                    <div class="flex gap-2 mb-3">
+                        <span class="text-[10px] font-bold bg-indigo-500/10 text-indigo-400 px-2 py-1 rounded uppercase tracking-wider">Processos</span>
+                        <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded uppercase tracking-wider">Internal Docs</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 group-hover:text-indigo-400 transition">Eficiência Operacional: Base Interna</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Unificação de fluxos de engenharia e produto, transformando a curiosidade investigativa em documentação pragmática.
+                    </p>
+                </div>
+
+                <!-- Case 3 -->
+                <div class="glass p-6 rounded-3xl group hover:border-indigo-500/50 transition-all duration-300">
+                    <div class="h-44 bg-slate-800 rounded-2xl mb-6 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-60">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent"></div>
+                    </div>
+                    <div class="flex gap-2 mb-3">
+                        <span class="text-[10px] font-bold bg-indigo-500/10 text-indigo-400 px-2 py-1 rounded uppercase tracking-wider">Treinamento</span>
+                        <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-1 rounded uppercase tracking-wider">Academy</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 group-hover:text-indigo-400 transition">Academy Tech Writer</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Desenvolvimento de trilhas de conhecimento para formação de profissionais e padronização de entregáveis técnicos.
+                    </p>
+                </div>
             </div>
         </section>
     </main>
-
-    <!-- ÁREA RESTRITA: DOCS / ACADEMY (Escondida por padrão) -->
-    <main id="private-area" class="hidden h-screen flex overflow-hidden">
-        <aside class="w-64 glass border-r border-slate-800 p-6 flex flex-col">
-            <div id="private-menu" class="flex-1 mt-20 space-y-2 text-sm text-slate-400">
-                <!-- Injetado via JS -->
-            </div>
-            <button onclick="window.location.reload()" class="text-xs text-slate-500 hover:text-white">Voltar ao Portfólio</button>
-        </aside>
-        <section id="private-content" class="flex-1 p-20 overflow-y-auto mt-16">
-            <!-- Conteúdo do banco aqui -->
-        </section>
-    </main>
-
-    <!-- MODAL DE LOGIN / SOLICITAÇÃO -->
-    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 hidden">
-        <div class="glass p-8 rounded-3xl w-full max-w-md relative">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i class="lucide-x"></i></button>
-            <div id="modal-content">
-                <!-- Conteúdo de Login/Cadastro aqui (O mesmo formulário anterior) -->
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const SUPABASE_URL = 'SUA_URL';
-        const SUPABASE_KEY = 'SUA_KEY';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        async function checkGate(envSlug) {
-            const { data: { user } } = await _supabase.auth.getUser();
-            if (!user) {
-                openLogin(`Para acessar a área de ${envSlug}, faça login ou solicite seu acesso.`);
-            } else {
-                enterPrivateArea(envSlug);
-            }
-        }
-
-        function openLogin(message = "") {
-            document.getElementById('auth-modal').classList.remove('hidden');
-            // Aqui você reinjeta o formulário de login/solicitação que criamos antes
-            document.getElementById('modal-content').innerHTML = `
-                <div class="text-center mb-8">
-                    <h2 class="text-2xl font-bold">Acesso Restrito</h2>
-                    <p class="text-slate-400 text-sm mt-2">${message}</p>
-                </div>
-                <!-- Form de login aqui -->
-                <button onclick="toggleAuth('login')" class="w-full bg-indigo-600 p-4 rounded-xl font-bold">Fazer Login</button>
-                <button onclick="toggleAuth('request')" class="w-full border border-slate-700 p-4 rounded-xl font-bold mt-4">Solicitar Acesso</button>
-            `;
-        }
-
-        function closeModal() {
-            document.getElementById('auth-modal').classList.add('hidden');
-        }
-
-        function enterPrivateArea(env) {
-            document.getElementById('public-portfolio').classList.add('hidden');
-            document.getElementById('private-area').classList.remove('hidden');
-            // Lógica para carregar o menu do Supabase aqui
-        }
-
-        // Auto-check on load
-        window.onload = async () => {
-            const { data: { user } } = await _supabase.auth.getUser();
-            if (user) {
-                document.getElementById('auth-status').innerHTML = `<span class="text-xs text-slate-400 mr-4">${user.email}</span><button onclick="logout()" class="text-xs text-red-400">Sair</button>`;
-            }
-        };
-    </script>
-</body>
-</html>
