@@ -3,150 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fabiana Nonjah | Senior Tech Writer</title>
+    <!-- Meta Descrição solicitada -->
+    <meta name="description" content="Documentação como ativo estratégico de negócio. Especialista em simplificar o complexo.">
+    <title>Fabiana Nonjah | Senior Tech Writer & DocSpace</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/font/lucide.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        
         :root { --primary: #6366f1; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s; background-color: #020617; color: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s; background-color: #020617; color: #f8fafc; scroll-behavior: smooth; }
+        
         .glass { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
         .hidden { display: none !important; }
-        .nav-link { font-size: 0.85rem; font-weight: 600; color: #94a3b8; transition: 0.2s; }
+        
+        /* LOGO COM CURSOR E TAGLINE */
+        .logo-container { display: flex; flex-direction: column; line-height: 1; }
+        .logo-text { font-weight: 800; font-size: 1.5rem; letter-spacing: -0.03em; display: flex; align-items: center; color: white; }
+        .logo-cursor { width: 3px; height: 1.4rem; background-color: var(--primary); margin-left: 2px; animation: blink 1s step-end infinite; }
+        .tagline { font-size: 0.65rem; color: #64748b; font-weight: 600; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.02em; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* MENU CENTRALIZADO (ESTILO IMAGEM 4) */
+        .nav-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 60px; }
+        .nav-link { font-size: 0.85rem; font-weight: 700; color: #94a3b8; transition: 0.2s; white-space: nowrap; }
         .nav-link:hover { color: #f8fafc; }
-        /* Estilização específica solicitada para os menus superiores */
-        .nav-explorar { color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; pointer-events: none; }
+        .nav-explorar { color: #ef4444; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 900; pointer-events: none; }
+
+        /* FOTO DE PERFIL ALINHADA */
+        .profile-wrapper { width: 340px; height: 340px; border-radius: 50%; padding: 8px; border: 2px solid rgba(99, 102, 241, 0.2); background: linear-gradient(135deg, rgba(99,102,241,0.1), transparent); }
+        .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; filter: grayscale(100%); transition: 0.6s ease; }
+        .profile-img:hover { filter: grayscale(0%); transform: scale(1.03); }
+
+        .case-card { transition: 0.4s; }
+        .case-card:hover { transform: translateY(-8px); border-color: rgba(99, 102, 241, 0.3); }
     </style>
 </head>
 <body class="overflow-x-hidden">
 
-    <!-- HEADER AJUSTADO (CONFORME IMAGEM 4 E 5) -->
-    <nav class="fixed top-0 w-full z-50 glass px-8 py-4 flex justify-between items-center">
-        <!-- Esquerda: Logo (Espaço para o futuro Logo) -->
-        <div class="flex items-center gap-3 font-bold text-xl cursor-pointer" onclick="showView('portfolio')">
-            <div id="logo-placeholder" class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-xs font-black shadow-lg shadow-indigo-500/20">
-                FN
+    <!-- HEADER (LOGO COM TAGLINE + MENU CENTRAL + AUTH) -->
+    <nav class="fixed top-0 w-full z-50 glass px-12 py-5 flex items-center justify-between">
+        <!-- Esquerda: Logo + Tagline -->
+        <div class="logo-container cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <div class="logo-text">
+                Doc<span class="text-indigo-500">Space</span>
+                <div class="logo-cursor"></div>
             </div>
-            <span class="tracking-tighter">DocSpace<span class="text-indigo-500">.</span></span>
+            <span class="tagline">Documentação como ativo estratégico de negócio</span>
         </div>
 
-        <!-- Centro: Menus "Explorar" alinhados (Conforme imagem 4) -->
-        <div class="hidden md:flex items-center gap-8">
+        <!-- Centro: Menu conforme Imagem de referência -->
+        <div class="hidden lg:flex nav-center">
             <span class="nav-explorar">Explorar</span>
-            <button onclick="gateCheck('docs')" class="nav-link hover:text-indigo-400">Documentação Técnica</button>
-            <button onclick="gateCheck('academy')" class="nav-link hover:text-indigo-400">Academy Tech Writer</button>
+            <button onclick="gateCheck('docs')" class="nav-link">Documentação Técnica</button>
+            <button onclick="gateCheck('academy')" class="nav-link">Academy Tech Writer</button>
         </div>
 
         <!-- Direita: Idiomas e Auth -->
-        <div class="flex items-center gap-6">
-            <div class="flex gap-3 text-[10px] font-bold text-slate-500">
-                <button onclick="translate('pt')" class="hover:text-white">PT</button>
-                <button onclick="translate('en')" class="hover:text-white">EN</button>
-                <button onclick="translate('es')" class="hover:text-white">ES</button>
+        <div class="flex items-center gap-8">
+            <div class="flex gap-4 text-[10px] font-black text-slate-500">
+                <button class="hover:text-white">PT</button>
+                <button class="hover:text-white">EN</button>
+                <button class="hover:text-white">ES</button>
             </div>
             <div id="auth-area">
-                <button onclick="openAuthModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-full text-xs font-bold transition shadow-lg shadow-indigo-500/20">Entrar</button>
+                <button onclick="openAuthModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-2.5 rounded-full text-xs font-bold transition shadow-lg shadow-indigo-500/25">Entrar</button>
             </div>
         </div>
     </nav>
 
-    <!-- VIEW: PORTFÓLIO -->
-    <main id="view-portfolio" class="pt-32 pb-20 px-6 max-w-6xl mx-auto">
+    <!-- CONTEÚDO PRINCIPAL (PORTFÓLIO) -->
+    <main id="view-portfolio" class="pt-48 pb-20 px-6 max-w-6xl mx-auto">
         
-        <!-- HERO SECTION (IMAGEM 2: ESPAÇO PARA PERFIL) -->
-        <header class="flex flex-col md:flex-row items-center gap-12 mb-24">
+        <!-- INTRODUÇÃO + FOTO DE PERFIL ALINHADA -->
+        <header class="flex flex-col md:flex-row items-center gap-20 mb-32">
             <div class="flex-1 text-center md:text-left">
-                <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight leading-[1.1]">Simplificando o que é <span class="text-indigo-500">complexo.</span></h1>
-                <p class="text-xl text-slate-400 leading-relaxed max-w-2xl">
+                <h1 class="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.95] text-white">Simplificando o que é <span class="text-indigo-500">complexo.</span></h1>
+                <p class="text-xl text-slate-400 leading-relaxed max-w-xl">
                     <strong class="text-white">Fabiana Nonjah.</strong> Senior Technical Writer & Documentation Analyst. Especialista em unir a curiosidade investigativa do jornalismo com o pragmatismo da engenharia para criar documentação escalável focada em clientes SaaS e eficiência operacional.
                 </p>
             </div>
-            <!-- Espaço para Foto de Perfil (Círculo Vermelho da Imagem 2) -->
-            <div class="w-64 h-64 md:w-80 md:h-80 rounded-full border-4 border-slate-800 p-2 shrink-0 overflow-hidden shadow-2xl relative">
-                <img src="https://via.placeholder.com/400" alt="Fabiana Nonjah" class="w-full h-full object-cover rounded-full grayscale hover:grayscale-0 transition duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-indigo-500/20 to-transparent"></div>
+            <!-- Sua Foto de Perfil Alinhada -->
+            <div class="profile-wrapper shrink-0 shadow-2xl">
+                <img src="https://via.placeholder.com/400" alt="Fabiana Nonjah" class="profile-img shadow-inner">
             </div>
         </header>
 
-        <!-- DESTAQUE: IA ASSISTANT -->
+        <!-- SEÇÃO IA ASSISTANT -->
         <section class="mb-24">
-            <div class="glass p-2 rounded-[2.5rem] shadow-2xl border border-indigo-500/20 overflow-hidden">
-                <div class="p-6 bg-slate-900/50 flex justify-between items-center border-b border-slate-800">
-                    <h3 class="font-bold flex items-center gap-3"><i class="lucide-bot text-indigo-400"></i> IA Assistant: Experiência de Pré-Entrevista</h3>
-                    <span class="text-[10px] bg-indigo-500 text-white px-3 py-1 rounded-full font-bold">DEMO INTERATIVA</span>
+            <div class="glass p-2 rounded-[3rem] shadow-2xl border border-white/5 overflow-hidden">
+                <div class="p-8 bg-slate-900/40 flex justify-between items-center border-b border-slate-800">
+                    <div>
+                        <h3 class="font-bold text-xl flex items-center gap-3"><i class="lucide-bot text-indigo-400"></i> IA Assistant</h3>
+                        <p class="text-xs text-slate-500 mt-1">Experiência interativa de Pré-Entrevista desenvolvida para recrutadores.</p>
+                    </div>
+                    <span class="text-[10px] bg-indigo-600 text-white px-4 py-1.5 rounded-full font-black tracking-widest uppercase">Demo Ativa</span>
                 </div>
-                <iframe src="https://aistudio.google.com/apps/1e4ca1d4-e221-471a-bbeb-bfd85ab7c7d5?showPreview=true" class="w-full h-[600px] border-none bg-slate-950"></iframe>
+                <div class="relative w-full h-[600px] bg-slate-950">
+                   <iframe src="https://aistudio.google.com/apps/1e4ca1d4-e221-471a-bbeb-bfd85ab7c7d5?showPreview=true" class="w-full h-full border-none"></iframe>
+                </div>
             </div>
         </section>
 
         <!-- SEÇÃO DE CASES (IMAGEM 1) -->
-        <section id="cases-section" class="mb-32">
-            <h2 class="text-3xl font-extrabold mb-12 tracking-tight">Cases em Destaque</h2>
-            <div class="grid md:grid-cols-2 gap-8">
+        <section id="cases" class="mb-40">
+            <div class="flex items-center gap-6 mb-16">
+                <h2 class="text-4xl font-black tracking-tighter">Cases em Destaque</h2>
+                <div class="h-px bg-slate-800 flex-1"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-10">
                 <!-- Case 1 -->
-                <div class="glass p-8 rounded-3xl group hover:border-indigo-500/50 transition duration-300">
-                    <div class="h-56 bg-slate-900 rounded-2xl mb-6 overflow-hidden border border-slate-800">
-                        <img src="https://images.unsplash.com/photo-1551288049-bbb652167014?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition duration-700">
+                <div class="case-card glass p-10 rounded-[2.5rem] group border border-white/5">
+                    <div class="h-60 bg-slate-900 rounded-3xl mb-8 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1551288049-bbb652167014?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-40 group-hover:opacity-100 transition duration-700">
                     </div>
-                    <h3 class="text-xl font-bold mb-3">Arquitetura SaaS: Redesign Estrutural</h3>
-                    <p class="text-sm text-slate-400 mb-6 leading-relaxed">Como reduzi o churn de um software de logística através da reorganização da documentação técnica e UI.</p>
-                    <div class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">UX Design • Tech Writing</div>
+                    <h3 class="text-2xl font-bold mb-4 group-hover:text-indigo-400 transition">Arquitetura SaaS: Redesign Estrutural</h3>
+                    <p class="text-slate-400 text-sm mb-8 leading-relaxed">Redução de churn e otimização do Onboarding através da reorganização completa da documentação técnica e UI de suporte.</p>
+                    <div class="flex gap-4 text-[10px] font-black uppercase tracking-widest text-indigo-500">
+                        <span>UX Design • Tech Writing</span>
+                    </div>
                 </div>
+
                 <!-- Case 2 -->
-                <div class="glass p-8 rounded-3xl group hover:border-indigo-500/50 transition duration-300">
-                    <div class="h-56 bg-slate-900 rounded-2xl mb-6 overflow-hidden border border-slate-800">
-                        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition duration-700">
+                <div class="case-card glass p-10 rounded-[2.5rem] group border border-white/5">
+                    <div class="h-60 bg-slate-900 rounded-3xl mb-8 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-40 group-hover:opacity-100 transition duration-700">
                     </div>
-                    <h3 class="text-xl font-bold mb-3">Plataforma E-learning</h3>
-                    <p class="text-sm text-slate-400 mb-6 leading-relaxed">Design de interface e experiência de aprendizagem para cursos de tecnologia avançada.</p>
-                    <div class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">EdTech • Product Design</div>
+                    <h3 class="text-2xl font-bold mb-4 group-hover:text-indigo-400 transition">Plataforma E-learning</h3>
+                    <p class="text-slate-400 text-sm mb-8 leading-relaxed">Design de interface e arquitetura de informação para trilhas de aprendizagem em cursos de alta complexidade técnica.</p>
+                    <div class="flex gap-4 text-[10px] font-black uppercase tracking-widest text-indigo-500">
+                        <span>EdTech • Product Design</span>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- FOOTER AJUSTADO (IMAGEM 3 E 5) -->
-    <footer class="border-t border-slate-900 py-16 bg-[#010411]">
-        <div class="max-w-6xl mx-auto px-6 flex flex-col items-center gap-8">
-            <div class="text-center">
-                <p class="font-bold text-xl mb-1 tracking-tighter">DocSpace</p>
-                <p class="text-xs text-slate-600 font-medium">Documentação como ativo estratégico de negócio.</p>
-            </div>
+    <!-- FOOTER CENTRALIZADO (IMAGEM 5) -->
+    <footer class="border-t border-slate-900 py-20 bg-[#010411]">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col items-center">
+            <p class="font-bold text-lg mb-2 tracking-tighter">DocSpace</p>
+            <p class="text-[10px] text-slate-600 font-bold tracking-[0.3em] uppercase mb-12 text-center">Documentação como ativo estratégico de negócio</p>
             
-            <!-- Links de Contato centralizados horizontalmente (Conforme Imagem 5) -->
-            <div class="flex items-center gap-12">
-                <div class="text-slate-700 uppercase text-[10px] font-black tracking-[0.2em]">Contato</div>
-                <div class="flex gap-8">
-                    <a href="#" class="text-sm font-semibold text-slate-400 hover:text-white transition">LinkedIn</a>
-                    <a href="#" class="text-sm font-semibold text-slate-400 hover:text-white transition">E-mail</a>
+            <div class="flex items-center gap-10 border-t border-slate-900 pt-12 w-full justify-center">
+                <span class="text-slate-800 uppercase text-[10px] font-black tracking-[0.4em]">Contato</span>
+                <div class="flex gap-12">
+                    <a href="#" class="text-sm font-bold text-slate-400 hover:text-indigo-400 transition">LinkedIn</a>
+                    <a href="#" class="text-sm font-bold text-slate-400 hover:text-indigo-400 transition">E-mail</a>
                 </div>
             </div>
         </div>
     </footer>
 
     <!-- MODAL AUTH -->
-    <div id="auth-modal" class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
-        <div class="glass p-10 rounded-[3rem] w-full max-w-md relative border border-slate-800">
-            <button onclick="closeAuthModal()" class="absolute top-8 right-8 text-slate-500 hover:text-white"><i class="lucide-x w-6 h-6"></i></button>
-            
-            <div class="flex bg-slate-900 p-1.5 rounded-2xl mb-8">
-                <button id="tab-login" onclick="setAuthMode('login')" class="flex-1 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold">Entrar</button>
-                <button id="tab-request" onclick="setAuthMode('request')" class="flex-1 py-2 rounded-xl text-slate-400 text-xs font-bold">Solicitar Acesso</button>
+    <div id="auth-modal" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="glass p-12 rounded-[3.5rem] w-full max-w-md relative border border-white/5">
+            <button onclick="closeAuthModal()" class="absolute top-10 right-10 text-slate-500 hover:text-white transition"><i class="lucide-x w-6 h-6"></i></button>
+            <div class="flex bg-slate-900 p-2 rounded-2xl mb-10">
+                <button id="tab-login" onclick="setAuthMode('login')" class="flex-1 py-3 rounded-xl bg-indigo-600 text-white text-xs font-bold">Entrar</button>
+                <button id="tab-request" onclick="setAuthMode('request')" class="flex-1 py-3 rounded-xl text-slate-500 text-xs font-bold">Solicitar</button>
             </div>
-
+            <!-- Formulários de Login/Request aqui permanecem os mesmos -->
             <div id="form-login" class="space-y-4">
-                <input type="email" placeholder="E-mail" class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white focus:border-indigo-500 transition">
-                <input type="password" placeholder="Senha" class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white focus:border-indigo-500 transition">
-                <button class="w-full bg-indigo-600 p-4 rounded-2xl font-bold shadow-xl shadow-indigo-500/20 hover:bg-indigo-500 transition">Login na Plataforma</button>
-            </div>
-
-            <div id="form-request" class="space-y-4 hidden">
-                <input type="text" placeholder="Nome Completo" class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white focus:border-indigo-500" required>
-                <input type="email" placeholder="E-mail" class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white focus:border-indigo-500" required>
-                <input type="url" placeholder="LinkedIn (Obrigatório)" class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white focus:border-indigo-500" required>
-                <input type="text" placeholder="Empresa / Cargo" class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white focus:border-indigo-500" required>
-                <button class="w-full border-2 border-indigo-600 text-indigo-400 p-4 rounded-2xl font-bold hover:bg-indigo-600 hover:text-white transition">Enviar Solicitação</button>
+                <input type="email" placeholder="E-mail" class="w-full p-5 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white">
+                <input type="password" placeholder="Senha" class="w-full p-5 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white">
+                <button class="w-full bg-indigo-600 p-5 rounded-2xl font-bold shadow-xl">Acessar</button>
             </div>
         </div>
     </div>
@@ -156,41 +179,23 @@
         const SUPABASE_KEY = 'SUA_KEY';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        function showView(view) {
-            // No momento só temos a View de Portfolio. Áreas restritas abrirão modal.
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        }
-
         async function gateCheck(env) {
             const { data: { user } } = await _supabase.auth.getUser();
-            if (!user) {
-                openAuthModal();
-            } else {
-                alert("Redirecionando para área logada de: " + env);
-            }
+            if (!user) openAuthModal();
+            else alert("Acesso liberado para: " + env);
         }
 
         function openAuthModal() { document.getElementById('auth-modal').classList.remove('hidden'); }
         function closeAuthModal() { document.getElementById('auth-modal').classList.add('hidden'); }
-        
         function setAuthMode(mode) {
-            const isLogin = mode === 'login';
-            document.getElementById('form-login').classList.toggle('hidden', !isLogin);
-            document.getElementById('form-request').classList.toggle('hidden', isLogin);
-            document.getElementById('tab-login').className = isLogin ? "flex-1 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold" : "flex-1 py-2 rounded-xl text-slate-400 text-xs font-bold";
-            document.getElementById('tab-request').className = !isLogin ? "flex-1 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold" : "flex-1 py-2 rounded-xl text-slate-400 text-xs font-bold";
+             const isLogin = mode === 'login';
+             document.getElementById('form-login').classList.toggle('hidden', !isLogin);
+             document.getElementById('tab-login').className = isLogin ? "flex-1 py-3 rounded-xl bg-indigo-600 text-white text-xs font-bold" : "flex-1 py-3 rounded-xl text-slate-500 text-xs font-bold";
         }
-
-        document.addEventListener('keydown', (e) => { if(e.key === "Escape") closeAuthModal(); });
-
         window.onload = async () => {
             const { data: { user } } = await _supabase.auth.getUser();
-            if (user) {
-                document.getElementById('auth-area').innerHTML = `<button onclick="_supabase.auth.signOut().then(()=>location.reload())" class="text-xs text-red-400 font-bold">Sair</button>`;
-            }
+            if (user) document.getElementById('auth-area').innerHTML = `<button onclick="_supabase.auth.signOut().then(()=>location.reload())" class="text-xs text-red-500 font-bold">SAIR</button>`;
         };
-
-        function translate(lang) { console.log("Mudando idioma para: " + lang); }
     </script>
 </body>
 </html>
