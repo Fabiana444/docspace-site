@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Meta Descrição solicitada -->
-    <meta name="description" content="Documentação como ativo estratégico de negócio. Especialista em simplificar o complexo.">
-    <title>Fabiana Nonjah | Senior Tech Writer & DocSpace</title>
+    <!-- Meta Descrição para SEO -->
+    <meta name="description" content="DocSpace: Documentação como ativo estratégico de negócio. Por Fabiana Nonjah.">
+    <title>Fabiana Nonjah | Senior Tech Writer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/font/lucide.min.css" rel="stylesheet">
@@ -18,42 +18,44 @@
         .glass { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
         .hidden { display: none !important; }
         
-        /* LOGO COM CURSOR E TAGLINE */
-        .logo-container { display: flex; flex-direction: column; line-height: 1; }
-        .logo-text { font-weight: 800; font-size: 1.5rem; letter-spacing: -0.03em; display: flex; align-items: center; color: white; }
+        /* LOGO COM CURSOR PISCANTE */
+        .logo-container { display: flex; flex-direction: column; }
+        .logo-text { font-weight: 800; font-size: 1.6rem; letter-spacing: -0.04em; display: flex; align-items: center; color: white; line-height: 1; }
         .logo-cursor { width: 3px; height: 1.4rem; background-color: var(--primary); margin-left: 2px; animation: blink 1s step-end infinite; }
-        .tagline { font-size: 0.65rem; color: #64748b; font-weight: 600; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.02em; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* MENU CENTRALIZADO (ESTILO IMAGEM 4) */
-        .nav-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 60px; }
-        .nav-link { font-size: 0.85rem; font-weight: 700; color: #94a3b8; transition: 0.2s; white-space: nowrap; }
+        /* TAGLINE COM ESPAÇAMENTO (EXCLUSIVA ÁREAS LOGADAS) */
+        .tagline { font-size: 0.65rem; color: #64748b; font-weight: 600; margin-top: 10px; /* Espaço entrelinhas solicitado */ text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* MENU CENTRALIZADO */
+        .nav-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 40px; }
+        .nav-link { font-size: 0.8rem; font-weight: 700; color: #94a3b8; transition: 0.2s; white-space: nowrap; }
         .nav-link:hover { color: #f8fafc; }
-        .nav-explorar { color: #ef4444; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 900; pointer-events: none; }
+        .nav-explorar { color: #ef4444; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 900; pointer-events: none; }
 
-        /* FOTO DE PERFIL ALINHADA */
-        .profile-wrapper { width: 340px; height: 340px; border-radius: 50%; padding: 8px; border: 2px solid rgba(99, 102, 241, 0.2); background: linear-gradient(135deg, rgba(99,102,241,0.1), transparent); }
-        .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; filter: grayscale(100%); transition: 0.6s ease; }
-        .profile-img:hover { filter: grayscale(0%); transform: scale(1.03); }
+        /* HERO: FOTO E TEXTO ALINHADOS */
+        .profile-circle { width: 320px; height: 320px; border-radius: 50%; object-fit: cover; border: 4px solid #1e293b; filter: grayscale(100%); transition: 0.6s; }
+        .profile-circle:hover { filter: grayscale(0%); transform: scale(1.02); border-color: var(--primary); }
 
-        .case-card { transition: 0.4s; }
-        .case-card:hover { transform: translateY(-8px); border-color: rgba(99, 102, 241, 0.3); }
+        /* FOOTER CONFORME IMAGEM (SEM BURACO NO MEIO) */
+        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 2rem; width: 100%; }
+        @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr; text-align: center; } }
     </style>
 </head>
 <body class="overflow-x-hidden">
 
-    <!-- HEADER (LOGO COM TAGLINE + MENU CENTRAL + AUTH) -->
-    <nav class="fixed top-0 w-full z-50 glass px-12 py-5 flex items-center justify-between">
-        <!-- Esquerda: Logo + Tagline -->
-        <div class="logo-container cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+    <!-- HEADER -->
+    <nav class="fixed top-0 w-full z-50 glass px-12 py-5 flex items-center justify-between min-h-[90px]">
+        <!-- Esquerda: Logo (Tagline oculta na Home por padrão) -->
+        <div class="logo-container cursor-pointer" onclick="showView('portfolio')">
             <div class="logo-text">
                 Doc<span class="text-indigo-500">Space</span>
                 <div class="logo-cursor"></div>
             </div>
-            <span class="tagline">Documentação como ativo estratégico de negócio</span>
+            <span id="header-tagline" class="tagline hidden">Documentação como ativo estratégico de negócio</span>
         </div>
 
-        <!-- Centro: Menu conforme Imagem de referência -->
+        <!-- Centro: Menu "Explorar" -->
         <div class="hidden lg:flex nav-center">
             <span class="nav-explorar">Explorar</span>
             <button onclick="gateCheck('docs')" class="nav-link">Documentação Técnica</button>
@@ -61,22 +63,20 @@
         </div>
 
         <!-- Direita: Idiomas e Auth -->
-        <div class="flex items-center gap-8">
-            <div class="flex gap-4 text-[10px] font-black text-slate-500">
+        <div class="flex items-center gap-6">
+            <div class="flex gap-3 text-[10px] font-black text-slate-600">
                 <button class="hover:text-white">PT</button>
                 <button class="hover:text-white">EN</button>
                 <button class="hover:text-white">ES</button>
             </div>
             <div id="auth-area">
-                <button onclick="openAuthModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-2.5 rounded-full text-xs font-bold transition shadow-lg shadow-indigo-500/25">Entrar</button>
+                <button onclick="openAuthModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-full text-xs font-bold transition shadow-lg shadow-indigo-500/20">Entrar</button>
             </div>
         </div>
     </nav>
 
-    <!-- CONTEÚDO PRINCIPAL (PORTFÓLIO) -->
+    <!-- VIEW: PORTFÓLIO (HOME PÚBLICA) -->
     <main id="view-portfolio" class="pt-48 pb-20 px-6 max-w-6xl mx-auto">
-        
-        <!-- INTRODUÇÃO + FOTO DE PERFIL ALINHADA -->
         <header class="flex flex-col md:flex-row items-center gap-20 mb-32">
             <div class="flex-1 text-center md:text-left">
                 <h1 class="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.95] text-white">Simplificando o que é <span class="text-indigo-500">complexo.</span></h1>
@@ -84,118 +84,61 @@
                     <strong class="text-white">Fabiana Nonjah.</strong> Senior Technical Writer & Documentation Analyst. Especialista em unir a curiosidade investigativa do jornalismo com o pragmatismo da engenharia para criar documentação escalável focada em clientes SaaS e eficiência operacional.
                 </p>
             </div>
-            <!-- Sua Foto de Perfil Alinhada -->
-            <div class="profile-wrapper shrink-0 shadow-2xl">
-                <img src="https://via.placeholder.com/400" alt="Fabiana Nonjah" class="profile-img shadow-inner">
+            <div class="shrink-0 shadow-2xl rounded-full">
+                <img src="https://via.placeholder.com/400" alt="Fabiana Nonjah" class="profile-circle">
             </div>
         </header>
 
-        <!-- SEÇÃO IA ASSISTANT -->
-        <section class="mb-24">
-            <div class="glass p-2 rounded-[3rem] shadow-2xl border border-white/5 overflow-hidden">
+        <!-- SEÇÃO IA ASSISTANT EM DESTAQUE -->
+        <section class="mb-32">
+            <div class="glass p-2 rounded-[2.5rem] shadow-2xl border border-white/5 overflow-hidden">
                 <div class="p-8 bg-slate-900/40 flex justify-between items-center border-b border-slate-800">
-                    <div>
-                        <h3 class="font-bold text-xl flex items-center gap-3"><i class="lucide-bot text-indigo-400"></i> IA Assistant</h3>
-                        <p class="text-xs text-slate-500 mt-1">Experiência interativa de Pré-Entrevista desenvolvida para recrutadores.</p>
-                    </div>
-                    <span class="text-[10px] bg-indigo-600 text-white px-4 py-1.5 rounded-full font-black tracking-widest uppercase">Demo Ativa</span>
+                    <h3 class="font-bold flex items-center gap-3"><i class="lucide-bot text-indigo-400"></i> IA Assistant: Experiência de Pré-Entrevista</h3>
+                    <span class="text-[10px] bg-indigo-500 text-white px-3 py-1 rounded-full font-bold">DEMO INTERATIVA</span>
                 </div>
-                <div class="relative w-full h-[600px] bg-slate-950">
-                   <iframe src="https://aistudio.google.com/apps/1e4ca1d4-e221-471a-bbeb-bfd85ab7c7d5?showPreview=true" class="w-full h-full border-none"></iframe>
-                </div>
+                <iframe src="https://aistudio.google.com/apps/1e4ca1d4-e221-471a-bbeb-bfd85ab7c7d5?showPreview=true" class="w-full h-[650px] border-none bg-slate-950"></iframe>
             </div>
         </section>
 
-        <!-- SEÇÃO DE CASES (IMAGEM 1) -->
-        <section id="cases" class="mb-40">
-            <div class="flex items-center gap-6 mb-16">
-                <h2 class="text-4xl font-black tracking-tighter">Cases em Destaque</h2>
-                <div class="h-px bg-slate-800 flex-1"></div>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-10">
-                <!-- Case 1 -->
-                <div class="case-card glass p-10 rounded-[2.5rem] group border border-white/5">
-                    <div class="h-60 bg-slate-900 rounded-3xl mb-8 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1551288049-bbb652167014?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-40 group-hover:opacity-100 transition duration-700">
-                    </div>
-                    <h3 class="text-2xl font-bold mb-4 group-hover:text-indigo-400 transition">Arquitetura SaaS: Redesign Estrutural</h3>
-                    <p class="text-slate-400 text-sm mb-8 leading-relaxed">Redução de churn e otimização do Onboarding através da reorganização completa da documentação técnica e UI de suporte.</p>
-                    <div class="flex gap-4 text-[10px] font-black uppercase tracking-widest text-indigo-500">
-                        <span>UX Design • Tech Writing</span>
-                    </div>
+        <!-- SEÇÃO DE CASES (CONFORME IMAGEM 1) -->
+        <section class="mb-40">
+            <h2 class="text-3xl font-extrabold mb-12 tracking-tight">Cases em Destaque</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="glass p-8 rounded-3xl group hover:border-indigo-500/50 transition">
+                    <div class="h-56 bg-slate-900 rounded-2xl mb-6 overflow-hidden"><img src="https://images.unsplash.com/photo-1551288049-bbb652167014?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition duration-700"></div>
+                    <h3 class="text-xl font-bold mb-3">Arquitetura SaaS: Redesign Estrutural</h3>
+                    <p class="text-sm text-slate-400">Otimização de documentação para redução de churn.</p>
                 </div>
-
-                <!-- Case 2 -->
-                <div class="case-card glass p-10 rounded-[2.5rem] group border border-white/5">
-                    <div class="h-60 bg-slate-900 rounded-3xl mb-8 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-40 group-hover:opacity-100 transition duration-700">
-                    </div>
-                    <h3 class="text-2xl font-bold mb-4 group-hover:text-indigo-400 transition">Plataforma E-learning</h3>
-                    <p class="text-slate-400 text-sm mb-8 leading-relaxed">Design de interface e arquitetura de informação para trilhas de aprendizagem em cursos de alta complexidade técnica.</p>
-                    <div class="flex gap-4 text-[10px] font-black uppercase tracking-widest text-indigo-500">
-                        <span>EdTech • Product Design</span>
-                    </div>
+                <div class="glass p-8 rounded-3xl group hover:border-indigo-500/50 transition">
+                    <div class="h-56 bg-slate-900 rounded-2xl mb-6 overflow-hidden"><img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition duration-700"></div>
+                    <h3 class="text-xl font-bold mb-3">Plataforma E-learning</h3>
+                    <p class="text-sm text-slate-400">Design de interface para cursos técnicos complexos.</p>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- FOOTER CENTRALIZADO (IMAGEM 5) -->
-    <footer class="border-t border-slate-900 py-20 bg-[#010411]">
-        <div class="max-w-6xl mx-auto px-6 flex flex-col items-center">
-            <p class="font-bold text-lg mb-2 tracking-tighter">DocSpace</p>
-            <p class="text-[10px] text-slate-600 font-bold tracking-[0.3em] uppercase mb-12 text-center">Documentação como ativo estratégico de negócio</p>
-            
-            <div class="flex items-center gap-10 border-t border-slate-900 pt-12 w-full justify-center">
-                <span class="text-slate-800 uppercase text-[10px] font-black tracking-[0.4em]">Contato</span>
-                <div class="flex gap-12">
-                    <a href="#" class="text-sm font-bold text-slate-400 hover:text-indigo-400 transition">LinkedIn</a>
-                    <a href="#" class="text-sm font-bold text-slate-400 hover:text-indigo-400 transition">E-mail</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- MODAL AUTH -->
-    <div id="auth-modal" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 hidden">
-        <div class="glass p-12 rounded-[3.5rem] w-full max-w-md relative border border-white/5">
-            <button onclick="closeAuthModal()" class="absolute top-10 right-10 text-slate-500 hover:text-white transition"><i class="lucide-x w-6 h-6"></i></button>
-            <div class="flex bg-slate-900 p-2 rounded-2xl mb-10">
-                <button id="tab-login" onclick="setAuthMode('login')" class="flex-1 py-3 rounded-xl bg-indigo-600 text-white text-xs font-bold">Entrar</button>
-                <button id="tab-request" onclick="setAuthMode('request')" class="flex-1 py-3 rounded-xl text-slate-500 text-xs font-bold">Solicitar</button>
-            </div>
-            <!-- Formulários de Login/Request aqui permanecem os mesmos -->
-            <div id="form-login" class="space-y-4">
-                <input type="email" placeholder="E-mail" class="w-full p-5 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white">
-                <input type="password" placeholder="Senha" class="w-full p-5 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white">
-                <button class="w-full bg-indigo-600 p-5 rounded-2xl font-bold shadow-xl">Acessar</button>
-            </div>
-        </div>
+    <!-- VIEW: RESTRICTED (ESTILO CLAUDE DOCS) -->
+    <div id="view-restricted" class="hidden flex h-screen overflow-hidden">
+        <aside class="w-72 glass border-r border-slate-800 pt-32 px-6 fixed h-full overflow-y-auto">
+            <div id="sidebar-nav" class="space-y-1"></div>
+        </aside>
+        <main class="ml-72 flex-1 pt-40 px-12 overflow-y-auto">
+            <div id="doc-content" class="max-w-3xl"></div>
+        </main>
     </div>
 
-    <script>
-        const SUPABASE_URL = 'https://SUA_URL.supabase.co';
-        const SUPABASE_KEY = 'SUA_KEY';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        async function gateCheck(env) {
-            const { data: { user } } = await _supabase.auth.getUser();
-            if (!user) openAuthModal();
-            else alert("Acesso liberado para: " + env);
-        }
-
-        function openAuthModal() { document.getElementById('auth-modal').classList.remove('hidden'); }
-        function closeAuthModal() { document.getElementById('auth-modal').classList.add('hidden'); }
-        function setAuthMode(mode) {
-             const isLogin = mode === 'login';
-             document.getElementById('form-login').classList.toggle('hidden', !isLogin);
-             document.getElementById('tab-login').className = isLogin ? "flex-1 py-3 rounded-xl bg-indigo-600 text-white text-xs font-bold" : "flex-1 py-3 rounded-xl text-slate-500 text-xs font-bold";
-        }
-        window.onload = async () => {
-            const { data: { user } } = await _supabase.auth.getUser();
-            if (user) document.getElementById('auth-area').innerHTML = `<button onclick="_supabase.auth.signOut().then(()=>location.reload())" class="text-xs text-red-500 font-bold">SAIR</button>`;
-        };
-    </script>
-</body>
-</html>
+    <!-- FOOTER AJUSTADO CONFORME IMAGEM (SEM BURACO CENTRAL) -->
+    <footer class="border-t border-slate-900 py-16 bg-[#010411]">
+        <div class="max-w-6xl mx-auto px-8">
+            <div class="footer-grid">
+                <!-- Bloco 1: Logo e Tagline -->
+                <div>
+                    <p class="font-bold text-xl mb-2 tracking-tighter">DocSpace</p>
+                    <p class="text-[10px] text-slate-600 font-bold uppercase tracking-widest">Documentação como ativo estratégico de negócio</p>
+                </div>
+                <!-- Bloco 2: Menu Explorar -->
+                <div class="flex flex-col gap-3">
+                    <p class="text-slate-700 uppercase text-[10px] font-black tracking-widest mb-1">Explorar</p>
+                    <button onclick="gateCheck('docs')" class="text-sm font-semibold text-slate-500 hover:text-white text-left transition">Documentação Técnica</button>
+                    <button onclick="gateCheck('academy')" class="text-sm font-semibold text-slate-500 hover:text-white text-left transition">Academy
