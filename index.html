@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Meta Descrição para SEO -->
     <meta name="description" content="DocSpace: Documentação como ativo estratégico de negócio. Por Fabiana Nonjah.">
     <title>Fabiana Nonjah | Senior Tech Writer</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -18,127 +17,33 @@
         .glass { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
         .hidden { display: none !important; }
         
-        /* LOGO COM CURSOR PISCANTE */
+        /* LOGO E TAGLINE */
         .logo-container { display: flex; flex-direction: column; }
         .logo-text { font-weight: 800; font-size: 1.6rem; letter-spacing: -0.04em; display: flex; align-items: center; color: white; line-height: 1; }
         .logo-cursor { width: 3px; height: 1.4rem; background-color: var(--primary); margin-left: 2px; animation: blink 1s step-end infinite; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* TAGLINE COM ESPAÇAMENTO (EXCLUSIVA ÁREAS LOGADAS) */
-        .tagline { font-size: 0.65rem; color: #64748b; font-weight: 600; margin-top: 10px; /* Espaço entrelinhas solicitado */ text-transform: uppercase; letter-spacing: 0.05em; }
+        /* TAGLINE COM ESPAÇO ENTRELINHAS (EXCLUSIVA ÁREAS LOGADAS) */
+        .tagline { font-size: 0.65rem; color: #64748b; font-weight: 600; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
 
-        /* MENU CENTRALIZADO */
+        /* MENU CENTRALIZADO NO HEADER */
         .nav-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 40px; }
         .nav-link { font-size: 0.8rem; font-weight: 700; color: #94a3b8; transition: 0.2s; white-space: nowrap; }
         .nav-link:hover { color: #f8fafc; }
         .nav-explorar { color: #ef4444; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 900; pointer-events: none; }
 
-        /* HERO: FOTO E TEXTO ALINHADOS */
-        .profile-circle { width: 320px; height: 320px; border-radius: 50%; object-fit: cover; border: 4px solid #1e293b; filter: grayscale(100%); transition: 0.6s; }
+        /* FOTO DE PERFIL ALINHADA AO TEXTO */
+        .profile-circle { width: 340px; height: 340px; border-radius: 50%; object-fit: cover; border: 4px solid #1e293b; filter: grayscale(100%); transition: 0.6s; }
         .profile-circle:hover { filter: grayscale(0%); transform: scale(1.02); border-color: var(--primary); }
 
-        /* FOOTER CONFORME IMAGEM (SEM BURACO NO MEIO) */
-        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 2rem; width: 100%; }
-        @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr; text-align: center; } }
+        /* RODAPÉ SEM ESPAÇO GIGANTE (FLEXBOX CONTROLADO) */
+        .footer-container { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1000px; margin: 0 auto; width: 100%; }
+        @media (max-width: 768px) { .footer-container { flex-direction: column; gap: 40px; text-align: center; align-items: center; } }
     </style>
 </head>
 <body class="overflow-x-hidden">
 
     <!-- HEADER -->
     <nav class="fixed top-0 w-full z-50 glass px-12 py-5 flex items-center justify-between min-h-[90px]">
-        <!-- Esquerda: Logo (Tagline oculta na Home por padrão) -->
         <div class="logo-container cursor-pointer" onclick="showView('portfolio')">
-            <div class="logo-text">
-                Doc<span class="text-indigo-500">Space</span>
-                <div class="logo-cursor"></div>
-            </div>
-            <span id="header-tagline" class="tagline hidden">Documentação como ativo estratégico de negócio</span>
-        </div>
-
-        <!-- Centro: Menu "Explorar" -->
-        <div class="hidden lg:flex nav-center">
-            <span class="nav-explorar">Explorar</span>
-            <button onclick="gateCheck('docs')" class="nav-link">Documentação Técnica</button>
-            <button onclick="gateCheck('academy')" class="nav-link">Academy Tech Writer</button>
-        </div>
-
-        <!-- Direita: Idiomas e Auth -->
-        <div class="flex items-center gap-6">
-            <div class="flex gap-3 text-[10px] font-black text-slate-600">
-                <button class="hover:text-white">PT</button>
-                <button class="hover:text-white">EN</button>
-                <button class="hover:text-white">ES</button>
-            </div>
-            <div id="auth-area">
-                <button onclick="openAuthModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-full text-xs font-bold transition shadow-lg shadow-indigo-500/20">Entrar</button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- VIEW: PORTFÓLIO (HOME PÚBLICA) -->
-    <main id="view-portfolio" class="pt-48 pb-20 px-6 max-w-6xl mx-auto">
-        <header class="flex flex-col md:flex-row items-center gap-20 mb-32">
-            <div class="flex-1 text-center md:text-left">
-                <h1 class="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.95] text-white">Simplificando o que é <span class="text-indigo-500">complexo.</span></h1>
-                <p class="text-xl text-slate-400 leading-relaxed max-w-xl">
-                    <strong class="text-white">Fabiana Nonjah.</strong> Senior Technical Writer & Documentation Analyst. Especialista em unir a curiosidade investigativa do jornalismo com o pragmatismo da engenharia para criar documentação escalável focada em clientes SaaS e eficiência operacional.
-                </p>
-            </div>
-            <div class="shrink-0 shadow-2xl rounded-full">
-                <img src="https://via.placeholder.com/400" alt="Fabiana Nonjah" class="profile-circle">
-            </div>
-        </header>
-
-        <!-- SEÇÃO IA ASSISTANT EM DESTAQUE -->
-        <section class="mb-32">
-            <div class="glass p-2 rounded-[2.5rem] shadow-2xl border border-white/5 overflow-hidden">
-                <div class="p-8 bg-slate-900/40 flex justify-between items-center border-b border-slate-800">
-                    <h3 class="font-bold flex items-center gap-3"><i class="lucide-bot text-indigo-400"></i> IA Assistant: Experiência de Pré-Entrevista</h3>
-                    <span class="text-[10px] bg-indigo-500 text-white px-3 py-1 rounded-full font-bold">DEMO INTERATIVA</span>
-                </div>
-                <iframe src="https://aistudio.google.com/apps/1e4ca1d4-e221-471a-bbeb-bfd85ab7c7d5?showPreview=true" class="w-full h-[650px] border-none bg-slate-950"></iframe>
-            </div>
-        </section>
-
-        <!-- SEÇÃO DE CASES (CONFORME IMAGEM 1) -->
-        <section class="mb-40">
-            <h2 class="text-3xl font-extrabold mb-12 tracking-tight">Cases em Destaque</h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="glass p-8 rounded-3xl group hover:border-indigo-500/50 transition">
-                    <div class="h-56 bg-slate-900 rounded-2xl mb-6 overflow-hidden"><img src="https://images.unsplash.com/photo-1551288049-bbb652167014?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition duration-700"></div>
-                    <h3 class="text-xl font-bold mb-3">Arquitetura SaaS: Redesign Estrutural</h3>
-                    <p class="text-sm text-slate-400">Otimização de documentação para redução de churn.</p>
-                </div>
-                <div class="glass p-8 rounded-3xl group hover:border-indigo-500/50 transition">
-                    <div class="h-56 bg-slate-900 rounded-2xl mb-6 overflow-hidden"><img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition duration-700"></div>
-                    <h3 class="text-xl font-bold mb-3">Plataforma E-learning</h3>
-                    <p class="text-sm text-slate-400">Design de interface para cursos técnicos complexos.</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- VIEW: RESTRICTED (ESTILO CLAUDE DOCS) -->
-    <div id="view-restricted" class="hidden flex h-screen overflow-hidden">
-        <aside class="w-72 glass border-r border-slate-800 pt-32 px-6 fixed h-full overflow-y-auto">
-            <div id="sidebar-nav" class="space-y-1"></div>
-        </aside>
-        <main class="ml-72 flex-1 pt-40 px-12 overflow-y-auto">
-            <div id="doc-content" class="max-w-3xl"></div>
-        </main>
-    </div>
-
-    <!-- FOOTER AJUSTADO CONFORME IMAGEM (SEM BURACO CENTRAL) -->
-    <footer class="border-t border-slate-900 py-16 bg-[#010411]">
-        <div class="max-w-6xl mx-auto px-8">
-            <div class="footer-grid">
-                <!-- Bloco 1: Logo e Tagline -->
-                <div>
-                    <p class="font-bold text-xl mb-2 tracking-tighter">DocSpace</p>
-                    <p class="text-[10px] text-slate-600 font-bold uppercase tracking-widest">Documentação como ativo estratégico de negócio</p>
-                </div>
-                <!-- Bloco 2: Menu Explorar -->
-                <div class="flex flex-col gap-3">
-                    <p class="text-slate-700 uppercase text-[10px] font-black tracking-widest mb-1">Explorar</p>
-                    <button onclick="gateCheck('docs')" class="text-sm font-semibold text-slate-500 hover:text-white text-left transition">Documentação Técnica</button>
-                    <button onclick="gateCheck('academy')" class="text-sm font-semibold text-slate-500 hover:text-white text-left transition">Academy
+            <div class="logo-te
