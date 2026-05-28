@@ -1,4 +1,4 @@
-# DocSpace — Documentação Completa do Projeto
+# DocSpace — Documentação do Projeto
 
 **Proprietária:** Fabiana Nonjah  
 **Site:** https://docspace.tec.br  
