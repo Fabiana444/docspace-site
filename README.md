@@ -29,10 +29,12 @@ Projeto em construção.
 
 ---
 
+
 ## Observação sobre segurança e confidencialidade
 
 Este repositório contém apenas materiais públicos e autorais. Informações sensíveis, credenciais, configurações internas, detalhes de autenticação, banco de dados, integrações e processos de deploy não são documentados publicamente.
 ---
+
 
 ## Contato e Créditos
 
