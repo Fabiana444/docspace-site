@@ -8,207 +8,730 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/font/lucide.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        
         :root { --primary: #6366f1; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s; background-color: #020617; color: #f8fafc; scroll-behavior: smooth; }
-        
-        .glass { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .hidden { display: none !important; }
-        
-        /* LOGO E TAGLINE */
-        .logo-container { display: flex; flex-direction: column; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; color: #f8fafc; scroll-behavior: smooth; overflow-x: hidden; }
+
+        .glass { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+
+        /* Logo */
+        .logo-container { display: flex; flex-direction: column; cursor: pointer; }
         .logo-text { font-weight: 800; font-size: 1.6rem; letter-spacing: -0.04em; display: flex; align-items: center; color: white; line-height: 1; }
         .logo-cursor { width: 3px; height: 1.4rem; background-color: var(--primary); margin-left: 2px; animation: blink 1s step-end infinite; }
         @keyframes blink { 50% { opacity: 0; } }
-
-        /* TAGLINE COM ESPAÇO ENTRELINHAS (EXCLUSIVA ÁREAS LOGADAS) */
         .tagline { font-size: 0.65rem; color: #64748b; font-weight: 600; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
 
-        /* MENU CENTRALIZADO NO HEADER */
+        /* Nav */
         .nav-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 40px; }
-        .nav-link { font-size: 0.8rem; font-weight: 700; color: #94a3b8; transition: 0.2s; white-space: nowrap; }
+        .nav-link { font-size: 0.8rem; font-weight: 700; color: #94a3b8; transition: 0.2s; white-space: nowrap; background: none; border: none; cursor: pointer; }
         .nav-link:hover { color: #f8fafc; }
-        .nav-explorar { color: #ef4444; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 900; pointer-events: none; }
+        .nav-label { color: #ef4444; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 900; }
 
-        /* FOTO DE PERFIL ALINHADA AO TEXTO */
-        .profile-circle { width: 340px; height: 340px; border-radius: 50%; object-fit: cover; border: 4px solid #1e293b; filter: grayscale(100%); transition: 0.6s; }
+        /* Profile */
+        .profile-circle { width: 320px; height: 320px; border-radius: 50%; object-fit: cover; border: 4px solid #1e293b; filter: grayscale(100%); transition: 0.6s; }
         .profile-circle:hover { filter: grayscale(0%); transform: scale(1.02); border-color: var(--primary); }
 
-        /* RODAPÉ SEM ESPAÇO GIGANTE (FLEXBOX CONTROLADO) */
-        .footer-container { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1000px; margin: 0 auto; width: 100%; }
-        @media (max-width: 768px) { .footer-container { flex-direction: column; gap: 40px; text-align: center; align-items: center; } }
+        /* Sidebar */
+        .sidebar { width: 272px; background: rgba(15,23,42,0.95); border-right: 1px solid rgba(255,255,255,0.05); padding-top: 96px; position: fixed; height: 100vh; overflow-y: auto; z-index: 40; }
+        .sidebar-link { display: block; padding: 10px 16px; border-radius: 12px; font-size: 0.82rem; font-weight: 600; color: #64748b; cursor: pointer; transition: 0.15s; text-align: left; background: none; border: none; width: 100%; }
+        .sidebar-link:hover { color: #f8fafc; background: rgba(99,102,241,0.08); }
+        .sidebar-link.active { color: #a5b4fc; background: rgba(99,102,241,0.15); }
+        .sidebar-section { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #334155; padding: 20px 16px 6px; }
+
+        /* Footer */
+        .footer-grid { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1000px; margin: 0 auto; width: 100%; }
+        @media (max-width: 768px) { 
+            .footer-grid { flex-direction: column; gap: 40px; text-align: center; align-items: center; }
+            .nav-center { display: none !important; }
+            .profile-circle { width: 220px; height: 220px; }
+        }
+
+        /* Toast */
+        #toast { position: fixed; bottom: 24px; right: 24px; z-index: 200; transition: 0.3s; }
+        .toast-inner { padding: 14px 20px; border-radius: 16px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+        .toast-success { background: #052e16; color: #86efac; border: 1px solid #166534; }
+        .toast-error { background: #2d0a0a; color: #fca5a5; border: 1px solid #7f1d1d; }
+        .toast-info { background: #0c1a3a; color: #93c5fd; border: 1px solid #1e3a6e; }
+
+        /* Spinner */
+        .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.2); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Locked environment card */
+        .env-locked { opacity: 0.5; cursor: not-allowed; }
+        .env-unlocked { cursor: pointer; }
+        .env-unlocked:hover { border-color: rgba(99,102,241,0.4) !important; }
     </style>
 </head>
-<body class="overflow-x-hidden">
+<body>
 
-    <!-- HEADER -->
-    <nav class="fixed top-0 w-full z-50 glass px-12 py-5 flex items-center justify-between min-h-[90px]">
-        <div class="logo-container cursor-pointer" onclick="showView('portfolio')">
-            <div class="logo-text">
-                Doc<span class="text-indigo-500">Space</span>
-                <div class="logo-cursor"></div>
-            </div>
-            <!-- Tagline oculta no portfólio, aparece nos outros ambientes -->
-            <span id="header-tagline" class="tagline hidden">Documentação como ativo estratégico de negócio</span>
+<!-- ═══════════════════════════════════════════════════════════
+     HEADER / NAV
+═══════════════════════════════════════════════════════════ -->
+<nav class="fixed top-0 w-full z-50 glass px-8 md:px-12 py-5 flex items-center justify-between min-h-[80px]">
+    <div class="logo-container" onclick="goHome()">
+        <div class="logo-text">Doc<span class="text-indigo-500">Space</span><div class="logo-cursor"></div></div>
+        <span id="header-tagline" class="tagline hidden">Documentação como ativo estratégico de negócio</span>
+    </div>
+
+    <div class="hidden lg:flex nav-center">
+        <span class="nav-label">Explorar</span>
+        <button onclick="gateCheck('docs')" class="nav-link">Documentação Técnica</button>
+        <button onclick="gateCheck('academy')" class="nav-link">Academy Tech Writer</button>
+    </div>
+
+    <div class="flex items-center gap-6">
+        <div class="flex gap-3 text-[10px] font-black text-slate-600">
+            <button class="hover:text-white transition">PT</button>
+            <button class="hover:text-white transition">EN</button>
+            <button class="hover:text-white transition">ES</button>
         </div>
-
-        <div class="hidden lg:flex nav-center">
-            <span class="nav-explorar">Explorar</span>
-            <button onclick="gateCheck('docs')" class="nav-link">Documentação Técnica</button>
-            <button onclick="gateCheck('academy')" class="nav-link">Academy Tech Writer</button>
+        <!-- Auth Area: muda entre "Entrar" e nome do usuário -->
+        <div id="auth-area">
+            <button onclick="openAuthModal('login')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-full text-xs font-bold transition shadow-lg shadow-indigo-500/20">Entrar</button>
         </div>
+    </div>
+</nav>
 
-        <div class="flex items-center gap-8">
-            <div class="flex gap-3 text-[10px] font-black text-slate-600">
-                <button class="hover:text-white">PT</button>
-                <button class="hover:text-white">EN</button>
-                <button class="hover:text-white">ES</button>
-            </div>
-            <div id="auth-area">
-                <button onclick="openAuthModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-2.5 rounded-full text-xs font-bold transition shadow-lg shadow-indigo-500/20">Entrar</button>
+
+<!-- ═══════════════════════════════════════════════════════════
+     AMBIENTE: PORTFÓLIO (Público)
+═══════════════════════════════════════════════════════════ -->
+<main id="view-portfolio" class="pt-44 pb-20 px-6 max-w-6xl mx-auto">
+
+    <!-- Hero -->
+    <header class="flex flex-col md:flex-row items-center gap-16 mb-36">
+        <div class="flex-1 text-center md:text-left">
+            <p class="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-4">Senior Technical Writer & Documentation Analyst</p>
+            <h1 class="text-5xl md:text-7xl font-black mb-8 tracking-tighter leading-[0.95] text-white">
+                Simplificando<br>o que é <span class="text-indigo-500">complexo.</span>
+            </h1>
+            <p class="text-lg text-slate-400 leading-relaxed max-w-xl mb-10">
+                <strong class="text-white">Fabiana Nonjah.</strong> Especialista em unir a curiosidade investigativa do jornalismo com o pragmatismo da engenharia para criar documentação escalável focada em clientes SaaS e eficiência operacional.
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+                <button onclick="gateCheck('docs')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3 rounded-full text-sm font-bold transition shadow-xl shadow-indigo-500/25">Ver Documentação</button>
+                <button onclick="gateCheck('academy')" class="border border-slate-700 hover:border-indigo-500 text-slate-300 hover:text-white px-8 py-3 rounded-full text-sm font-bold transition">Academy</button>
             </div>
         </div>
-    </nav>
+        <div class="shrink-0">
+            <img src="https://via.placeholder.com/400/1e293b/6366f1?text=FN" alt="Fabiana Nonjah" class="profile-circle shadow-2xl">
+        </div>
+    </header>
 
-    <!-- PORTFÓLIO (HOME) -->
-    <main id="view-portfolio" class="pt-48 pb-20 px-6 max-w-6xl mx-auto">
-        <header class="flex flex-col md:flex-row items-center gap-20 mb-32">
-            <div class="flex-1 text-center md:text-left">
-                <h1 class="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.95] text-white">Simplificando o que é <span class="text-indigo-500">complexo.</span></h1>
-                <p class="text-xl text-slate-400 leading-relaxed max-w-xl">
-                    <strong class="text-white">Fabiana Nonjah.</strong> Senior Technical Writer & Documentation Analyst. Especialista em unir a curiosidade investigativa do jornalismo com o pragmatismo da engenharia para criar documentação escalável focada em clientes SaaS e eficiência operacional.
-                </p>
+    <!-- IA Assistant -->
+    <section class="mb-36">
+        <div class="text-center mb-10">
+            <p class="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-3">Demo Interativa</p>
+            <h2 class="text-3xl font-extrabold tracking-tight">IA Assistant: Pré-Entrevista</h2>
+            <p class="text-slate-400 mt-3 max-w-lg mx-auto text-sm">Converse com minha IA treinada para responder perguntas sobre minha experiência, projetos e habilidades.</p>
+        </div>
+        <div class="glass rounded-[2rem] overflow-hidden border border-white/5 shadow-2xl">
+            <div class="px-8 py-5 bg-slate-900/60 flex justify-between items-center border-b border-slate-800">
+                <h3 class="font-bold flex items-center gap-3 text-sm tracking-tight">
+                    <i class="lucide-bot text-indigo-400"></i> DocSpace IA — Assistente de Entrevista
+                </h3>
+                <span class="text-[10px] bg-indigo-500 text-white px-3 py-1 rounded-full font-bold">AO VIVO</span>
             </div>
-            <div class="shrink-0 shadow-2xl rounded-full">
-                <img src="https://via.placeholder.com/400" alt="Fabiana Nonjah" class="profile-circle">
-            </div>
-        </header>
+            <iframe 
+                src="https://aistudio.google.com/apps/1e4ca1d4-e221-471a-bbeb-bfd85ab7c7d5?showPreview=true" 
+                class="w-full h-[580px] border-none bg-slate-950"
+                title="IA Assistant DocSpace"
+                loading="lazy">
+            </iframe>
+        </div>
+    </section>
 
-        <!-- IA ASSISTANT EM DESTAQUE -->
-        <section class="mb-32">
-            <div class="glass p-2 rounded-[2.5rem] shadow-2xl border border-white/5 overflow-hidden">
-                <div class="p-8 bg-slate-900/40 flex justify-between items-center border-b border-slate-800">
-                    <h3 class="font-bold flex items-center gap-3 tracking-tight"><i class="lucide-bot text-indigo-400"></i> IA Assistant: Experiência de Pré-Entrevista</h3>
-                    <span class="text-[10px] bg-indigo-500 text-white px-3 py-1 rounded-full font-bold">DEMO INTERATIVA</span>
-                </div>
-                <iframe src="https://aistudio.google.com/apps/1e4ca1d4-e221-471a-bbeb-bfd85ab7c7d5?showPreview=true" class="w-full h-[650px] border-none bg-slate-950"></iframe>
+    <!-- Cases -->
+    <section class="mb-36">
+        <div class="flex justify-between items-center mb-12">
+            <div>
+                <p class="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2">Portfólio</p>
+                <h2 class="text-3xl font-extrabold tracking-tight">Cases em Destaque</h2>
             </div>
-        </section>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="glass p-8 rounded-3xl group hover:border-indigo-500/30 transition cursor-pointer border border-transparent">
+                <div class="h-52 bg-slate-900 rounded-2xl mb-6 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1551288049-bbb652167014?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-40 group-hover:opacity-90 transition duration-700" alt="Case SaaS">
+                </div>
+                <span class="text-[10px] bg-indigo-500/20 text-indigo-400 px-3 py-1 rounded-full font-bold">SaaS · Redesign</span>
+                <h3 class="text-lg font-bold mt-4 mb-3">Arquitetura de Docs SaaS: Redesign Estrutural</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Otimização de fluxos de documentação para redução de churn e melhoria do processo de Onboarding em plataforma B2B.</p>
+            </div>
+            <div class="glass p-8 rounded-3xl group hover:border-indigo-500/30 transition cursor-pointer border border-transparent">
+                <div class="h-52 bg-slate-900 rounded-2xl mb-6 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-40 group-hover:opacity-90 transition duration-700" alt="Case E-learning">
+                </div>
+                <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full font-bold">LMS · UX Writing</span>
+                <h3 class="text-lg font-bold mt-4 mb-3">Plataforma E-learning: Arquitetura de Informação</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Arquitetura de informação e UX Writing para trilhas educacionais técnicas de alta complexidade, com foco em retenção.</p>
+            </div>
+        </div>
+    </section>
 
-        <!-- CASES EM DESTAQUE -->
-        <section class="mb-40">
-            <h2 class="text-3xl font-extrabold mb-12 tracking-tight">Cases em Destaque</h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="glass p-8 rounded-3xl group hover:border-indigo-500/50 transition">
-                    <div class="h-56 bg-slate-900 rounded-2xl mb-6 overflow-hidden"><img src="https://images.unsplash.com/photo-1551288049-bbb652167014?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition duration-700"></div>
-                    <h3 class="text-xl font-bold mb-3">Arquitetura SaaS: Redesign Estrutural</h3>
-                    <p class="text-sm text-slate-400 leading-relaxed">Otimização de fluxos de documentação para redução de churn e melhoria do Onboarding.</p>
+    <!-- Acesso Restrito: cards dos ambientes -->
+    <section class="mb-20">
+        <div class="text-center mb-12">
+            <p class="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-3">Ambientes com acesso controlado</p>
+            <h2 class="text-3xl font-extrabold tracking-tight">Explorar o DocSpace</h2>
+            <p class="text-slate-400 mt-3 text-sm">Solicite acesso para acessar os ambientes restritos.</p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Docs SaaS -->
+            <div id="card-docs" class="glass p-8 rounded-3xl border border-transparent transition" onclick="gateCheck('docs')">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-500/20 flex items-center justify-center">
+                        <i class="lucide-file-text text-indigo-400 text-xl"></i>
+                    </div>
+                    <span id="badge-docs" class="text-[10px] bg-slate-800 text-slate-500 px-3 py-1 rounded-full font-bold">ACESSO NECESSÁRIO</span>
                 </div>
-                <div class="glass p-8 rounded-3xl group hover:border-indigo-500/50 transition">
-                    <div class="h-56 bg-slate-900 rounded-2xl mb-6 overflow-hidden"><img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition duration-700"></div>
-                    <h3 class="text-xl font-bold mb-3">Plataforma E-learning</h3>
-                    <p class="text-sm text-slate-400 leading-relaxed">Arquitetura de informação e UX Writing para trilhas educacionais técnicas de alta complexidade.</p>
+                <h3 class="text-xl font-bold mb-3">Documentação Técnica</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Manuais, tutoriais, FAQs, Release Notes e documentação de APIs de software SaaS.</p>
+                <div class="mt-6 flex items-center gap-2 text-indigo-400 text-sm font-bold">
+                    <i class="lucide-arrow-right"></i> Acessar ambiente
                 </div>
             </div>
-        </section>
+            <!-- Academy -->
+            <div id="card-academy" class="glass p-8 rounded-3xl border border-transparent transition" onclick="gateCheck('academy')">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-violet-500/20 flex items-center justify-center">
+                        <i class="lucide-graduation-cap text-violet-400 text-xl"></i>
+                    </div>
+                    <span id="badge-academy" class="text-[10px] bg-slate-800 text-slate-500 px-3 py-1 rounded-full font-bold">ACESSO NECESSÁRIO</span>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Academy Tech Writer</h3>
+                <p class="text-sm text-slate-400 leading-relaxed">Curso completo de formação em Tech Writing com módulos, aulas em vídeo, materiais e certificação.</p>
+                <div class="mt-6 flex items-center gap-2 text-violet-400 text-sm font-bold">
+                    <i class="lucide-arrow-right"></i> Acessar Academy
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     AMBIENTE RESTRITO (Docs e Academy)
+═══════════════════════════════════════════════════════════ -->
+<div id="view-restricted" class="hidden">
+    <aside class="sidebar">
+        <div id="sidebar-nav" class="pb-12"></div>
+    </aside>
+    <main class="pl-[272px] pt-32 pr-8 pb-20 min-h-screen">
+        <div id="doc-content" class="max-w-3xl mx-auto"></div>
     </main>
+</div>
 
-    <!-- ÁREAS RESTRITAS (CLAUDE DOCS STYLE) -->
-    <div id="view-restricted" class="hidden flex h-screen overflow-hidden">
-        <aside class="w-72 glass border-r border-slate-800 pt-32 px-6 fixed h-full overflow-y-auto">
-            <div id="sidebar-nav" class="space-y-1"></div>
-        </aside>
-        <main class="ml-72 flex-1 pt-40 px-12 overflow-y-auto">
-            <div id="doc-content" class="max-w-3xl"></div>
-        </main>
-    </div>
 
-    <!-- RODAPÉ CORRIGIDO (CONFORME IMAGEM 5) -->
-    <footer class="border-t border-slate-900 py-20 bg-[#010411]">
-        <div class="footer-container px-6">
-            <!-- Esquerda: Marca e Tagline -->
-            <div class="flex flex-col">
-                <p class="font-bold text-xl mb-2 tracking-tighter">DocSpace</p>
-                <p class="text-[10px] text-slate-600 font-bold uppercase tracking-widest max-w-[200px] leading-relaxed">Documentação como ativo estratégico de negócio</p>
-            </div>
-
-            <!-- Direita: Explorar e Contato Agrupados para evitar o "vazio" -->
-            <div class="flex gap-20">
-                <div class="flex flex-col gap-4">
-                    <p class="text-slate-700 uppercase text-[10px] font-black tracking-widest">Explorar</p>
-                    <button onclick="gateCheck('docs')" class="text-sm font-semibold text-slate-500 hover:text-white text-left transition">Documentação Técnica</button>
-                    <button onclick="gateCheck('academy')" class="text-sm font-semibold text-slate-500 hover:text-white text-left transition">Academy</button>
-                </div>
-                <div class="flex flex-col gap-4">
-                    <p class="text-slate-700 uppercase text-[10px] font-black tracking-widest">Contato</p>
-                    <a href="https://linkedin.com/in/SEUPERFIL" class="text-sm font-semibold text-slate-500 hover:text-white transition">LinkedIn</a>
-                    <a href="mailto:fabiana.nonjah@outlook.com" class="text-sm font-semibold text-slate-500 hover:text-white transition">E-mail</a>
-                </div>
-            </div>
+<!-- ═══════════════════════════════════════════════════════════
+     RODAPÉ
+═══════════════════════════════════════════════════════════ -->
+<footer id="main-footer" class="border-t border-slate-900 py-20 bg-[#010411]">
+    <div class="footer-grid px-8">
+        <div>
+            <p class="font-bold text-xl mb-2 tracking-tighter">DocSpace</p>
+            <p class="text-[10px] text-slate-600 font-bold uppercase tracking-widest max-w-[200px] leading-relaxed">Documentação como ativo estratégico de negócio</p>
         </div>
-    </footer>
-
-    <!-- MODAL AUTH -->
-    <div id="auth-modal" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 hidden">
-        <div class="glass p-12 rounded-[3.5rem] w-full max-w-md relative border border-white/5">
-            <button onclick="closeAuthModal()" class="absolute top-10 right-10 text-slate-500 hover:text-white transition"><i class="lucide-x w-6 h-6"></i></button>
-            <div class="flex bg-slate-900 p-2 rounded-2xl mb-10 border border-slate-800">
-                <button id="tab-login" onclick="setAuthMode('login')" class="flex-1 py-3 rounded-xl bg-indigo-600 text-white text-xs font-bold transition">Entrar</button>
-                <button id="tab-request" onclick="setAuthMode('request')" class="flex-1 py-3 rounded-xl text-slate-500 text-xs font-bold transition">Solicitar</button>
+        <div class="flex gap-16">
+            <div class="flex flex-col gap-4">
+                <p class="text-slate-700 uppercase text-[10px] font-black tracking-widest">Explorar</p>
+                <button onclick="gateCheck('docs')" class="text-sm font-semibold text-slate-500 hover:text-white text-left transition">Documentação Técnica</button>
+                <button onclick="gateCheck('academy')" class="text-sm font-semibold text-slate-500 hover:text-white text-left transition">Academy</button>
             </div>
-            <div id="form-login" class="space-y-4">
-                <input type="email" placeholder="E-mail" class="w-full p-5 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white">
-                <input type="password" placeholder="Senha" class="w-full p-5 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white">
-                <button class="w-full bg-indigo-600 p-5 rounded-2xl font-bold shadow-xl">Acessar</button>
+            <div class="flex flex-col gap-4">
+                <p class="text-slate-700 uppercase text-[10px] font-black tracking-widest">Contato</p>
+                <a href="https://linkedin.com/in/SEUPERFIL" target="_blank" class="text-sm font-semibold text-slate-500 hover:text-white transition">LinkedIn</a>
+                <a href="mailto:fabiana.nonjah@outlook.com" class="text-sm font-semibold text-slate-500 hover:text-white transition">E-mail</a>
             </div>
         </div>
     </div>
+    <p class="text-center text-slate-800 text-xs mt-16">© 2025 Fabiana Nonjah · DocSpace · Todos os direitos reservados</p>
+</footer>
 
-    <script>
-        const SUPABASE_URL = 'https://SUA_URL.supabase.co';
-        const SUPABASE_KEY = 'SUA_KEY';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        function showView(view) {
-            document.getElementById('view-portfolio').classList.add('hidden');
-            document.getElementById('view-restricted').classList.add('hidden');
-            const tagline = document.getElementById('header-tagline');
-            
-            if(view === 'portfolio') {
-                document.getElementById('view-portfolio').classList.remove('hidden');
-                tagline.classList.add('hidden'); 
-            } else {
-                document.getElementById('view-restricted').classList.remove('hidden');
-                tagline.classList.remove('hidden'); 
-                buildRestrictedView(view);
-            }
-            window.scrollTo(0,0);
-        }
+<!-- ═══════════════════════════════════════════════════════════
+     MODAL DE AUTENTICAÇÃO
+═══════════════════════════════════════════════════════════ -->
+<div id="auth-modal" class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="glass p-10 rounded-[2.5rem] w-full max-w-md relative border border-white/5 shadow-2xl">
+        
+        <button onclick="closeAuthModal()" class="absolute top-8 right-8 text-slate-500 hover:text-white transition">
+            <i class="lucide-x" style="font-size:20px"></i>
+        </button>
 
-        async function gateCheck(env) {
-            const { data: { user } } = await _supabase.auth.getUser();
-            if (!user) openAuthModal();
-            else showView(env);
-        }
+        <!-- Tabs -->
+        <div class="flex bg-slate-900 p-1.5 rounded-2xl mb-8 border border-slate-800">
+            <button id="tab-login" onclick="setAuthMode('login')" class="flex-1 py-3 rounded-xl text-xs font-bold transition">Entrar</button>
+            <button id="tab-request" onclick="setAuthMode('request')" class="flex-1 py-3 rounded-xl text-xs font-bold transition">Solicitar Acesso</button>
+        </div>
 
-        function buildRestrictedView(env) {
-            const nav = document.getElementById('sidebar-nav');
-            const content = document.getElementById('doc-content');
-            if(env === 'docs') {
-                nav.innerHTML = `<p class="text-[10px] font-bold text-slate-500 uppercase p-3 tracking-widest">Documentação SaaS</p><a class="block p-3 rounded-xl font-bold bg-indigo-500/10 text-indigo-400">Cases de Redesign</a>`;
-                content.innerHTML = `<h1 class="text-4xl font-bold mb-6">Arquitetura de Conhecimento</h1><p class="text-slate-400 leading-relaxed">Bem-vindo à área de documentação restrita.</p>`;
-            } else {
-                nav.innerHTML = `<p class="text-[10px] font-bold text-slate-500 uppercase p-3 tracking-widest">Academy</p><a class="block p-3 rounded-xl font-bold bg-indigo-500/10 text-indigo-400">Curso: Tech Writer Sênior</a>`;
-                content.innerHTML = `<h1 class="text-4xl font-bold mb-6">Academy Online</h1><p class="text-slate-400 leading-relaxed">Trilhas de formação especializada.</p>`;
-            }
-        }
+        <!-- FORM: Login -->
+        <div id="form-login">
+            <h2 class="text-xl font-black mb-2 tracking-tight">Bem-vindo de volta</h2>
+            <p class="text-slate-400 text-sm mb-8">Entre com sua conta para acessar os ambientes.</p>
+            <div class="space-y-4">
+                <input id="login-email" type="email" placeholder="seu@email.com" 
+                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white placeholder-slate-600 focus:border-indigo-500 transition">
+                <input id="login-password" type="password" placeholder="Senha" 
+                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white placeholder-slate-600 focus:border-indigo-500 transition">
+                <p id="login-error" class="text-red-400 text-xs hidden"></p>
+                <button id="btn-login" onclick="doLogin()" 
+                    class="w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-2xl font-bold text-sm transition shadow-xl shadow-indigo-500/20 flex items-center justify-center gap-2">
+                    Acessar
+                </button>
+            </div>
+            <p class="text-center text-slate-500 text-xs mt-6">
+                Não tem acesso? <button onclick="setAuthMode('request')" class="text-indigo-400 hover:text-indigo-300 font-bold">Solicite aqui</button>
+            </p>
+        </div>
 
-        function openAuthModal() { document.getElementById('auth-modal').classList.remove('hidden'); }
-        function closeAuthModal() { document.getElementById('auth-modal').classList.add('hidden'); }
-        function setAuthMode(mode) { /* lógica de troca */ }
-        window.onload = async () => { /* check user */ };
-    </script>
+        <!-- FORM: Solicitar Acesso -->
+        <div id="form-request" class="hidden">
+            <h2 class="text-xl font-black mb-2 tracking-tight">Solicitar Acesso</h2>
+            <p class="text-slate-400 text-sm mb-8">Preencha o formulário. O admin entrará em contato.</p>
+            <div class="space-y-3">
+                <input id="req-name" type="text" placeholder="Nome completo *" 
+                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white placeholder-slate-600 focus:border-indigo-500 transition">
+                <input id="req-email" type="email" placeholder="E-mail *" 
+                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white placeholder-slate-600 focus:border-indigo-500 transition">
+                <input id="req-company" type="text" placeholder="Empresa" 
+                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white placeholder-slate-600 focus:border-indigo-500 transition">
+                <input id="req-jobtitle" type="text" placeholder="Cargo" 
+                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white placeholder-slate-600 focus:border-indigo-500 transition">
+                <select id="req-environment" 
+                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-slate-400 focus:border-indigo-500 transition">
+                    <option value="">Qual ambiente deseja acessar? *</option>
+                    <option value="docs">Documentação Técnica</option>
+                    <option value="academy">Academy Tech Writer</option>
+                    <option value="both">Ambos</option>
+                </select>
+                <textarea id="req-justification" placeholder="Por que você deseja acessar este conteúdo?" rows="3"
+                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white placeholder-slate-600 focus:border-indigo-500 transition resize-none"></textarea>
+                <p id="req-error" class="text-red-400 text-xs hidden"></p>
+                <button id="btn-request" onclick="doRequestAccess()" 
+                    class="w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-2xl font-bold text-sm transition shadow-xl flex items-center justify-center gap-2">
+                    Enviar Solicitação
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     TOAST NOTIFICATION
+═══════════════════════════════════════════════════════════ -->
+<div id="toast" class="hidden">
+    <div id="toast-inner" class="toast-inner">
+        <span id="toast-msg"></span>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════════════════ -->
+<script>
+// ── CONFIGURAÇÃO SUPABASE ───────────────────────────────────
+// Substitua pelos valores do seu projeto em supabase.com → Settings → API
+const SUPABASE_URL = 'https://SUA_URL.supabase.co';
+const SUPABASE_KEY = 'SUA_ANON_KEY';
+const _db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── ESTADO GLOBAL ───────────────────────────────────────────
+let currentUser = null;
+let currentProfile = null;
+let userAccessList = [];  // slugs dos ambientes que o usuário tem acesso
+
+// ── INICIALIZAÇÃO ───────────────────────────────────────────
+window.addEventListener('load', async () => {
+    await restoreSession();
+});
+
+// Monitora mudanças de autenticação (login/logout em outras abas)
+_db.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+        await loadUserData(session.user);
+    } else if (event === 'SIGNED_OUT') {
+        clearUserState();
+    }
+});
+
+// ── SESSÃO ──────────────────────────────────────────────────
+async function restoreSession() {
+    const { data: { session } } = await _db.auth.getSession();
+    if (session?.user) {
+        await loadUserData(session.user);
+    }
+}
+
+async function loadUserData(user) {
+    currentUser = user;
+
+    // Busca o perfil (role, nome, etc.)
+    const { data: profile } = await _db
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+    
+    currentProfile = profile;
+
+    // Busca os ambientes que o usuário tem acesso
+    const { data: accesses } = await _db
+        .from('user_access')
+        .select('is_active, environments!inner(slug)')
+        .eq('user_id', user.id)
+        .eq('is_active', true);
+
+    userAccessList = accesses?.map(a => a.environments.slug) ?? [];
+
+    updateAuthUI();
+    updateEnvironmentCards();
+}
+
+function clearUserState() {
+    currentUser = null;
+    currentProfile = null;
+    userAccessList = [];
+    updateAuthUI();
+    updateEnvironmentCards();
+}
+
+// ── UI: AUTH AREA ────────────────────────────────────────────
+function updateAuthUI() {
+    const area = document.getElementById('auth-area');
+    if (currentUser) {
+        const name = currentProfile?.full_name || currentUser.email;
+        const isAdmin = currentProfile?.role === 'admin';
+        area.innerHTML = `
+            <div class="flex items-center gap-3">
+                ${isAdmin ? `<span class="text-[10px] bg-indigo-500/20 text-indigo-400 px-2 py-1 rounded-full font-bold">ADMIN</span>` : ''}
+                <span class="text-sm text-slate-300 font-semibold hidden md:block">${name.split(' ')[0]}</span>
+                <button onclick="doLogout()" class="border border-slate-700 hover:border-red-500 text-slate-400 hover:text-red-400 px-4 py-2 rounded-full text-xs font-bold transition">Sair</button>
+            </div>
+        `;
+    } else {
+        area.innerHTML = `
+            <button onclick="openAuthModal('login')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-full text-xs font-bold transition shadow-lg shadow-indigo-500/20">Entrar</button>
+        `;
+    }
+}
+
+// ── UI: CARDS DE AMBIENTE ────────────────────────────────────
+function updateEnvironmentCards() {
+    const hasDocsAccess = userAccessList.includes('docs') || currentProfile?.role === 'admin';
+    const hasAcademyAccess = userAccessList.includes('academy') || currentProfile?.role === 'admin';
+
+    const cardDocs = document.getElementById('card-docs');
+    const badgeDocs = document.getElementById('badge-docs');
+    if (hasDocsAccess) {
+        badgeDocs.textContent = 'ACESSO LIBERADO';
+        badgeDocs.className = 'text-[10px] bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full font-bold';
+        cardDocs.className = cardDocs.className.replace('env-locked','') + ' env-unlocked';
+    }
+
+    const cardAcademy = document.getElementById('card-academy');
+    const badgeAcademy = document.getElementById('badge-academy');
+    if (hasAcademyAccess) {
+        badgeAcademy.textContent = 'ACESSO LIBERADO';
+        badgeAcademy.className = 'text-[10px] bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full font-bold';
+        cardAcademy.className = cardAcademy.className.replace('env-locked','') + ' env-unlocked';
+    }
+}
+
+// ── GATE CHECK: Verifica acesso antes de abrir ambiente ──────
+async function gateCheck(envSlug) {
+    if (!currentUser) {
+        openAuthModal('login');
+        return;
+    }
+    const hasAccess = userAccessList.includes(envSlug) || currentProfile?.role === 'admin';
+    if (!hasAccess) {
+        showToast(`Você não tem acesso ao ambiente ${envSlug === 'docs' ? 'Documentação' : 'Academy'}. Solicite acesso.`, 'error');
+        openAuthModal('request');
+        return;
+    }
+    showView(envSlug);
+}
+
+// ── NAVEGAÇÃO ENTRE VIEWS ────────────────────────────────────
+function showView(view) {
+    const portfolio = document.getElementById('view-portfolio');
+    const restricted = document.getElementById('view-restricted');
+    const footer = document.getElementById('main-footer');
+    const tagline = document.getElementById('header-tagline');
+
+    if (view === 'portfolio') {
+        portfolio.classList.remove('hidden');
+        restricted.classList.add('hidden');
+        footer.classList.remove('hidden');
+        tagline.classList.add('hidden');
+    } else {
+        portfolio.classList.add('hidden');
+        restricted.classList.remove('hidden');
+        footer.classList.add('hidden');
+        tagline.classList.remove('hidden');
+        buildRestrictedView(view);
+    }
+    window.scrollTo(0, 0);
+}
+
+function goHome() {
+    showView('portfolio');
+}
+
+// ── AMBIENTE RESTRITO: Conteúdo ──────────────────────────────
+function buildRestrictedView(env) {
+    const nav = document.getElementById('sidebar-nav');
+    const content = document.getElementById('doc-content');
+
+    if (env === 'docs') {
+        nav.innerHTML = `
+            <div class="sidebar-section">Documentação SaaS</div>
+            <button class="sidebar-link active">Início</button>
+            <div class="sidebar-section">Manuais</div>
+            <button class="sidebar-link">Guia de Início Rápido</button>
+            <button class="sidebar-link">Manual do Usuário</button>
+            <div class="sidebar-section">Tutoriais</div>
+            <button class="sidebar-link">Primeiros Passos</button>
+            <div class="sidebar-section">Release Notes</div>
+            <button class="sidebar-link">v2.0.0 — Maio 2025</button>
+            <div class="sidebar-section">FAQs</div>
+            <button class="sidebar-link">Perguntas Frequentes</button>
+        `;
+        content.innerHTML = `
+            <div class="mb-4 flex items-center gap-2">
+                <button onclick="goHome()" class="text-slate-500 hover:text-white text-sm transition flex items-center gap-1"><i class="lucide-home"></i> Home</button>
+                <span class="text-slate-700">/</span>
+                <span class="text-slate-400 text-sm">Documentação Técnica</span>
+            </div>
+            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full font-bold">PÚBLICO</span>
+            <h1 class="text-4xl font-black tracking-tight mt-6 mb-4">Documentação Técnica</h1>
+            <p class="text-slate-400 leading-relaxed text-lg mb-8">Bem-vindo à área de Documentação SaaS. Selecione um item no menu lateral para começar.</p>
+            <div class="grid gap-6">
+                <div class="glass p-6 rounded-2xl border border-white/5">
+                    <h3 class="font-bold mb-2 flex items-center gap-2"><i class="lucide-file-text text-indigo-400"></i> Manuais e Tutoriais</h3>
+                    <p class="text-slate-400 text-sm">Documentação completa de software SaaS, guias de início rápido e tutoriais passo a passo.</p>
+                </div>
+                <div class="glass p-6 rounded-2xl border border-white/5">
+                    <h3 class="font-bold mb-2 flex items-center gap-2"><i class="lucide-tag text-amber-400"></i> Release Notes</h3>
+                    <p class="text-slate-400 text-sm">Notas de versão com versionamento semântico e histórico completo de mudanças.</p>
+                </div>
+                <div class="glass p-6 rounded-2xl border border-white/5">
+                    <h3 class="font-bold mb-2 flex items-center gap-2"><i class="lucide-help-circle text-emerald-400"></i> FAQs</h3>
+                    <p class="text-slate-400 text-sm">Perguntas frequentes organizadas por categoria e com busca integrada.</p>
+                </div>
+            </div>
+        `;
+    } else if (env === 'academy') {
+        nav.innerHTML = `
+            <div class="sidebar-section">Academy Tech Writer</div>
+            <button class="sidebar-link active">Início</button>
+            <div class="sidebar-section">Módulo 1</div>
+            <button class="sidebar-link">Fundamentos de Tech Writing</button>
+            <button class="sidebar-link">Ferramentas Essenciais</button>
+            <div class="sidebar-section">Módulo 2</div>
+            <button class="sidebar-link">Documentação SaaS</button>
+            <button class="sidebar-link">APIs e Swagger</button>
+            <div class="sidebar-section">Módulo 3</div>
+            <button class="sidebar-link">IA aplicada à Documentação</button>
+        `;
+        content.innerHTML = `
+            <div class="mb-4 flex items-center gap-2">
+                <button onclick="goHome()" class="text-slate-500 hover:text-white text-sm transition flex items-center gap-1"><i class="lucide-home"></i> Home</button>
+                <span class="text-slate-700">/</span>
+                <span class="text-slate-400 text-sm">Academy Tech Writer</span>
+            </div>
+            <span class="text-[10px] bg-violet-500/20 text-violet-400 px-3 py-1 rounded-full font-bold">ACADEMY</span>
+            <h1 class="text-4xl font-black tracking-tight mt-6 mb-4">Academy Tech Writer</h1>
+            <p class="text-slate-400 leading-relaxed text-lg mb-8">Formação completa para Technical Writers. Selecione um módulo no menu lateral para começar.</p>
+            <div class="grid gap-6">
+                <div class="glass p-6 rounded-2xl border border-white/5">
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="font-bold flex items-center gap-2"><i class="lucide-play-circle text-violet-400"></i> Módulo 1: Fundamentos</h3>
+                        <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded-full">2 aulas</span>
+                    </div>
+                    <p class="text-slate-400 text-sm">Bases teóricas e práticas do Technical Writing moderno.</p>
+                </div>
+                <div class="glass p-6 rounded-2xl border border-white/5">
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="font-bold flex items-center gap-2"><i class="lucide-code text-indigo-400"></i> Módulo 2: Docs SaaS</h3>
+                        <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded-full">2 aulas</span>
+                    </div>
+                    <p class="text-slate-400 text-sm">Documentação de produtos digitais e APIs REST.</p>
+                </div>
+                <div class="glass p-6 rounded-2xl border border-white/5">
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="font-bold flex items-center gap-2"><i class="lucide-bot text-emerald-400"></i> Módulo 3: IA na Documentação</h3>
+                        <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded-full">1 aula</span>
+                    </div>
+                    <p class="text-slate-400 text-sm">Automação, prompts e ferramentas de IA para documentação técnica.</p>
+                </div>
+            </div>
+        `;
+    }
+}
+
+// ── LOGIN ─────────────────────────────────────────────────────
+async function doLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const errEl = document.getElementById('login-error');
+    const btn = document.getElementById('btn-login');
+
+    if (!email || !password) {
+        errEl.textContent = 'Preencha e-mail e senha.';
+        errEl.classList.remove('hidden');
+        return;
+    }
+
+    btn.innerHTML = '<div class="spinner"></div> Entrando...';
+    btn.disabled = true;
+    errEl.classList.add('hidden');
+
+    const { data, error } = await _db.auth.signInWithPassword({ email, password });
+
+    if (error) {
+        errEl.textContent = error.message === 'Invalid login credentials'
+            ? 'E-mail ou senha incorretos.'
+            : 'Erro ao entrar. Tente novamente.';
+        errEl.classList.remove('hidden');
+        btn.innerHTML = 'Acessar';
+        btn.disabled = false;
+        return;
+    }
+
+    await loadUserData(data.user);
+    closeAuthModal();
+    showToast(`Bem-vindo, ${currentProfile?.full_name?.split(' ')[0] || 'usuário'}!`, 'success');
+}
+
+// ── LOGOUT ────────────────────────────────────────────────────
+async function doLogout() {
+    await _db.auth.signOut();
+    clearUserState();
+    showView('portfolio');
+    showToast('Você saiu da sua conta.', 'info');
+}
+
+// ── SOLICITAR ACESSO ─────────────────────────────────────────
+async function doRequestAccess() {
+    const name = document.getElementById('req-name').value.trim();
+    const email = document.getElementById('req-email').value.trim();
+    const company = document.getElementById('req-company').value.trim();
+    const jobtitle = document.getElementById('req-jobtitle').value.trim();
+    const envSlug = document.getElementById('req-environment').value;
+    const justification = document.getElementById('req-justification').value.trim();
+    const errEl = document.getElementById('req-error');
+    const btn = document.getElementById('btn-request');
+
+    if (!name || !email || !envSlug) {
+        errEl.textContent = 'Preencha os campos obrigatórios (nome, e-mail e ambiente).';
+        errEl.classList.remove('hidden');
+        return;
+    }
+
+    btn.innerHTML = '<div class="spinner"></div> Enviando...';
+    btn.disabled = true;
+    errEl.classList.add('hidden');
+
+    // Busca o ID do ambiente
+    const slugsToFetch = envSlug === 'both' ? ['docs', 'academy'] : [envSlug];
+    const { data: envs } = await _db.from('environments').select('id, slug').in('slug', slugsToFetch);
+
+    if (!envs || envs.length === 0) {
+        errEl.textContent = 'Erro ao identificar o ambiente. Tente novamente.';
+        errEl.classList.remove('hidden');
+        btn.innerHTML = 'Enviar Solicitação';
+        btn.disabled = false;
+        return;
+    }
+
+    // Insere uma solicitação para cada ambiente selecionado
+    const requests = envs.map(env => ({
+        email,
+        full_name: name,
+        company: company || null,
+        job_title: jobtitle || null,
+        environment_id: env.id,
+        justification: justification || null,
+    }));
+
+    const { error } = await _db.from('access_requests').insert(requests);
+
+    if (error) {
+        errEl.textContent = 'Erro ao enviar solicitação. Tente novamente.';
+        errEl.classList.remove('hidden');
+        btn.innerHTML = 'Enviar Solicitação';
+        btn.disabled = false;
+        return;
+    }
+
+    closeAuthModal();
+    showToast('Solicitação enviada! O administrador analisará em breve.', 'success');
+}
+
+// ── MODAL ─────────────────────────────────────────────────────
+function openAuthModal(mode = 'login') {
+    document.getElementById('auth-modal').classList.remove('hidden');
+    setAuthMode(mode);
+}
+
+function closeAuthModal() {
+    document.getElementById('auth-modal').classList.add('hidden');
+    // Limpa erros
+    document.getElementById('login-error').classList.add('hidden');
+    document.getElementById('req-error').classList.add('hidden');
+}
+
+function setAuthMode(mode) {
+    const formLogin = document.getElementById('form-login');
+    const formRequest = document.getElementById('form-request');
+    const tabLogin = document.getElementById('tab-login');
+    const tabRequest = document.getElementById('tab-request');
+
+    if (mode === 'login') {
+        formLogin.classList.remove('hidden');
+        formRequest.classList.add('hidden');
+        tabLogin.className = 'flex-1 py-3 rounded-xl bg-indigo-600 text-white text-xs font-bold transition';
+        tabRequest.className = 'flex-1 py-3 rounded-xl text-slate-500 text-xs font-bold transition';
+    } else {
+        formLogin.classList.add('hidden');
+        formRequest.classList.remove('hidden');
+        tabLogin.className = 'flex-1 py-3 rounded-xl text-slate-500 text-xs font-bold transition';
+        tabRequest.className = 'flex-1 py-3 rounded-xl bg-indigo-600 text-white text-xs font-bold transition';
+    }
+}
+
+// Fecha modal ao clicar fora
+document.getElementById('auth-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeAuthModal();
+});
+
+// Enter para fazer login
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !document.getElementById('form-login').classList.contains('hidden') && !document.getElementById('auth-modal').classList.contains('hidden')) {
+        doLogin();
+    }
+});
+
+// ── TOAST ─────────────────────────────────────────────────────
+function showToast(msg, type = 'info') {
+    const toast = document.getElementById('toast');
+    const inner = document.getElementById('toast-inner');
+    const msgEl = document.getElementById('toast-msg');
+
+    inner.className = `toast-inner toast-${type}`;
+    msgEl.textContent = msg;
+    toast.classList.remove('hidden');
+
+    setTimeout(() => { toast.classList.add('hidden'); }, 4000);
+}
+</script>
+
 </body>
 </html>
