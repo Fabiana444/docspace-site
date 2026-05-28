@@ -40,7 +40,7 @@ Este repositório contém apenas materiais públicos e autorais. Informações s
 
 **Fabiana Nonjah**  
 Senior Technical Writer & Documentation Analyst  
-E-mails: fabiana.nonjah@outlook.com / fnonjah@yahoo.com.br
+E-mails: fabiana.nonjah@outlook.com
 
 LinkedIn: [linkedin.com/in/fabiana-nonjah-techwriter/ ](https://www.linkedin.com/in/fabiana-nonjah-techwriter/) 
 
