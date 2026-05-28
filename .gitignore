@@ -1,1 +1,15 @@
+# Segredos - nunca commitar
+.env
+.env.local
+*.env
+supabase-service-key.txt
 
+# Dependencias e temporarios
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+
+# Arquivos locais
+.vscode/
+.idea/
