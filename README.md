@@ -27,6 +27,8 @@ O DocSpace é uma plataforma multi-ambiente de Gestão de Conhecimento e Experi�
 
 Projeto em construção.
 
+---
+
 ## Observação sobre segurança e confidencialidade
 
 Este repositório contém apenas materiais públicos e autorais. Informações sensíveis, credenciais, configurações internas, detalhes de autenticação, banco de dados, integrações e processos de deploy não são documentados publicamente.
