@@ -100,6 +100,7 @@ DocSpace-Documentacao/
 
 **Fabiana Nonjah**  
 Senior Technical Writer & Documentation Analyst  
-E-mails: fabiana.nonjah@outlook.com / fnonjah@yahoo.com.br 
-LinkedIn: linkedin.com/in/fabiana-nonjah-techwriter/  
+E-mails: fabiana.nonjah@outlook.com / fnonjah@yahoo.com.br
+
+LinkedIn: [linkedin.com/in/fabiana-nonjah-techwriter/ ](https://www.linkedin.com/in/fabiana-nonjah-techwriter/) 
 
