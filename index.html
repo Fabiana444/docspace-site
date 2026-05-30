@@ -11,7 +11,7 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <style>
 /* ═══════════════════════════════════════
-   DESIGN SYSTEM — Paper & Ink
+   DESIGN SYSTEM — Paper & Ink v2.0.1
    DocSpace · Fabiana Nonjah · 2026
 ═══════════════════════════════════════ */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -29,75 +29,92 @@
 html{font-family:var(--font-sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-feature-settings:"ss01","cv11";scroll-behavior:smooth}
 body{background:var(--paper);color:var(--ink);overflow-x:hidden;line-height:1.5}
 ::selection{background:var(--ink);color:var(--paper)}
-a{color:inherit}
-
-/* Kicker */
+a{color:inherit;text-decoration:none}
+button{font-family:var(--font-sans)}
+ 
 .kicker{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
-
-/* Hover underline — linha de progressão (não botão com caixa) */
-.hu{background-image:linear-gradient(currentColor,currentColor);background-size:0% 1px;background-repeat:no-repeat;background-position:0 100%;transition:background-size .35s ease;text-decoration:none;color:inherit}
+.hu{background-image:linear-gradient(currentColor,currentColor);background-size:0% 1px;background-repeat:no-repeat;background-position:0 100%;transition:background-size .35s ease}
 .hu:hover{background-size:100% 1px}
-
-/* Grain texture */
 .grain{position:relative;isolation:isolate}
 .grain::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.05;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
-
-/* Rules */
-.rule-b{border-bottom:1px solid var(--rule)}
-.rule-t{border-top:1px solid var(--rule)}
-
-/* Hidden */
 .hidden{display:none!important}
-
+ 
 /* ═══════════════════════════════════════
-   NAV TOPO FIXO
+   NAV TOPO — logo com proporção correta
 ═══════════════════════════════════════ */
 .site-nav{
   position:sticky;top:0;z-index:100;
   background:color-mix(in oklch,var(--paper) 92%,transparent);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border-bottom:1px solid var(--rule);
-  padding:0 48px;
-  height:72px;
-  display:flex;align-items:center;justify-content:space-between;
-  gap:32px;
+  padding:0 48px;height:80px;
+  display:flex;align-items:center;justify-content:space-between;gap:32px;
 }
-
-/* LOGO com cursor piscando */
-.logo-wrap{display:flex;flex-direction:column;text-decoration:none;gap:3px;cursor:pointer}
-.logo-wordmark{font-family:var(--font-display);font-size:1.35rem;font-weight:800;color:var(--ink);letter-spacing:-.04em;display:flex;align-items:center;line-height:1}
+/* Logo — proporção correta, não achatada */
+.logo-wrap{
+  display:flex;flex-direction:column;
+  text-decoration:none;cursor:pointer;
+  gap:5px; /* espaço real entre wordmark e meta */
+  flex-shrink:0;
+}
+.logo-wordmark{
+  font-family:var(--font-display);
+  font-size:1.45rem;
+  font-weight:800;
+  color:var(--ink);
+  letter-spacing:-.04em;
+  display:flex;align-items:center;
+  line-height:1;
+}
 .logo-wordmark span{color:var(--indigo)}
-.logo-cursor{width:2.5px;height:1.1rem;background:var(--indigo);margin-left:2px;animation:blink 1s step-end infinite;display:inline-block;border-radius:1px}
+.logo-cursor{
+  width:2.5px;height:1.15rem;
+  background:var(--indigo);
+  margin-left:2px;
+  animation:blink 1s step-end infinite;
+  display:inline-block;border-radius:1px;
+}
 @keyframes blink{50%{opacity:0}}
-/* EDITAR: Meta description da logo */
-.logo-meta{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);line-height:1}
-
-.site-nav-links{display:flex;align-items:center;gap:6px}
-.site-nav-links a,.site-nav-links button{font-family:var(--font-sans);font-size:13px;font-weight:500;color:color-mix(in oklch,var(--ink) 70%,transparent);text-decoration:none;background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:4px;transition:color .15s;white-space:nowrap}
-.site-nav-links a:hover,.site-nav-links button:hover{color:var(--ink)}
-.site-nav-links a.active{color:var(--ink);font-weight:600}
-
-.btn-entrar{background:var(--ink)!important;color:var(--paper)!important;padding:8px 18px!important;font-size:12px!important;font-weight:700!important;border-radius:.25rem!important;margin-left:8px!important}
-.btn-entrar:hover{background:var(--ink-soft)!important;color:var(--paper)!important}
-
+.logo-meta{
+  font-family:var(--font-mono);
+  font-size:.6rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  line-height:1;
+  white-space:nowrap;
+}
+.site-nav-links{display:flex;align-items:center;gap:4px;flex-wrap:nowrap}
+.site-nav-links a,.site-nav-links button{
+  font-family:var(--font-sans);font-size:13px;font-weight:500;
+  color:color-mix(in oklch,var(--ink) 68%,transparent);
+  text-decoration:none;background:none;border:none;cursor:pointer;
+  padding:6px 10px;border-radius:4px;transition:color .15s;white-space:nowrap;
+}
+.site-nav-links a:hover,.site-nav-links button:hover,.site-nav-links a.active{color:var(--ink)}
+.btn-entrar{
+  background:var(--ink)!important;color:var(--paper)!important;
+  padding:9px 20px!important;font-size:12px!important;font-weight:700!important;
+  border-radius:.25rem!important;margin-left:10px!important;
+  letter-spacing:.01em!important;
+}
+.btn-entrar:hover{background:var(--ink-soft)!important}
+ 
 /* ═══════════════════════════════════════
-   SUB-NAV — separado com espaço respeitoso
+   SUB-NAV
 ═══════════════════════════════════════ */
 .sub-nav{
-  background:var(--paper);
-  border-bottom:1px solid var(--rule);
-  padding:20px 48px;
-  display:flex;align-items:center;justify-content:space-between;
-  gap:24px;
+  background:var(--paper);border-bottom:1px solid var(--rule);
+  padding:18px 48px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
 }
 .sub-nav-id{display:flex;flex-direction:column;gap:3px}
-/* EDITAR: Nome e cargo no sub-nav */
 .sub-nav-name{font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-.02em;line-height:1.2}
 .sub-nav-role{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-soft)}
 .sub-nav-links{display:flex;align-items:center;gap:28px}
 .sub-nav-links a{font-size:13px;font-weight:500;color:color-mix(in oklch,var(--ink) 65%,transparent);text-decoration:none;transition:color .15s}
-.sub-nav-links a:hover,.sub-nav-links a.active{color:var(--ink)}
-
+.sub-nav-links a:hover{color:var(--ink)}
+ 
 /* ═══════════════════════════════════════
    HERO
 ═══════════════════════════════════════ */
@@ -105,112 +122,38 @@ a{color:inherit}
 .hero-inner{
   max-width:1400px;margin:0 auto;
   padding:56px 48px 64px;
-  display:grid;
-  grid-template-columns:7fr 5fr;
-  gap:56px;
-  align-items:start;
+  display:grid;grid-template-columns:7fr 5fr;gap:56px;align-items:start;
 }
-/* EDITAR: Eyebrow do hero */
 .hero-eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:28px}
-
-/* Título hero — fonte fina como o Lovable */
-.hero-h1{
-  font-family:var(--font-display);
-  font-size:clamp(3rem,8.5vw,8rem);
-  font-weight:600;
-  line-height:.9;
-  letter-spacing:-.04em;
-  color:var(--ink);
-  margin-bottom:36px;
-}
-/* EDITAR: Texto itálico do título */
+.hero-h1{font-family:var(--font-display);font-size:clamp(3rem,8.5vw,7.5rem);font-weight:600;line-height:.9;letter-spacing:-.04em;color:var(--ink);margin-bottom:36px}
 .hero-h1 em{font-style:italic;font-weight:300}
-
-/* EDITAR: Bio principal */
 .hero-bio{font-size:17px;font-weight:400;color:var(--ink-soft);line-height:1.7;max-width:480px;margin-bottom:40px}
 .hero-bio strong{color:var(--ink);font-weight:600}
-
-.hero-btns{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:0}
-
-/* Botão fill — preto */
-.btn-fill{
-  background:var(--ink);color:var(--paper);
-  padding:14px 28px;
-  font-family:var(--font-sans);font-size:14px;font-weight:500;
-  border:none;cursor:pointer;text-decoration:none;
-  display:inline-flex;align-items:center;gap:8px;
-  transition:background .15s;
-}
+.hero-btns{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+.btn-fill{background:var(--ink);color:var(--paper);padding:14px 28px;font-family:var(--font-sans);font-size:14px;font-weight:500;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background .15s}
 .btn-fill:hover{background:var(--ink-soft)}
-
-/* Stroke button */
-.btn-stroke{
-  background:transparent;color:var(--ink);
-  padding:13px 24px;
-  font-family:var(--font-sans);font-size:14px;font-weight:500;
-  border:1px solid var(--ink);cursor:pointer;text-decoration:none;
-  display:inline-flex;align-items:center;gap:8px;
-  transition:all .15s;
-}
+.btn-stroke{background:transparent;color:var(--ink);padding:13px 24px;font-family:var(--font-sans);font-size:14px;font-weight:500;border:1px solid var(--ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s}
 .btn-stroke:hover{background:var(--ink);color:var(--paper)}
-
-/* LINKS do hero como texto sublinhado */
-.hero-link{font-size:13px;font-weight:400;color:var(--ink);text-decoration:none}
-
+.hero-link{font-size:13px;font-weight:500;color:var(--ink);text-decoration:none}
+ 
+/* Foto circular */
+.hero-photo-col{display:flex;flex-direction:column;align-items:center;align-self:start;gap:0;margin-top:4px}
+.hero-photo-frame{width:100%;max-width:340px;aspect-ratio:1/1;border-radius:50%;overflow:hidden;border:3px solid var(--paper-2);box-shadow:0 4px 32px rgba(0,0,0,.1);background:var(--paper-2);display:flex;align-items:center;justify-content:center}
+.hero-photo-frame img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.hero-photo-placeholder{font-family:var(--font-display);font-size:72px;font-weight:800;color:color-mix(in oklch,var(--ink) 15%,var(--paper-2))}
+.hero-avail{background:var(--ink);padding:16px 20px;width:100%;max-width:340px}
+.hero-avail .kicker{color:rgba(245,243,238,.6);margin-bottom:4px}
+.hero-avail-title{font-family:var(--font-display);font-size:16px;font-weight:500;color:#f5f3ee}
+ 
 /* ═══════════════════════════════════════
-   FOTO CIRCULAR — nítida, sem sobrepor título
+   MARQUEE
 ═══════════════════════════════════════ */
-.hero-photo-col{display:flex;flex-direction:column;gap:0;align-items:stretch;align-self:start;margin-top:8px}
-.hero-photo-frame{
-  width:100%;
-  max-width:360px;
-  aspect-ratio:1/1;
-  border-radius:50%;
-  overflow:hidden;
-  border:3px solid var(--paper-2);
-  box-shadow:0 2px 24px rgba(0,0,0,.1);
-  background:var(--paper-2);
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto;
-}
-.hero-photo-frame img{
-  width:100%;height:100%;
-  object-fit:cover;
-  object-position:top center;
-  display:block;
-  /* Nitidez máxima */
-  image-rendering:-webkit-optimize-contrast;
-  image-rendering:crisp-edges;
-}
-.hero-photo-placeholder{font-family:var(--font-display);font-size:72px;font-weight:800;color:color-mix(in oklch,var(--ink) 18%,var(--paper-2));letter-spacing:-.04em}
-/* EDITAR: Badge disponível */
-.hero-avail{
-  background:var(--ink);
-  padding:16px 20px;
-  margin-top:0;
-  width:100%;max-width:360px;
-  margin-left:auto;margin-right:auto;
-}
-.hero-avail .kicker{color:color-mix(in oklch,var(--paper) 65%,transparent);font-size:.62rem;margin-bottom:4px}
-.hero-avail-title{font-family:var(--font-display);font-size:16px;font-weight:500;color:var(--paper);letter-spacing:-.01em}
-
-/* ═══════════════════════════════════════
-   MARQUEE — faixa preta com competências reais
-═══════════════════════════════════════ */
-.marquee-wrap{background:var(--ink);overflow:hidden;padding:18px 0;border-top:none}
-.marquee-inner{display:inline-flex;white-space:nowrap;animation:marquee 50s linear infinite}
+.marquee-wrap{background:#0d0d0d;overflow:hidden;padding:18px 0}
+.marquee-inner{display:inline-flex;white-space:nowrap;animation:marquee 55s linear infinite}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-/* EDITAR: Itens da faixa — competências do currículo */
-.marquee-item{
-  font-family:var(--font-display);
-  font-size:20px;
-  font-weight:400;
-  color:var(--paper); /* branco sobre preto, bem visível */
-  padding:0 24px;
-  display:inline-flex;align-items:center;gap:16px;
-}
-.marquee-sep{color:color-mix(in oklch,var(--paper) 35%,transparent);font-size:14px}
-
+.marquee-item{font-family:var(--font-display);font-size:20px;font-weight:400;color:#f5f3ee;padding:0 24px;display:inline-flex;align-items:center;gap:16px}
+.marquee-sep{color:rgba(245,243,238,.3);font-size:14px}
+ 
 /* ═══════════════════════════════════════
    NUMBERS
 ═══════════════════════════════════════ */
@@ -218,10 +161,9 @@ a{color:inherit}
 .numbers{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
 .num-cell{padding:52px 48px 44px;border-right:1px solid var(--rule)}
 .num-cell:last-child{border-right:none}
-/* EDITAR: Valores dos números */
 .num-val{font-family:var(--font-display);font-size:clamp(2.8rem,5vw,4rem);font-weight:500;color:var(--ink);letter-spacing:-.04em;line-height:1}
 .num-label{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-top:10px}
-
+ 
 /* ═══════════════════════════════════════
    CASES
 ═══════════════════════════════════════ */
@@ -231,270 +173,309 @@ a{color:inherit}
 .sec-tag{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:12px}
 .sec-h2{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);font-weight:500;letter-spacing:-.03em;color:var(--ink);line-height:.95}
 .sec-h2 em{font-style:italic;font-weight:300}
-
 .cases-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule)}
-.case-item{background:var(--paper);padding:40px 40px 44px;transition:background .2s;cursor:default}
+.case-item{background:var(--paper);padding:40px;transition:background .2s}
 .case-item:hover{background:var(--paper-2)}
 .case-meta{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:22px}
 .case-num,.case-cat{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
-/* EDITAR: Título de cada case */
 .case-title{font-family:var(--font-display);font-size:clamp(1.4rem,2.2vw,2rem);font-weight:500;color:var(--ink);margin-bottom:14px;line-height:1.05;letter-spacing:-.02em}
-/* EDITAR: Descrição do case */
-.case-desc{font-size:15px;font-weight:400;color:var(--ink-soft);line-height:1.65;margin-bottom:18px}
-/* EDITAR: Resultado/métrica do case */
-.case-result{font-family:var(--font-mono);font-size:13px;color:var(--ink);font-weight:400}
-
+.case-desc{font-size:15px;color:var(--ink-soft);line-height:1.65;margin-bottom:18px}
+.case-result{font-family:var(--font-mono);font-size:13px;color:var(--ink)}
+ 
 /* ═══════════════════════════════════════
-   IA SECTION — preto real, texto branco nítido
+   IA SECTION — preto real
 ═══════════════════════════════════════ */
-.ia-section{background:#0d0d0d} /* preto real — não cinza */
+.ia-section{background:#0d0d0d}
 .ia-top{max-width:1400px;margin:0 auto;padding:80px 48px;display:grid;grid-template-columns:7fr 5fr;gap:80px;align-items:flex-end;border-bottom:1px solid rgba(255,255,255,.08)}
-.ia-kicker{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:16px}
-.ia-h2{font-family:var(--font-display);font-size:clamp(3rem,6.5vw,6rem);font-weight:500;line-height:.95;letter-spacing:-.04em;color:#f5f3ee} /* branco creme para maior contraste */
+.ia-kicker{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:16px}
+.ia-h2{font-family:var(--font-display);font-size:clamp(3rem,6vw,5.5rem);font-weight:500;line-height:.95;letter-spacing:-.04em;color:#f5f3ee}
 .ia-h2 em{font-style:italic;font-weight:300}
-.ia-desc{font-size:17px;font-weight:400;line-height:1.7;color:rgba(245,243,238,.75);margin-bottom:28px}
-
-.btn-stroke-light{
-  background:transparent;color:#f5f3ee;
-  padding:13px 24px;
-  font-family:var(--font-sans);font-size:14px;font-weight:500;
-  border:1px solid rgba(245,243,238,.35);
-  cursor:pointer;text-decoration:none;display:inline-block;
-  transition:all .15s;
-}
-.btn-stroke-light:hover{border-color:rgba(245,243,238,.7);background:rgba(245,243,238,.06)}
-
+.ia-desc{font-size:17px;color:rgba(245,243,238,.72);line-height:1.7;margin-bottom:28px}
+.btn-stroke-light{background:transparent;color:#f5f3ee;padding:13px 24px;font-family:var(--font-sans);font-size:14px;font-weight:500;border:1px solid rgba(245,243,238,.3);cursor:pointer;text-decoration:none;display:inline-block;transition:all .15s}
+.btn-stroke-light:hover{border-color:rgba(245,243,238,.65);background:rgba(245,243,238,.06)}
 .ia-grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.06)}
-.ia-card{background:#0d0d0d;padding:40px 40px 44px}
+.ia-card{background:#0d0d0d;padding:40px}
 .ia-card-n{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-.ia-card-num{font-family:var(--font-mono);font-size:.7rem;color:rgba(255,255,255,.3);letter-spacing:.16em}
-.ia-dot{width:8px;height:8px;border-radius:50%;background:#f5f3ee;opacity:.25}
-/* EDITAR: Título de cada card IA */
+.ia-card-num{font-family:var(--font-mono);font-size:.7rem;color:rgba(255,255,255,.28);letter-spacing:.16em}
+.ia-dot{width:8px;height:8px;border-radius:50%;background:#f5f3ee;opacity:.22}
 .ia-card-t{font-family:var(--font-display);font-size:1.4rem;font-weight:500;color:#f5f3ee;margin-bottom:12px;line-height:1.1;letter-spacing:-.02em}
-/* EDITAR: Descrição de cada card IA */
-.ia-card-d{font-size:14px;font-weight:400;color:rgba(245,243,238,.55);line-height:1.65}
-
+.ia-card-d{font-size:14px;color:rgba(245,243,238,.52);line-height:1.65}
 .stack-section{background:#0d0d0d;border-top:1px solid rgba(255,255,255,.07);padding:44px 48px 56px}
 .stack-inner{max-width:1400px;margin:0 auto}
-.stack-kicker{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:20px}
+.stack-kicker{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-bottom:20px}
 .stack-tags{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
-/* EDITAR: Tags da stack */
-.stack-tag{font-family:var(--font-mono);font-size:11px;color:rgba(245,243,238,.55);padding:7px 14px;border:1px solid rgba(255,255,255,.12)}
-
+.stack-tag{font-family:var(--font-mono);font-size:11px;color:rgba(245,243,238,.52);padding:7px 14px;border:1px solid rgba(255,255,255,.1)}
+ 
 /* ═══════════════════════════════════════
    CURSO
 ═══════════════════════════════════════ */
-.curso-section{border-bottom:1px solid var(--rule)}
+.curso-outer{border-bottom:1px solid var(--rule)}
 .curso-inner{max-width:1400px;margin:0 auto;padding:72px 48px;display:grid;grid-template-columns:5fr 7fr;gap:80px;align-items:flex-end}
 .curso-h{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);font-weight:500;color:var(--ink);line-height:.95;letter-spacing:-.03em}
 .curso-h em{font-style:italic;font-weight:300}
-/* EDITAR: Descrição do curso */
-.curso-desc{font-size:17px;font-weight:400;color:var(--ink-soft);line-height:1.7;margin-bottom:28px}
-
+.curso-desc{font-size:17px;color:var(--ink-soft);line-height:1.7;margin-bottom:28px}
+ 
 /* ═══════════════════════════════════════
-   FOOTER
+   SOBRE — com Princípios e Onde me encontrar
 ═══════════════════════════════════════ */
-footer{border-top:1px solid var(--rule);padding:64px 48px 28px;background:var(--paper)}
+.sobre-outer{border-bottom:1px solid var(--rule)}
+.sobre-hero{max-width:1400px;margin:0 auto;padding:72px 48px 56px;border-bottom:1px solid var(--rule)}
+.sobre-bio-grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:5fr 7fr;gap:80px;padding:56px 48px;border-bottom:1px solid var(--rule)}
+.principios-wrap{max-width:1400px;margin:0 auto;padding:56px 48px;border-bottom:1px solid var(--rule)}
+.principios-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule)}
+.principio-item{background:var(--paper);padding:36px}
+.principio-title{font-family:var(--font-display);font-size:1.6rem;font-weight:500;color:var(--ink);margin-bottom:10px;letter-spacing:-.02em}
+.principio-desc{font-size:15px;color:var(--ink-soft);line-height:1.65}
+.onde-grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:5fr 7fr;gap:80px;padding:56px 48px}
+.onde-links{display:flex;flex-direction:column}
+.onde-link{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid var(--rule);font-family:var(--font-display);font-size:1.4rem;font-weight:500;color:var(--ink);text-decoration:none;transition:color .15s}
+.onde-link:first-child{border-top:1px solid var(--rule)}
+.onde-link:hover{color:color-mix(in oklch,var(--ink) 65%,transparent)}
+.onde-link-arrow{font-size:1rem;color:color-mix(in oklch,var(--ink) 45%,transparent)}
+ 
+/* ═══════════════════════════════════════
+   CONTATO — igual ao Lovable
+═══════════════════════════════════════ */
+.contato-outer{border-bottom:1px solid var(--rule)}
+.contato-hero{max-width:1400px;margin:0 auto;padding:72px 48px 56px;border-bottom:1px solid var(--rule)}
+.contato-h{font-family:var(--font-display);font-size:clamp(3rem,7vw,6rem);font-weight:500;line-height:.95;letter-spacing:-.04em;color:var(--ink)}
+.contato-h em{font-style:italic;font-weight:300}
+.contato-sub{font-size:17px;color:var(--ink-soft);line-height:1.7;max-width:480px;margin-top:24px}
+.contato-body{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:4fr 8fr;gap:80px;padding:56px 48px}
+.contato-left{display:flex;flex-direction:column;gap:32px}
+.contato-label{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}
+.contato-email-link{font-family:var(--font-display);font-size:1.5rem;font-weight:500;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:2px;display:inline-block}
+.contato-direto-links{display:flex;flex-direction:column;gap:6px}
+.contato-direto-link{font-size:16px;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+.contato-atalho{border:1px solid var(--rule);padding:20px;background:var(--paper-2)}
+.contato-atalho-label{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}
+.contato-atalho-text{font-family:var(--font-display);font-size:1.1rem;font-weight:500;line-height:1.4}
+ 
+/* Formulário de contato */
+.form-wrap{display:flex;flex-direction:column;gap:20px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.form-input,.form-textarea{width:100%;border:1px solid var(--rule);background:var(--paper);color:var(--ink);padding:12px 14px;font-family:var(--font-sans);font-size:14px;outline:none;transition:border-color .15s;resize:none;appearance:none}
+.form-input:focus,.form-textarea:focus{border-color:var(--ink)}
+.form-assunto{display:flex;gap:8px;flex-wrap:wrap}
+.form-chip{padding:9px 18px;border:1px solid var(--rule);background:transparent;color:var(--ink);font-family:var(--font-sans);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.form-chip.active,.form-chip:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.form-success{border:1px solid var(--rule);padding:32px;text-align:center;display:none}
+.form-success-title{font-family:var(--font-display);font-size:2rem;font-weight:500;margin-bottom:8px}
+.form-success-sub{font-size:14px;color:var(--ink-soft)}
+ 
+/* ═══════════════════════════════════════
+   FOOTER — direitos reservados
+═══════════════════════════════════════ */
+footer{border-top:1px solid var(--rule);padding:64px 48px 32px;background:var(--paper)}
 .footer-inner{max-width:1400px;margin:0 auto}
 .footer-grid{display:grid;grid-template-columns:5fr 3fr 4fr;gap:48px;margin-bottom:64px}
 .footer-col-label{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:20px}
-.footer-tagline{font-family:var(--font-display);font-size:clamp(1.8rem,3vw,2.8rem);font-weight:500;color:var(--ink);letter-spacing:-.03em;line-height:1}
+.footer-tagline{font-family:var(--font-display);font-size:clamp(1.8rem,3vw,2.6rem);font-weight:500;color:var(--ink);letter-spacing:-.03em;line-height:1}
 .footer-tagline em{font-style:italic;font-weight:300}
-/* EDITAR: E-mail do footer */
-.footer-email{font-size:17px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:2px;margin-top:20px;display:inline-block}
-.footer-link{display:block;font-size:14px;font-weight:400;color:var(--ink-soft);text-decoration:none;margin-bottom:12px;transition:color .15s}
+.footer-email{font-size:16px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:2px;margin-top:20px;display:inline-block}
+.footer-link{display:block;font-size:14px;color:var(--ink-soft);text-decoration:none;margin-bottom:12px;transition:color .15s}
 .footer-link:hover{color:var(--ink)}
 .footer-bottom{border-top:1px solid var(--rule);padding-top:20px;display:flex;justify-content:space-between;align-items:center}
 .footer-copy{font-size:12px;color:var(--ink-soft)}
-.footer-status{font-family:var(--font-mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em}
-
+.footer-version{font-family:var(--font-mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em}
+ 
 /* ═══════════════════════════════════════
-   MODAL DE AUTH
+   MODAL AUTH
 ═══════════════════════════════════════ */
-.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:24px}
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:24px}
 .modal-box{background:var(--paper);width:100%;max-width:440px;padding:48px;position:relative}
-.modal-tabs{display:flex;gap:0;border-bottom:1px solid var(--rule);margin-bottom:36px}
-.modal-tab{flex:1;padding:12px;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;background:none;border:none;cursor:pointer;color:var(--ink-soft);border-bottom:2px solid transparent;transition:all .15s;margin-bottom:-1px}
+.modal-tabs{display:flex;border-bottom:1px solid var(--rule);margin-bottom:36px}
+.modal-tab{flex:1;padding:12px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;background:none;border:none;cursor:pointer;color:var(--ink-soft);border-bottom:2px solid transparent;transition:all .15s;margin-bottom:-1px}
 .modal-tab.active{color:var(--ink);border-bottom-color:var(--ink)}
 .modal-title{font-family:var(--font-display);font-size:1.8rem;font-weight:600;letter-spacing:-.03em;margin-bottom:8px}
 .modal-sub{font-size:14px;color:var(--ink-soft);margin-bottom:28px}
-.form-group{margin-bottom:18px}
-.form-label{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:6px}
-.form-input{width:100%;border:1px solid var(--rule);background:var(--paper);color:var(--ink);padding:12px 14px;font-family:var(--font-sans);font-size:14px;outline:none;transition:border-color .15s}
-.form-input:focus{border-color:var(--ink)}
-.form-error{font-size:12px;color:#c0392b;margin-top:6px;display:none}
+.m-form-group{margin-bottom:16px}
+.m-form-label{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:6px}
+.m-form-input{width:100%;border:1px solid var(--rule);background:var(--paper);color:var(--ink);padding:11px 13px;font-family:var(--font-sans);font-size:14px;outline:none;transition:border-color .15s}
+.m-form-input:focus{border-color:var(--ink)}
+.m-form-error{font-size:12px;color:#c0392b;margin-top:6px;display:none}
 .modal-close{position:absolute;top:20px;right:20px;background:none;border:none;cursor:pointer;font-size:20px;color:var(--ink-soft);line-height:1}
 .modal-close:hover{color:var(--ink)}
-select.form-input{appearance:none;cursor:pointer}
-
+select.m-form-input{cursor:pointer;appearance:none}
+.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+ 
 /* ═══════════════════════════════════════
-   BOT FLUTUANTE — fundo PRETO real
+   BOT FLUTUANTE — fundo preto, texto branco
+   Abas com fonte maior, visíveis
 ═══════════════════════════════════════ */
-/* Botão que alterna entre Pré-entrevista e Fechar */
 .bot-trigger{
   position:fixed;bottom:24px;right:24px;z-index:300;
-  background:#0d0d0d; /* preto real */
-  color:#f5f3ee;
+  background:#0d0d0d;color:#f5f3ee;
   padding:14px 20px;
-  font-family:var(--font-mono);font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  font-family:var(--font-mono);font-size:.72rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
   border:none;cursor:pointer;
   display:flex;align-items:center;gap:10px;
-  box-shadow:0 8px 32px rgba(0,0,0,.3);
+  box-shadow:0 8px 32px rgba(0,0,0,.32);
   transition:background .15s;
 }
-.bot-trigger:hover{background:#1a1a1a}
-.bot-ping{position:relative;width:8px;height:8px;flex-shrink:0}
-.bot-ping-outer{position:absolute;inset:0;border-radius:50%;background:#f5f3ee;opacity:.65;animation:ping 1.5s cubic-bezier(0,0,.2,1) infinite}
+.bot-trigger:hover{background:#1c1c1c}
+.bot-ping{position:relative;width:9px;height:9px;flex-shrink:0}
+.bot-ping-outer{position:absolute;inset:0;border-radius:50%;background:#f5f3ee;opacity:.6;animation:ping 1.5s cubic-bezier(0,0,.2,1) infinite}
 .bot-ping-inner{position:absolute;inset:0;border-radius:50%;background:#f5f3ee}
 @keyframes ping{75%,100%{transform:scale(2.2);opacity:0}}
-
-/* Painel do bot — fundo preto real */
+ 
 .bot-panel{
   position:fixed;bottom:80px;right:24px;z-index:299;
   background:#0d0d0d;
-  border:1px solid rgba(255,255,255,.1);
-  width:min(420px,calc(100vw - 48px));
+  border:1px solid rgba(255,255,255,.12);
+  width:min(440px,calc(100vw - 48px));
   display:none;flex-direction:column;
   box-shadow:0 24px 64px rgba(0,0,0,.5);
   max-height:calc(100vh - 120px);
 }
 .bot-panel.open{display:flex}
-
-/* Abas do bot */
-.bot-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.08)}
+ 
+/* Abas — fonte maior e mais visível */
+.bot-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.1)}
 .bot-tab{
-  flex:1;padding:10px 6px;
-  font-family:var(--font-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;
-  color:rgba(255,255,255,.4);
+  flex:1;padding:12px 8px;
+  font-family:var(--font-mono);font-size:.72rem; /* maior que antes */
+  letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.45);
   background:transparent;border:none;cursor:pointer;
   border-bottom:2px solid transparent;margin-bottom:-1px;
-  transition:all .15s;
+  transition:all .2s;
 }
 .bot-tab.active,.bot-tab:hover{color:#f5f3ee;border-bottom-color:var(--indigo)}
-
-/* Header do bot */
-.bot-header{padding:14px 18px 12px;background:#0d0d0d}
-.bot-header-tag{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:3px}
-.bot-header-title{font-family:var(--font-display);font-size:15px;font-weight:600;color:#f5f3ee;letter-spacing:-.01em}
-
-/* Views */
-.bot-view{display:none;flex-direction:column;flex:1;min-height:0}
+ 
+/* Header do bot — AGENTE IA em destaque */
+.bot-header{padding:16px 20px 14px;background:#0d0d0d;border-bottom:1px solid rgba(255,255,255,.06)}
+.bot-header-tag{
+  font-family:var(--font-mono);
+  font-size:.75rem; /* maior, mais visível */
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#f5f3ee; /* branco real — não opaco */
+  font-weight:500;
+  margin-bottom:4px;
+}
+.bot-header-title{font-family:var(--font-display);font-size:16px;font-weight:600;color:rgba(245,243,238,.7);letter-spacing:-.01em}
+ 
+.bot-view{display:none;flex-direction:column;flex:1;min-height:0;overflow:hidden}
 .bot-view.active{display:flex}
-
-/* Chat view — iframe do agente real */
-.bot-iframe{width:100%;flex:1;border:none;min-height:420px;display:block;background:#0d0d0d}
-
+ 
+/* Chat view — bot nativo (AI Studio bloqueado por X-Frame) */
+.bot-chat-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:200px;max-height:320px}
+.bot-msg{display:flex}
+.bot-msg.user{justify-content:flex-end}
+.bot-bubble{max-width:88%;padding:10px 14px;font-size:13px;line-height:1.55;white-space:pre-wrap}
+.bot-bubble.assistant{background:rgba(255,255,255,.08);color:#f5f3ee;border-radius:0 8px 8px 8px}
+.bot-bubble.user{background:#f5f3ee;color:#0d0d0d;border-radius:8px 0 8px 8px}
+.bot-typing{display:flex;gap:5px;padding:12px 16px;align-items:center}
+.bot-typing span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4);animation:bounce .9s ease infinite}
+.bot-typing span:nth-child(2){animation-delay:.15s}
+.bot-typing span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.bot-suggestions{padding:0 16px 12px;display:flex;flex-direction:column;gap:6px}
+.bot-suggestion{font-size:12px;padding:9px 13px;border:1px solid rgba(255,255,255,.15);color:rgba(245,243,238,.8);cursor:pointer;background:transparent;text-align:left;font-family:var(--font-sans);transition:all .15s;border-radius:0}
+.bot-suggestion:hover{border-color:rgba(255,255,255,.4);color:#f5f3ee}
+.bot-input-row{border-top:1px solid rgba(255,255,255,.08);display:flex;flex-shrink:0}
+.bot-input{flex:1;padding:12px 14px;font-size:13px;border:none;outline:none;background:rgba(255,255,255,.05);color:#f5f3ee;font-family:var(--font-sans)}
+.bot-input::placeholder{color:rgba(255,255,255,.3)}
+.bot-send{background:#f5f3ee;color:#0d0d0d;border:none;padding:12px 16px;cursor:pointer;font-size:14px;font-weight:700;transition:background .15s}
+.bot-send:hover{background:var(--indigo);color:#fff}
+ 
+/* Nota sobre AI Studio */
+.bot-aistudio-note{padding:14px 16px;background:rgba(99,102,241,.08);border-bottom:1px solid rgba(99,102,241,.15);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
+.bot-aistudio-text{font-size:11px;color:rgba(245,243,238,.6);line-height:1.5}
+.bot-aistudio-link{font-size:11px;color:var(--indigo);font-weight:600;white-space:nowrap;text-decoration:none;border:1px solid rgba(99,102,241,.3);padding:4px 10px;transition:all .15s}
+.bot-aistudio-link:hover{background:rgba(99,102,241,.15)}
+ 
 /* FAQ view */
 .bot-faq{flex:1;overflow-y:auto;padding:12px 16px}
 .faq-item{border-bottom:1px solid rgba(255,255,255,.07)}
-.faq-q{width:100%;text-align:left;padding:12px 0;background:transparent;border:none;cursor:pointer;font-size:13px;font-weight:500;color:#f5f3ee;font-family:var(--font-sans);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.faq-q{width:100%;text-align:left;padding:13px 0;background:transparent;border:none;cursor:pointer;font-size:13px;font-weight:500;color:#f5f3ee;font-family:var(--font-sans);display:flex;justify-content:space-between;align-items:center;gap:12px}
 .faq-q:hover{color:rgba(245,243,238,.75)}
-.faq-icon{flex-shrink:0;color:rgba(255,255,255,.3);transition:transform .2s;font-size:15px}
-.faq-item.open .faq-icon{transform:rotate(45deg)}
-.faq-a{font-size:13px;color:rgba(245,243,238,.6);line-height:1.65;padding:0 0 12px;display:none}
+.faq-icon{flex-shrink:0;color:rgba(255,255,255,.3);transition:transform .2s;font-size:16px;line-height:1}
+.faq-item.open .faq-icon{transform:rotate(45deg);color:var(--indigo)}
+.faq-a{font-size:13px;color:rgba(245,243,238,.58);line-height:1.65;padding:0 0 13px;display:none}
 .faq-item.open .faq-a{display:block}
-
+ 
 /* Agendar view */
 .bot-schedule{flex:1;padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
-.schedule-title{font-family:var(--font-display);font-size:17px;font-weight:600;color:#f5f3ee;margin-bottom:2px}
-.schedule-sub{font-size:13px;color:rgba(245,243,238,.55);line-height:1.6;margin-bottom:8px}
-/* EDITAR: Links de agendamento */
+.schedule-title{font-family:var(--font-display);font-size:17px;font-weight:600;color:#f5f3ee}
+.schedule-sub{font-size:13px;color:rgba(245,243,238,.52);line-height:1.6;margin-bottom:4px}
 .schedule-btn{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid rgba(255,255,255,.12);color:#f5f3ee;text-decoration:none;font-size:13px;font-weight:500;transition:all .15s;font-family:var(--font-sans)}
 .schedule-btn:hover{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.04)}
 .schedule-icon{font-size:18px;flex-shrink:0}
 .schedule-info-title{font-weight:600;font-size:13px;margin-bottom:2px}
-.schedule-info-sub{font-size:11px;color:rgba(245,243,238,.45)}
-
-/* Fechar bar — dentro do painel, fundo preto, texto branco */
+.schedule-info-sub{font-size:11px;color:rgba(245,243,238,.42)}
+ 
 .bot-close-bar{border-top:1px solid rgba(255,255,255,.08);padding:10px 16px;flex-shrink:0;background:#0d0d0d}
-.bot-close-btn{
-  width:100%;
-  background:rgba(255,255,255,.05);
-  color:#f5f3ee;
-  border:1px solid rgba(255,255,255,.12);
-  padding:10px;
-  font-family:var(--font-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
-  cursor:pointer;transition:all .15s;
-}
-.bot-close-btn:hover{background:rgba(255,255,255,.1)}
-
+.bot-close-btn{width:100%;background:rgba(255,255,255,.06);color:#f5f3ee;border:1px solid rgba(255,255,255,.1);padding:10px;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .15s}
+.bot-close-btn:hover{background:rgba(255,255,255,.12)}
+ 
 /* ═══════════════════════════════════════
    TOAST
 ═══════════════════════════════════════ */
 #toast{position:fixed;bottom:24px;left:24px;z-index:400;display:none}
-.toast-inner{padding:12px 18px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.toast-inner{padding:12px 18px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px}
 .toast-success{background:#f0fff4;color:#276749;border:1px solid #9ae6b4}
 .toast-error{background:#fff5f5;color:#c53030;border:1px solid #fc8181}
 .toast-info{background:#ebf8ff;color:#2c5282;border:1px solid #90cdf4}
-
+ 
 /* ═══════════════════════════════════════
-   SPINNER
+   RESPONSIVO
 ═══════════════════════════════════════ */
-.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.25);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ═══════════════════════════════════════
-   RESPONSIVO MOBILE
-═══════════════════════════════════════ */
-@media(max-width:768px){
-  .site-nav{padding:0 20px;height:60px}
-  .site-nav-links{gap:4px}
+@media(max-width:900px){
+  .site-nav{padding:0 20px;height:68px}
   .site-nav-links a,.site-nav-links button{font-size:11px;padding:5px 7px}
-  .sub-nav{padding:14px 20px}
-  .hero-inner{grid-template-columns:1fr;padding:32px 20px 40px;gap:32px}
-  .hero-h1{font-size:3rem;margin-bottom:24px}
+  .sub-nav{padding:14px 20px;flex-direction:column;align-items:flex-start;gap:12px}
+  .hero-inner{grid-template-columns:1fr;padding:32px 20px 40px;gap:28px}
   .hero-photo-col{order:-1}
-  .hero-photo-frame{max-width:200px;margin:0 auto}
-  .hero-avail{max-width:200px}
+  .hero-photo-frame{max-width:180px;margin:0 auto}
+  .hero-avail{max-width:180px;margin:0 auto}
   .numbers{grid-template-columns:repeat(2,1fr)}
   .num-cell{padding:32px 20px}
   .section-wrap{padding:40px 20px}
   .cases-grid{grid-template-columns:1fr}
-  .ia-top{grid-template-columns:1fr;padding:48px 20px;gap:32px}
-  .ia-h2{font-size:3rem}
-  .ia-grid{grid-template-columns:1fr;padding:0 0}
+  .ia-top{grid-template-columns:1fr;padding:40px 20px;gap:28px}
+  .ia-grid{grid-template-columns:1fr}
   .ia-card{padding:28px 20px}
-  .stack-section{padding:32px 20px 40px}
-  .curso-inner{grid-template-columns:1fr;padding:40px 20px;gap:24px}
+  .stack-section{padding:28px 20px 40px}
+  .curso-inner{grid-template-columns:1fr;padding:40px 20px;gap:20px}
+  .sobre-bio-grid{grid-template-columns:1fr;padding:40px 20px;gap:24px}
+  .principios-wrap{padding:40px 20px}
+  .principios-grid{grid-template-columns:1fr}
+  .onde-grid{grid-template-columns:1fr;padding:40px 20px;gap:24px}
+  .contato-hero{padding:40px 20px 36px}
+  .contato-body{grid-template-columns:1fr;padding:40px 20px;gap:36px}
   .footer-grid{grid-template-columns:1fr;gap:32px}
-  footer{padding:40px 20px 20px}
-  .footer-bottom{flex-direction:column;gap:8px;text-align:center}
-  .bot-trigger{bottom:16px;right:16px;padding:11px 16px;font-size:.62rem}
-  .bot-panel{bottom:68px;right:16px;width:calc(100vw - 32px)}
-  .modal-box{padding:32px 24px}
+  footer{padding:40px 20px 24px}
+  .footer-bottom{flex-direction:column;gap:6px;text-align:center}
+  .sobre-hero{padding:40px 20px}
+  .form-row{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body class="grain">
-
+ 
 <!-- ══════════════════════════════════════
-     NAV TOPO FIXO
+     NAV TOPO
 ══════════════════════════════════════ -->
-<header class="site-nav" id="site-nav">
-  <!-- EDITAR: Logo e meta description -->
-  <div class="logo-wrap" onclick="goHome()" style="cursor:pointer">
-    <div class="logo-wordmark">
-      Doc<span>Space</span><div class="logo-cursor"></div>
-    </div>
+<header class="site-nav">
+  <div class="logo-wrap" onclick="scrollToTop()">
+    <div class="logo-wordmark">Doc<span>Space</span><div class="logo-cursor"></div></div>
     <span class="logo-meta">Documentação como ativo estratégico de negócio</span>
   </div>
-
   <nav class="site-nav-links">
-    <a href="index.html" class="active hu">Portfólio</a>
+    <a href="#inicio" class="hu active">Portfólio</a>
     <button onclick="gateCheck('docs')" class="hu">Documentação Técnica</button>
     <button onclick="gateCheck('academy')" class="hu">Academy Tech Writer</button>
-    <!-- Auth area — muda após login -->
-    <div id="auth-area">
-      <button class="btn-entrar" onclick="openModal('login')">Entrar</button>
-    </div>
+    <div id="auth-area"><button class="btn-entrar" onclick="openModal('login')">Entrar</button></div>
   </nav>
 </header>
-
-<!-- ══════════════════════════════════════
-     SUB-NAV (espaçado do nav principal)
-══════════════════════════════════════ -->
+ 
+<!-- SUB-NAV -->
 <div class="sub-nav">
-  <!-- EDITAR: Identidade no sub-nav -->
   <div class="sub-nav-id">
     <span class="sub-nav-name">Fabiana Nonjah</span>
     <span class="sub-nav-role">Senior Tech Writer · Documentação SaaS</span>
@@ -506,67 +487,36 @@ select.form-input{appearance:none;cursor:pointer}
     <a href="#contato" class="hu">Contato</a>
   </nav>
 </div>
-
+ 
 <!-- ══════════════════════════════════════
      HERO
 ══════════════════════════════════════ -->
-<section class="hero-wrap">
+<section class="hero-wrap" id="inicio">
   <div class="hero-inner">
-
-    <!-- Coluna esquerda -->
     <div>
-      <!-- EDITAR: Eyebrow -->
       <p class="hero-eyebrow">Portfólio · Edição 2026</p>
-
-      <!-- EDITAR: Título principal -->
-      <h1 class="hero-h1">
-        Documentação<br>
-        <em>que move</em><br>
-        produto.
-      </h1>
-
-      <!-- EDITAR: Bio principal -->
-      <p class="hero-bio">
-        Sou <strong>Fabiana Nonjah</strong>, Analista de Documentação de Software Sênior com 7+ anos em empresas SaaS.
-        Especialista em documentação técnica, gestão de bases de conhecimento e comunicação orientada à adoção do produto.
-        Apoiada por IA generativa e pipelines automatizados que entregam mais rápido, sem perder o cuidado editorial.
-      </p>
-
-      <!-- EDITAR: Botões e links do hero -->
+      <h1 class="hero-h1">Documentação<br><em>que move</em><br>produto.</h1>
+      <p class="hero-bio">Sou <strong>Fabiana Nonjah</strong>, Analista de Documentação de Software Sênior com 7+ anos em empresas SaaS. Especialista em documentação técnica, gestão de bases de conhecimento e comunicação orientada à adoção do produto — apoiada por IA generativa e pipelines automatizados.</p>
       <div class="hero-btns">
         <a href="#cases" class="btn-fill">Ver cases →</a>
-        <!-- EDITAR: Link LinkedIn -->
         <a href="https://www.linkedin.com/in/fabiana-nonjah-techwriter/" target="_blank" rel="noreferrer" class="hero-link hu">LinkedIn ↗</a>
-        <!-- EDITAR: Link GitHub -->
         <a href="https://github.com/Fabiana444" target="_blank" rel="noreferrer" class="hero-link hu">GitHub ↗</a>
       </div>
     </div>
-
-    <!-- Coluna direita — foto circular -->
     <div class="hero-photo-col">
       <div class="hero-photo-frame">
-        <!-- EDITAR: URL da foto — use Supabase Storage para manter privada -->
-        <!-- Opção 1: foto local -->
-        <img src="assets/img/fabiana-profile.jpg" alt="Fabiana Nonjah" id="hero-photo">
-        <!-- Opção 2: Supabase (descomente e cole a URL)
-        <img src="https://SEU_PROJETO.supabase.co/storage/v1/object/public/assets/fabiana-profile.jpg" alt="Fabiana Nonjah" id="hero-photo">
-        -->
+        <img src="assets/img/fabiana-profile.jpg" alt="Fabiana Nonjah" id="hero-photo" onerror="this.style.display='none';this.parentElement.innerHTML='<span class=\'hero-photo-placeholder\'>FN</span>'">
       </div>
-      <!-- EDITAR: Badge disponível -->
       <div class="hero-avail">
         <p class="kicker" style="color:rgba(245,243,238,.6);margin-bottom:4px">Disponível</p>
         <p class="hero-avail-title">Para vagas remotas</p>
       </div>
     </div>
-
   </div>
 </section>
-
-<!-- ══════════════════════════════════════
-     FAIXA MARQUEE — competências reais
-══════════════════════════════════════ -->
+ 
+<!-- MARQUEE -->
 <section class="marquee-wrap">
-  <!-- EDITAR: Adicione ou remova competências da faixa -->
   <div class="marquee-inner">
     <span class="marquee-item">Documentação SaaS <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">Knowledge Base Management <span class="marquee-sep">✦</span></span>
@@ -578,21 +528,17 @@ select.form-input{appearance:none;cursor:pointer}
     <span class="marquee-item">Power Automate <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">GitHub Actions <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">Confluence <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">WordPress <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">Azure DevOps <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">Jira <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">Postman <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Postman · Swagger <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">Prompt Engineering <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">Arquitetura de Informação <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">UX Writing <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">Onboarding SaaS <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">Guided Walkthrough <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">Docusaurus <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">MkDocs <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">SharePoint <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Docusaurus · MkDocs · GitBook <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">SharePoint · WordPress <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">Claude · GPT · Gemini <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">Markdown / MDX <span class="marquee-sep">✦</span></span>
-    <!-- Duplicata para loop contínuo -->
+    <span class="marquee-item">Markdown / MDX · Mermaid <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">Documentação SaaS <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">Knowledge Base Management <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">Docs-as-Code <span class="marquee-sep">✦</span></span>
@@ -603,198 +549,251 @@ select.form-input{appearance:none;cursor:pointer}
     <span class="marquee-item">Power Automate <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">GitHub Actions <span class="marquee-sep">✦</span></span>
     <span class="marquee-item">Confluence <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">WordPress <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">Azure DevOps <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">Jira <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">Postman <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">Prompt Engineering <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">Arquitetura de Informação <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">UX Writing <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">Onboarding SaaS <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">Guided Walkthrough <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">Docusaurus <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">MkDocs <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">SharePoint <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">Claude · GPT · Gemini <span class="marquee-sep">✦</span></span>
-    <span class="marquee-item">Markdown / MDX <span class="marquee-sep">✦</span></span>
   </div>
 </section>
-
-<!-- ══════════════════════════════════════
-     NUMBERS
-══════════════════════════════════════ -->
+ 
+<!-- NUMBERS -->
 <div class="numbers-wrap">
   <div class="numbers">
-    <!-- EDITAR: Números e descrições -->
     <div class="num-cell"><p class="num-val">7+</p><p class="num-label">Anos em docs SaaS</p></div>
     <div class="num-cell"><p class="num-val">50+</p><p class="num-label">Produtos documentados</p></div>
     <div class="num-cell"><p class="num-val">−42%</p><p class="num-label">Tickets evitados (best case)</p></div>
     <div class="num-cell"><p class="num-val">2</p><p class="num-label">Agentes IA em produção</p></div>
   </div>
 </div>
-
-<!-- ══════════════════════════════════════
-     CASES
-══════════════════════════════════════ -->
+ 
+<!-- CASES -->
 <section class="section-outer" id="cases">
   <div class="section-wrap">
     <div class="section-header">
-      <div>
-        <p class="sec-tag">Seção 02</p>
-        <h2 class="sec-h2">Cases <em>selecionados</em></h2>
-      </div>
-      <a href="#" class="hu" style="font-size:13px;color:var(--ink);white-space:nowrap;text-decoration:none">Todos os cases →</a>
+      <div><p class="sec-tag">Seção 02</p><h2 class="sec-h2">Cases <em>selecionados</em></h2></div>
+      <a href="#cases" class="hu" style="font-size:13px;color:var(--ink);white-space:nowrap">Todos os cases →</a>
     </div>
     <div class="cases-grid">
-      <!-- EDITAR: Case 01 -->
       <article class="case-item">
         <div class="case-meta"><span class="case-num">01 / 04</span><span class="case-cat">B2B SaaS · 800+ artigos</span></div>
         <h3 class="case-title">Refatoração de Knowledge Base SaaS</h3>
         <p class="case-desc">Reestruturação de KB IA-friendly com taxonomia nova, busca semântica e geração assistida de artigos. Implementado na Smartspace com instrumentação para medir impacto real em suporte.</p>
         <p class="case-result">→ −42% em tickets de suporte</p>
       </article>
-      <!-- EDITAR: Case 02 -->
       <article class="case-item">
         <div class="case-meta"><span class="case-num">02 / 04</span><span class="case-cat">Developer Experience</span></div>
         <h3 class="case-title">Docs-as-Code para API Pública</h3>
         <p class="case-desc">OpenAPI versionado, Docusaurus + CI lintando exemplos. Onboarding self-service de devs com playground interativo e snippets em múltiplas linguagens.</p>
         <p class="case-result">→ Time-to-first-call de 47min → 9min</p>
       </article>
-      <!-- EDITAR: Case 03 -->
       <article class="case-item">
         <div class="case-meta"><span class="case-num">03 / 04</span><span class="case-cat">Automação · LLM Ops</span></div>
         <h3 class="case-title">Pipeline de Release Notes com IA</h3>
-        <p class="case-desc">GitHub Action integrado com Power Automate lê PRs, LLM classifica e redige draft, tech writer revisa em Markdown. Human-in-the-loop com auditoria completa.</p>
+        <p class="case-desc">GitHub Action + Power Automate lê PRs, LLM classifica e redige draft, tech writer revisa em Markdown. Human-in-the-loop com auditoria completa.</p>
         <p class="case-result">→ 8h → 25min por release</p>
       </article>
-      <!-- EDITAR: Case 04 -->
       <article class="case-item">
         <div class="case-meta"><span class="case-num">04 / 04</span><span class="case-cat">IA Aplicada · Pessoal</span></div>
         <h3 class="case-title">Agente de Pré-entrevista</h3>
-        <p class="case-desc">RAG sobre o portfólio para responder recrutadores em tempo real. Persona com guardrails, base de conhecimento versionada. Direto no canto inferior direito desta página.</p>
+        <p class="case-desc">RAG sobre o portfólio para responder recrutadores em tempo real. Persona com guardrails, base de conhecimento versionada. Disponível no canto inferior direito desta página.</p>
         <p class="case-result">→ Disponível neste site</p>
       </article>
     </div>
   </div>
 </section>
-
-<!-- ══════════════════════════════════════
-     IA & AUTOMAÇÕES — fundo PRETO real
-══════════════════════════════════════ -->
+ 
+<!-- IA & AUTOMAÇÕES -->
 <section class="ia-section" id="ia">
   <div class="ia-top">
     <div>
-      <!-- EDITAR: Tag e título da seção IA -->
       <p class="ia-kicker">Seção 03 — IA & Automações</p>
       <h2 class="ia-h2">IA com<br><em>método,</em> não<br>com mágica.</h2>
     </div>
     <div>
-      <!-- EDITAR: Descrição da seção IA -->
       <p class="ia-desc">Construo agentes, prompts versionados e pipelines que aceleram entregas de documentação sem perder voz, precisão técnica ou rastreabilidade. IA como copiloto — não como autora.</p>
-      <a href="#contato" class="btn-stroke-light">Ver workflows →</a>
+      <a href="#contato" class="btn-stroke-light">Quero aplicar isso →</a>
     </div>
   </div>
   <div class="ia-grid">
-    <!-- EDITAR: Cards de automação -->
     <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">01</span><span class="ia-dot"></span></div><h3 class="ia-card-t">Agentes de IA</h3><p class="ia-card-d">Bots com persona, guardrails e base de conhecimento controlada. Em produção: pré-entrevista (este site) e estruturas de conteúdo para FAQ inteligente omnichannel.</p></div>
-    <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">02</span><span class="ia-dot"></span></div><h3 class="ia-card-t">RAG sobre conteúdo proprietário</h3><p class="ia-card-d">Vetorização da knowledge base + retrieval para respostas ancoradas em fonte. Sem alucinação maquiada de autoridade. Implementado com estrutura de conteúdo controlada.</p></div>
-    <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">03</span><span class="ia-dot"></span></div><h3 class="ia-card-t">Prompt Library versionada</h3><p class="ia-card-d">Prompts tratados como código: revisão por PR, testes de regressão, changelog. Voz de marca preservada release após release. Parte do fluxo Documentar Solução no Jira.</p></div>
+    <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">02</span><span class="ia-dot"></span></div><h3 class="ia-card-t">RAG sobre conteúdo proprietário</h3><p class="ia-card-d">Vetorização da knowledge base + retrieval para respostas ancoradas em fonte. Sem alucinação maquiada de autoridade.</p></div>
+    <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">03</span><span class="ia-dot"></span></div><h3 class="ia-card-t">Prompt Library versionada</h3><p class="ia-card-d">Prompts tratados como código: revisão por PR, testes de regressão, changelog. Voz de marca preservada release após release.</p></div>
     <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">04</span><span class="ia-dot"></span></div><h3 class="ia-card-t">CI/CD para Documentação</h3><p class="ia-card-d">GitHub Actions com lint de Markdown, validação de OpenAPI, link-checker e geração assistida de release notes. Integrado com Power Automate e SharePoint.</p></div>
-    <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">05</span><span class="ia-dot"></span></div><h3 class="ia-card-t">Geração assistida + revisão humana</h3><p class="ia-card-d">LLM rascunha, humano edita, métrica audita. Aceleração real sem terceirizar julgamento editorial. Fluxo com auditoria e rastreabilidade garantidas.</p></div>
-    <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">06</span><span class="ia-dot"></span></div><h3 class="ia-card-t">Métricas de documentação</h3><p class="ia-card-d">Cobertura por endpoint, time-to-first-call, deflection de tickets, taxa de busca sem resultado. Dado guia roadmap e justifica investimento em docs.</p></div>
+    <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">05</span><span class="ia-dot"></span></div><h3 class="ia-card-t">Geração assistida + revisão humana</h3><p class="ia-card-d">LLM rascunha, humano edita, métrica audita. Aceleração real sem terceirizar julgamento editorial.</p></div>
+    <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">06</span><span class="ia-dot"></span></div><h3 class="ia-card-t">Métricas de documentação</h3><p class="ia-card-d">Cobertura por endpoint, time-to-first-call, deflection de tickets, taxa de busca sem resultado. Dado guia roadmap.</p></div>
   </div>
   <div class="stack-section">
     <div class="stack-inner">
-      <!-- EDITAR: Stack técnica -->
       <p class="stack-kicker">Stack em uso</p>
       <div class="stack-tags">
-        <span class="stack-tag">OpenAI · GPT</span>
-        <span class="stack-tag">Anthropic · Claude</span>
-        <span class="stack-tag">Google · Gemini</span>
-        <span class="stack-tag">Power Automate</span>
-        <span class="stack-tag">GitHub Actions</span>
-        <span class="stack-tag">SharePoint</span>
-        <span class="stack-tag">Confluence</span>
-        <span class="stack-tag">WordPress</span>
-        <span class="stack-tag">Docusaurus</span>
-        <span class="stack-tag">MkDocs</span>
-        <span class="stack-tag">OpenAPI 3.1</span>
-        <span class="stack-tag">Postman</span>
-        <span class="stack-tag">Swagger</span>
-        <span class="stack-tag">Azure DevOps</span>
-        <span class="stack-tag">Jira</span>
-        <span class="stack-tag">Markdown lint</span>
-        <span class="stack-tag">Vale prose linter</span>
-        <span class="stack-tag">Mermaid</span>
+        <span class="stack-tag">OpenAI · GPT</span><span class="stack-tag">Anthropic · Claude</span><span class="stack-tag">Google · Gemini</span><span class="stack-tag">Power Automate</span><span class="stack-tag">GitHub Actions</span><span class="stack-tag">SharePoint</span><span class="stack-tag">Confluence</span><span class="stack-tag">WordPress</span><span class="stack-tag">Docusaurus</span><span class="stack-tag">MkDocs</span><span class="stack-tag">OpenAPI 3.1</span><span class="stack-tag">Postman · Swagger</span><span class="stack-tag">Azure DevOps</span><span class="stack-tag">Jira</span><span class="stack-tag">Markdown lint</span><span class="stack-tag">Vale prose linter</span><span class="stack-tag">Mermaid</span>
       </div>
       <a href="#contato" class="btn-stroke-light">Quero aplicar isso no meu produto →</a>
     </div>
   </div>
 </section>
-
-<!-- ══════════════════════════════════════
-     CURSO
-══════════════════════════════════════ -->
-<section class="curso-section">
+ 
+<!-- CURSO -->
+<section class="curso-outer">
   <div class="curso-inner">
     <div>
       <p class="sec-tag">Seção 04 — Em construção</p>
-      <!-- EDITAR: Título do curso -->
       <h2 class="curso-h">Curso<br><em>Tech Writer</em></h2>
     </div>
     <div>
-      <!-- EDITAR: Descrição do curso -->
       <p class="curso-desc">Programa de preparação para profissionais que querem entrar (ou se reposicionar) em documentação de software. Da escrita técnica ao docs-as-code, passando por IA aplicada, métricas e portfólio.</p>
-      <a href="#" onclick="openModal('request')" class="btn-fill">Entrar na lista →</a>
+      <button class="btn-fill" onclick="openModal('request')">Entrar na lista →</button>
     </div>
   </div>
 </section>
-
+ 
 <!-- ══════════════════════════════════════
-     SOBRE
+     SOBRE — com Princípios e Onde me encontrar
 ══════════════════════════════════════ -->
-<section class="section-outer" id="sobre">
-  <div class="section-wrap">
-    <p class="sec-tag" style="margin-bottom:12px">Sobre</p>
-    <div style="display:grid;grid-template-columns:5fr 7fr;gap:80px;align-items:start">
-      <div>
-        <!-- EDITAR: Título sobre -->
-        <h2 class="sec-h2">Fabiana<br><em>Nonjah.</em></h2>
+<section class="sobre-outer" id="sobre">
+  <!-- Título Sobre -->
+  <div class="sobre-hero">
+    <p class="kicker" style="margin-bottom:12px">Sobre</p>
+    <h1 style="font-family:var(--font-display);font-size:clamp(3.5rem,7vw,6rem);font-weight:500;letter-spacing:-.04em;line-height:.95;color:var(--ink)">
+      Fabiana<br><em style="font-style:italic;font-weight:300">Nonjah.</em>
+    </h1>
+  </div>
+ 
+  <!-- Bio -->
+  <div class="sobre-bio-grid">
+    <div><p class="kicker">Bio</p></div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <p style="font-size:17px;color:var(--ink-soft);line-height:1.7">Sou Analista de Documentação de Software Sênior há mais de sete anos. Comecei escrevendo manuais que ninguém lia e fui descobrindo que o problema raramente é o leitor — é o sistema que produz o conteúdo.</p>
+      <p style="font-size:17px;color:var(--ink-soft);line-height:1.7">Desde então, conduzo documentação em produtos SaaS como um ecossistema: arquitetura de informação, docs-as-code, métricas, IA aplicada e revisão editorial caminhando juntos.</p>
+      <p style="font-size:17px;color:var(--ink-soft);line-height:1.7">Em <a href="https://docspace.tec.br" target="_blank" class="hu" style="color:var(--ink);font-weight:500">docspace.tec.br</a> estou construindo a base pública dos meus projetos e um curso de preparação para quem quer entrar em tech writing — sobretudo no Brasil.</p>
+    </div>
+  </div>
+ 
+  <!-- Princípios -->
+  <div class="principios-wrap">
+    <p class="kicker" style="margin-bottom:32px">Princípios</p>
+    <div class="principios-grid">
+      <div class="principio-item">
+        <h3 class="principio-title">Clareza > completude</h3>
+        <p class="principio-desc">Mais palavras raramente é mais clareza. Cortar é parte do ofício.</p>
       </div>
-      <div>
-        <!-- EDITAR: Bio completa -->
-        <p style="font-size:17px;font-weight:400;color:var(--ink-soft);line-height:1.7;margin-bottom:20px">
-          Analista de Documentação de Software Sênior com 7+ anos em empresas SaaS. Comecei escrevendo manuais
-          que ninguém lia e fui descobrindo que o problema raramente é o leitor — é o sistema que produz o conteúdo.
-        </p>
-        <p style="font-size:17px;font-weight:400;color:var(--ink-soft);line-height:1.7;margin-bottom:20px">
-          Desde então, conduzo documentação em produtos SaaS como um ecossistema: arquitetura de informação,
-          docs-as-code, métricas, IA aplicada e revisão editorial caminhando juntos.
-        </p>
-        <p style="font-size:17px;font-weight:400;color:var(--ink-soft);line-height:1.7">
-          Em <a href="https://docspace.tec.br" target="_blank" class="hu" style="color:var(--ink);font-weight:500">docspace.tec.br</a> estou
-          construindo a base pública dos meus projetos e um curso de preparação para quem quer entrar em tech writing — sobretudo no Brasil.
-        </p>
+      <div class="principio-item">
+        <h3 class="principio-title">Documentação é produto</h3>
+        <p class="principio-desc">Tem público, tem métrica, tem roadmap. Não é entregável de última hora.</p>
+      </div>
+      <div class="principio-item">
+        <h3 class="principio-title">IA é copiloto, não autora</h3>
+        <p class="principio-desc">Acelera o que é mecânico, libera o tempo para o que exige julgamento.</p>
+      </div>
+      <div class="principio-item">
+        <h3 class="principio-title">Voz importa</h3>
+        <p class="principio-desc">Cada produto tem um jeito de falar. Manter isso é trabalho ativo, não acidente.</p>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- Onde me encontrar -->
+  <div class="onde-grid">
+    <div>
+      <p class="kicker" style="margin-bottom:16px">Outros canais</p>
+      <h2 style="font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:500;letter-spacing:-.03em;color:var(--ink)">Onde me<br>encontrar</h2>
+    </div>
+    <div class="onde-links">
+      <a href="https://www.linkedin.com/in/fabiana-nonjah-techwriter/" target="_blank" rel="noreferrer" class="onde-link">
+        LinkedIn ↗ <span class="onde-link-arrow">↗</span>
+      </a>
+      <a href="https://github.com/Fabiana444" target="_blank" rel="noreferrer" class="onde-link">
+        GitHub ↗ <span class="onde-link-arrow">↗</span>
+      </a>
+      <a href="https://docspace.tec.br" target="_blank" rel="noreferrer" class="onde-link">
+        docspace.tec.br ↗ <span class="onde-link-arrow">↗</span>
+      </a>
+      <div class="onde-link" style="cursor:pointer" onclick="toggleBot()">
+        Chat aqui no site <span class="onde-link-arrow" style="font-size:.8rem;color:var(--indigo)">●</span>
       </div>
     </div>
   </div>
 </section>
-
+ 
 <!-- ══════════════════════════════════════
-     FOOTER / CONTATO
+     CONTATO — igual ao Lovable
 ══════════════════════════════════════ -->
-<footer id="contato">
+<section class="contato-outer" id="contato">
+  <!-- Hero contato -->
+  <div class="contato-hero">
+    <p class="kicker" style="margin-bottom:16px">Contato</p>
+    <h1 class="contato-h">Vamos<br><em>conversar.</em></h1>
+    <p class="contato-sub">Disponível para vagas (remoto), projetos pontuais de documentação SaaS e consultoria em IA aplicada à documentação. Resposta em até 2 dias úteis.</p>
+  </div>
+ 
+  <!-- Corpo do contato -->
+  <div class="contato-body">
+    <!-- Esquerda: dados de contato -->
+    <div class="contato-left">
+      <div>
+        <p class="contato-label">E-mail</p>
+        <a href="mailto:fabiana@docspace.tec.br" class="contato-email-link hu">fabiana@docspace.tec.br</a>
+      </div>
+      <div>
+        <p class="contato-label">Direto</p>
+        <div class="contato-direto-links">
+          <a href="https://www.linkedin.com/in/fabiana-nonjah-techwriter/" target="_blank" rel="noreferrer" class="contato-direto-link hu">LinkedIn ↗</a>
+          <a href="https://github.com/Fabiana444" target="_blank" rel="noreferrer" class="contato-direto-link hu">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="contato-atalho">
+        <p class="contato-atalho-label">Atalho</p>
+        <p class="contato-atalho-text">Para perguntas rápidas, use o <strong>bot de pré-entrevista</strong> no canto inferior direito.</p>
+      </div>
+    </div>
+ 
+    <!-- Direita: formulário -->
+    <div>
+      <div id="form-contato-success" class="form-success">
+        <p class="form-success-title">Mensagem enviada.</p>
+        <p class="form-success-sub" id="form-success-msg">Obrigada! Retorno em até 2 dias úteis.</p>
+      </div>
+      <form class="form-wrap" id="form-contato" onsubmit="submitContactForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Seu nome *</label>
+            <input type="text" class="form-input" id="c-nome" required placeholder="">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Empresa</label>
+            <input type="text" class="form-input" id="c-empresa" placeholder="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">E-mail *</label>
+          <input type="email" class="form-input" id="c-email" required placeholder="">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Assunto</label>
+          <div class="form-assunto" id="form-assunto">
+            <button type="button" class="form-chip active" onclick="selectChip(this)">Vaga</button>
+            <button type="button" class="form-chip" onclick="selectChip(this)">Projeto</button>
+            <button type="button" class="form-chip" onclick="selectChip(this)">Consultoria</button>
+            <button type="button" class="form-chip" onclick="selectChip(this)">Outro</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mensagem</label>
+          <textarea class="form-textarea" id="c-mensagem" rows="6" placeholder="Conte brevemente sobre a vaga ou projeto…"></textarea>
+        </div>
+        <button type="submit" class="btn-fill" style="align-self:flex-start">Enviar mensagem →</button>
+      </form>
+    </div>
+  </div>
+</section>
+ 
+<!-- FOOTER -->
+<footer>
   <div class="footer-inner">
     <div class="footer-grid">
       <div>
         <p class="footer-col-label">Vamos conversar</p>
         <div class="footer-tagline">Documentação<br><em>que move</em><br>produto.</div>
-        <!-- EDITAR: E-mail de contato -->
         <a href="mailto:fabiana@docspace.tec.br" class="footer-email hu">fabiana@docspace.tec.br →</a>
       </div>
       <div>
         <p class="footer-col-label">Navegação</p>
-        <!-- EDITAR: Links de navegação do footer -->
         <a href="#cases" class="footer-link hu">Cases</a>
         <a href="#ia" class="footer-link hu">IA & Automações</a>
         <a href="#" class="footer-link hu">Curso Tech Writer</a>
@@ -802,95 +801,69 @@ select.form-input{appearance:none;cursor:pointer}
       </div>
       <div>
         <p class="footer-col-label">Outros canais</p>
-        <!-- EDITAR: Links dos canais -->
         <a href="https://www.linkedin.com/in/fabiana-nonjah-techwriter/" target="_blank" rel="noreferrer" class="footer-link hu">LinkedIn · /in/fabiana-nonjah-techwriter</a>
         <a href="https://github.com/Fabiana444" target="_blank" rel="noreferrer" class="footer-link hu">GitHub · /Fabiana444</a>
         <a href="https://docspace.tec.br" target="_blank" rel="noreferrer" class="footer-link hu">docspace.tec.br</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <span class="footer-copy">© 2026 Fabiana Nonjah. Tipografia: Syne & Plus Jakarta Sans.</span>
-      <!-- EDITAR: Status do footer -->
-      <span class="footer-status">v2.0 · Brasil 🇧🇷 · disponível para vagas remotas</span>
+      <span class="footer-copy">© 2026 Fabiana Nonjah · Todos os direitos reservados</span>
+      <span class="footer-version">v2.0.1 · DocSpace</span>
     </div>
   </div>
 </footer>
-
+ 
 <!-- ══════════════════════════════════════
-     MODAL DE AUTH (LOGIN / SOLICITAR)
+     MODAL AUTH
 ══════════════════════════════════════ -->
 <div class="modal-overlay hidden" id="auth-modal" onclick="closeModalOutside(event)">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal()">✕</button>
-
-    <!-- Tabs -->
     <div class="modal-tabs">
       <button class="modal-tab active" id="tab-login" onclick="switchModalTab('login')">Entrar</button>
       <button class="modal-tab" id="tab-request" onclick="switchModalTab('request')">Solicitar acesso</button>
     </div>
-
-    <!-- LOGIN -->
     <div id="form-login">
       <h2 class="modal-title">Bem-vindo de volta</h2>
       <p class="modal-sub">Entre para acessar Documentação Técnica e Academy.</p>
-      <div class="form-group">
-        <label class="form-label">E-mail</label>
-        <input id="login-email" type="email" class="form-input" placeholder="seu@email.com">
+      <div class="m-form-group">
+        <label class="m-form-label">E-mail</label>
+        <input id="login-email" type="email" class="m-form-input" placeholder="seu@email.com">
       </div>
-      <div class="form-group">
-        <label class="form-label">Senha</label>
-        <input id="login-password" type="password" class="form-input" placeholder="••••••••">
+      <div class="m-form-group">
+        <label class="m-form-label">Senha</label>
+        <input id="login-password" type="password" class="m-form-input" placeholder="••••••••">
       </div>
-      <p class="form-error" id="login-error"></p>
-      <button class="btn-fill" style="width:100%;justify-content:center;margin-top:8px" id="btn-login" onclick="doLogin()">
-        Acessar
-      </button>
-      <p style="font-size:13px;color:var(--ink-soft);margin-top:20px;text-align:center">
-        Não tem acesso? <button onclick="switchModalTab('request')" style="background:none;border:none;cursor:pointer;color:var(--ink);font-weight:600;font-size:13px;text-decoration:underline">Solicite aqui</button>
-      </p>
+      <p class="m-form-error" id="login-error"></p>
+      <button class="btn-fill" style="width:100%;justify-content:center;margin-top:8px" id="btn-login" onclick="doLogin()">Acessar</button>
+      <p style="font-size:13px;color:var(--ink-soft);margin-top:20px;text-align:center">Não tem acesso? <button onclick="switchModalTab('request')" style="background:none;border:none;cursor:pointer;color:var(--ink);font-weight:600;font-size:13px;text-decoration:underline">Solicite aqui</button></p>
     </div>
-
-    <!-- SOLICITAR ACESSO -->
     <div id="form-request" class="hidden">
       <h2 class="modal-title">Solicitar acesso</h2>
       <p class="modal-sub">O administrador analisará e entrará em contato.</p>
-      <div class="form-group">
-        <label class="form-label">Nome completo *</label>
-        <input id="req-name" type="text" class="form-input" placeholder="Seu nome">
-      </div>
-      <div class="form-group">
-        <label class="form-label">E-mail *</label>
-        <input id="req-email" type="email" class="form-input" placeholder="seu@email.com">
-      </div>
+      <div class="m-form-group"><label class="m-form-label">Nome completo *</label><input id="req-name" type="text" class="m-form-input" placeholder="Seu nome"></div>
+      <div class="m-form-group"><label class="m-form-label">E-mail *</label><input id="req-email" type="email" class="m-form-input" placeholder="seu@email.com"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div class="form-group">
-          <label class="form-label">Empresa</label>
-          <input id="req-company" type="text" class="form-input" placeholder="Empresa">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Cargo</label>
-          <input id="req-jobtitle" type="text" class="form-input" placeholder="Seu cargo">
-        </div>
+        <div class="m-form-group"><label class="m-form-label">Empresa</label><input id="req-company" type="text" class="m-form-input" placeholder="Empresa"></div>
+        <div class="m-form-group"><label class="m-form-label">Cargo</label><input id="req-jobtitle" type="text" class="m-form-input" placeholder="Cargo"></div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Ambiente desejado *</label>
-        <select id="req-env" class="form-input">
+      <div class="m-form-group">
+        <label class="m-form-label">Ambiente desejado *</label>
+        <select id="req-env" class="m-form-input">
           <option value="">Selecione...</option>
           <option value="docs">Documentação Técnica</option>
           <option value="academy">Academy Tech Writer</option>
           <option value="both">Ambos</option>
         </select>
       </div>
-      <p class="form-error" id="req-error"></p>
-      <button class="btn-fill" style="width:100%;justify-content:center;margin-top:8px" id="btn-request" onclick="doRequestAccess()">
-        Enviar solicitação
-      </button>
+      <p class="m-form-error" id="req-error"></p>
+      <button class="btn-fill" style="width:100%;justify-content:center;margin-top:8px" id="btn-request" onclick="doRequestAccess()">Enviar solicitação</button>
     </div>
   </div>
 </div>
-
+ 
 <!-- ══════════════════════════════════════
-     BOT FLUTUANTE — fundo PRETO, texto branco
+     BOT FLUTUANTE
 ══════════════════════════════════════ -->
 <div class="bot-panel" id="botPanel">
   <div class="bot-tabs">
@@ -899,208 +872,182 @@ select.form-input{appearance:none;cursor:pointer}
     <button class="bot-tab" onclick="switchBotTab('agendar',this)">Agendar</button>
   </div>
   <div class="bot-header">
-    <p class="bot-header-tag">Agente IA</p>
+    <p class="bot-header-tag">● AGENTE IA</p>
     <p class="bot-header-title">Bot de Pré-entrevista</p>
   </div>
-
-  <!-- CHAT — iframe do agente real -->
+ 
+  <!-- CHAT — bot nativo (AI Studio não permite iframe externo) -->
   <div class="bot-view active" id="view-chat">
-    <!-- EDITAR: URL do agente de IA -->
-    <iframe
-      class="bot-iframe"
-      src="https://aistudio.google.com/apps/1e4ca1d4-e221-471a-bbeb-bfd85ab7c7d5?showPreview=true"
-      title="Bot de Pré-entrevista — Fabiana Nonjah"
-      allow="microphone"
-    ></iframe>
+    <div class="bot-aistudio-note">
+      <p class="bot-aistudio-text">Para a experiência completa com o Agente IA, acesse diretamente:</p>
+      <a href="https://aistudio.google.com/apps/1e4ca1d4-e221-471a-bbeb-bfd85ab7c7d5?showPreview=true" target="_blank" rel="noreferrer" class="bot-aistudio-link">Abrir agente ↗</a>
+    </div>
+    <div class="bot-chat-msgs" id="chatMsgs">
+      <div class="bot-msg">
+        <div class="bot-bubble assistant">Sou um agente treinado para responder dúvidas de recrutadores sobre a <strong style="color:#f5f3ee">Fabiana Nonjah</strong> — experiência, stack, cases e disponibilidade. Faça uma pergunta:</div>
+      </div>
+    </div>
+    <div class="bot-suggestions" id="chatSuggestions">
+      <button class="bot-suggestion" onclick="sendSuggestion(this)">Por que contratar a Fabiana?</button>
+      <button class="bot-suggestion" onclick="sendSuggestion(this)">Quais ferramentas ela domina?</button>
+      <button class="bot-suggestion" onclick="sendSuggestion(this)">Como ela usa IA na documentação?</button>
+      <button class="bot-suggestion" onclick="sendSuggestion(this)">Cases mais relevantes?</button>
+    </div>
+    <div class="bot-input-row">
+      <input class="bot-input" id="chatInput" placeholder="Pergunte sobre a Fabiana…" onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="bot-send" onclick="sendChat()">→</button>
+    </div>
   </div>
-
+ 
   <!-- FAQ -->
   <div class="bot-view" id="view-faq">
     <div class="bot-faq">
-      <!-- EDITAR: Perguntas e respostas do FAQ -->
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">Por que contratar a Fabiana? <span class="faq-icon">+</span></button>
-        <p class="faq-a">7+ anos em documentação SaaS, domínio de docs-as-code, IA aplicada e automação de pipelines. Entrega documentação que reduz tickets e acelera onboarding com método — não só texto bem escrito.</p>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">Quais ferramentas ela domina? <span class="faq-icon">+</span></button>
-        <p class="faq-a">Confluence, WordPress, Azure DevOps, Jira, Postman, Swagger, Docusaurus, MkDocs, Power Automate, SharePoint, GitHub Actions, Claude, GPT, Gemini, RAG, OpenAPI 3.1, Markdown/MDX.</p>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">Como ela usa IA na documentação? <span class="faq-icon">+</span></button>
-        <p class="faq-a">Agentes com persona e guardrails, RAG sobre knowledge base, prompts versionados como código, geração assistida de release notes com revisão humana, estruturas de conteúdo para FAQ inteligente omnichannel.</p>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">Está disponível para vagas? <span class="faq-icon">+</span></button>
-        <p class="faq-a">Sim. Disponível para vagas remotas e projetos pontuais de documentação SaaS e consultoria em IA aplicada. Resposta em até 2 dias úteis.</p>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">Cases mais relevantes? <span class="faq-icon">+</span></button>
-        <p class="faq-a">Refatoração de KB SaaS com 800+ artigos (−42% tickets), docs-as-code para API pública (47min → 9min), pipeline de release notes com IA (8h → 25min), e este agente de pré-entrevista rodando em produção.</p>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">Qual sua experiência com SaaS? <span class="faq-icon">+</span></button>
-        <p class="faq-a">7+ anos em empresas SaaS, incluindo Smartspace (plataformas omnichannel) e NDD Tech. Especialista em documentação funcional, APIs, FAQs e materiais de onboarding para times de implantação, suporte e CS.</p>
-      </div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Por que contratar a Fabiana? <span class="faq-icon">+</span></button><p class="faq-a">7+ anos em documentação SaaS, domínio de docs-as-code, IA aplicada e automação de pipelines com Power Automate e GitHub Actions. Entrega documentação que reduz tickets e acelera onboarding — com método e métricas.</p></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Quais ferramentas ela domina? <span class="faq-icon">+</span></button><p class="faq-a">Confluence, WordPress, Azure DevOps, Jira, Postman, Swagger, Docusaurus, MkDocs, Power Automate, SharePoint, GitHub Actions, Claude, GPT, Gemini, RAG, OpenAPI 3.1, Markdown/MDX, EasyDocs.</p></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Como ela usa IA na documentação? <span class="faq-icon">+</span></button><p class="faq-a">Agentes com persona e guardrails, RAG sobre knowledge base, prompts versionados como código, geração assistida de release notes com revisão humana, estruturas de conteúdo para FAQ inteligente omnichannel.</p></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Está disponível para vagas? <span class="faq-icon">+</span></button><p class="faq-a">Sim. Disponível para vagas remotas e projetos pontuais de documentação SaaS e consultoria em IA aplicada. Resposta em até 2 dias úteis. Use o formulário de contato ou o WhatsApp na aba Agendar.</p></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Cases mais relevantes? <span class="faq-icon">+</span></button><p class="faq-a">Refatoração de KB SaaS com 800+ artigos (−42% tickets), docs-as-code para API pública (47min → 9min), pipeline de release notes com IA (8h → 25min), e este agente de pré-entrevista em produção.</p></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Experiência com SaaS? <span class="faq-icon">+</span></button><p class="faq-a">7+ anos em empresas SaaS: Smartspace (plataformas omnichannel, 4 anos) e NDD Tech (3 anos). Especialista em documentação funcional, APIs, FAQs e materiais de onboarding para times de implantação, suporte e CS.</p></div>
     </div>
   </div>
-
+ 
   <!-- AGENDAR -->
   <div class="bot-view" id="view-agendar">
     <div class="bot-schedule">
       <p class="schedule-title">Agendar conversa</p>
-      <p class="schedule-sub">Prefere uma conversa rápida? Escolha o canal abaixo:</p>
-      <!-- EDITAR: Número do WhatsApp e e-mail -->
+      <p class="schedule-sub">Prefere uma conversa rápida? Escolha o canal:</p>
       <a href="https://wa.me/5549991503538?text=Ol%C3%A1%20Fabiana%2C%20vi%20seu%20portf%C3%B3lio%20no%20DocSpace%20e%20gostaria%20de%20conversar%20sobre%20uma%20oportunidade." target="_blank" rel="noreferrer" class="schedule-btn">
         <span class="schedule-icon">💬</span>
-        <div>
-          <div class="schedule-info-title">WhatsApp</div>
-          <div class="schedule-info-sub">Resposta rápida em horário comercial</div>
-        </div>
+        <div><div class="schedule-info-title">WhatsApp</div><div class="schedule-info-sub">Resposta rápida em horário comercial</div></div>
       </a>
       <a href="mailto:fabiana@docspace.tec.br?subject=Oportunidade%20via%20DocSpace&body=Ol%C3%A1%20Fabiana%2C%0A%0AVi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar..." class="schedule-btn">
         <span class="schedule-icon">✉️</span>
-        <div>
-          <div class="schedule-info-title">E-mail</div>
-          <div class="schedule-info-sub">fabiana@docspace.tec.br · até 2 dias úteis</div>
-        </div>
+        <div><div class="schedule-info-title">E-mail</div><div class="schedule-info-sub">fabiana@docspace.tec.br · até 2 dias úteis</div></div>
       </a>
       <a href="https://www.linkedin.com/in/fabiana-nonjah-techwriter/" target="_blank" rel="noreferrer" class="schedule-btn">
         <span class="schedule-icon">🔗</span>
-        <div>
-          <div class="schedule-info-title">LinkedIn</div>
-          <div class="schedule-info-sub">/in/fabiana-nonjah-techwriter</div>
-        </div>
+        <div><div class="schedule-info-title">LinkedIn</div><div class="schedule-info-sub">/in/fabiana-nonjah-techwriter</div></div>
       </a>
     </div>
   </div>
-
-  <!-- Botão Fechar dentro do painel — fundo preto, texto branco -->
+ 
   <div class="bot-close-bar">
     <button class="bot-close-btn" onclick="closeBotPanel()">● Fechar</button>
   </div>
 </div>
-
-<!-- Botão flutuante — alterna entre Pré-entrevista e Fechar -->
+ 
 <button class="bot-trigger" id="botTrigger" onclick="toggleBot()">
   <div class="bot-ping"><div class="bot-ping-outer"></div><div class="bot-ping-inner"></div></div>
   <span id="botTriggerLabel">Pré-entrevista</span>
 </button>
-
-<!-- Toast -->
+ 
 <div id="toast"><div id="toast-inner" class="toast-inner"></div></div>
-
-<!-- ══════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════ -->
+ 
 <script>
 // ── SUPABASE ─────────────────────────────────────────────
-// EDITAR: Substitua com suas chaves reais do Supabase
-const SUPABASE_URL = 'https://nukxorxurwzaxrlrfxrn.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_xyNrCwzJd-bTg-FG_lsXug_x1D90wUA';
-const _db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+// EDITAR: Substitua com suas chaves reais
+const SUPABASE_URL = 'https://SUA_URL.supabase.co';
+const SUPABASE_KEY = 'SUA_ANON_KEY';
+ 
+let _db = null;
+// Inicializa Supabase com tolerância a falha de configuração
+try {
+  _db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+} catch(e) {
+  console.warn('Supabase não configurado:', e.message);
+}
+ 
 let currentUser = null;
 let currentProfile = null;
 let userAccessList = [];
-
-// ── INICIALIZAÇÃO ────────────────────────────────────────
+let supabaseReady = SUPABASE_URL !== 'https://SUA_URL.supabase.co';
+ 
 window.addEventListener('load', async () => {
-  await restoreSession();
-  // Fallback da foto se não carregar
+  if (supabaseReady && _db) await restoreSession();
+  // Foto fallback
   const photo = document.getElementById('hero-photo');
-  if (photo) {
-    photo.onerror = () => {
-      photo.style.display = 'none';
-      photo.parentElement.innerHTML = '<span class="hero-photo-placeholder">FN</span>';
-    };
-  }
+  if (photo) photo.onerror = () => {
+    photo.style.display = 'none';
+    photo.parentElement.innerHTML = '<span class="hero-photo-placeholder">FN</span>';
+  };
 });
-
-_db.auth.onAuthStateChange(async (event, session) => {
-  if (event === 'SIGNED_IN' && session) await loadUserData(session.user);
-  else if (event === 'SIGNED_OUT') clearUserState();
-});
-
-async function restoreSession() {
-  const { data: { session } } = await _db.auth.getSession();
-  if (session?.user) await loadUserData(session.user);
+ 
+if (supabaseReady && _db) {
+  _db.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session) await loadUserData(session.user);
+    else if (event === 'SIGNED_OUT') clearUserState();
+  });
 }
-
+ 
+async function restoreSession() {
+  try {
+    const { data: { session } } = await _db.auth.getSession();
+    if (session?.user) await loadUserData(session.user);
+  } catch(e) { console.warn('Sessão não restaurada:', e.message); }
+}
+ 
 async function loadUserData(user) {
   currentUser = user;
-  const { data: profile } = await _db.from('profiles').select('*').eq('id', user.id).single();
-  currentProfile = profile;
-  const { data: accesses } = await _db
-    .from('user_access')
-    .select('is_active, environments!inner(slug)')
-    .eq('user_id', user.id)
-    .eq('is_active', true);
-  userAccessList = accesses?.map(a => a.environments.slug) ?? [];
+  try {
+    const { data: profile } = await _db.from('profiles').select('*').eq('id', user.id).single();
+    currentProfile = profile;
+    const { data: accesses } = await _db.from('user_access').select('is_active, environments!inner(slug)').eq('user_id', user.id).eq('is_active', true);
+    userAccessList = accesses?.map(a => a.environments.slug) ?? [];
+  } catch(e) { console.warn('Erro ao carregar perfil:', e.message); }
   updateAuthUI();
 }
-
-function clearUserState() {
-  currentUser = null; currentProfile = null; userAccessList = [];
-  updateAuthUI();
-}
-
+ 
+function clearUserState() { currentUser = null; currentProfile = null; userAccessList = []; updateAuthUI(); }
+ 
 function updateAuthUI() {
   const area = document.getElementById('auth-area');
   if (currentUser) {
     const name = currentProfile?.full_name || currentUser.email.split('@')[0];
-    const isAdmin = currentProfile?.role === 'admin';
-    area.innerHTML = `
-      <div style="display:flex;align-items:center;gap:10px">
-        ${isAdmin ? '<span style="font-size:10px;font-family:var(--font-mono);color:var(--indigo);letter-spacing:.1em;text-transform:uppercase">Admin</span>' : ''}
-        <span style="font-size:13px;font-weight:500">${name.split(' ')[0]}</span>
-        <button onclick="doLogout()" style="font-size:12px;font-weight:600;color:var(--ink-soft);background:none;border:1px solid var(--rule);padding:6px 12px;cursor:pointer;font-family:var(--font-sans);border-radius:.25rem" onmouseover="this.style.borderColor='var(--ink)'" onmouseout="this.style.borderColor='var(--rule)'">Sair</button>
-      </div>`;
+    area.innerHTML = `<div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:13px;font-weight:500">${name.split(' ')[0]}</span>
+      <button onclick="doLogout()" style="font-size:12px;font-weight:600;color:var(--ink-soft);background:none;border:1px solid var(--rule);padding:6px 12px;cursor:pointer;font-family:var(--font-sans);border-radius:.25rem">Sair</button>
+    </div>`;
   } else {
     area.innerHTML = '<button class="btn-entrar" onclick="openModal(\'login\')">Entrar</button>';
   }
 }
-
-// ── AUTH GATE ────────────────────────────────────────────
+ 
+// ── GATE CHECK ───────────────────────────────────────────
 async function gateCheck(envSlug) {
-  if (!currentUser) { openModal('login'); return; }
-  const hasAccess = userAccessList.includes(envSlug) || currentProfile?.role === 'admin';
-  if (!hasAccess) {
-    showToast('Solicite acesso para visualizar este ambiente.', 'info');
-    openModal('request');
+  if (!supabaseReady) {
+    showToast('Configure o Supabase para acessar ambientes restritos.', 'info');
     return;
   }
+  if (!currentUser) { openModal('login'); return; }
+  const hasAccess = userAccessList.includes(envSlug) || currentProfile?.role === 'admin';
+  if (!hasAccess) { showToast('Solicite acesso para este ambiente.', 'info'); openModal('request'); return; }
   window.location.href = envSlug === 'docs' ? 'docs.html' : 'academy.html';
 }
-
+ 
 // ── LOGIN ────────────────────────────────────────────────
 async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value;
   const errEl = document.getElementById('login-error');
   const btn = document.getElementById('btn-login');
-  if (!email || !password) { showError(errEl, 'Preencha e-mail e senha.'); return; }
-  btn.innerHTML = '<span class="spinner"></span> Entrando...';
-  btn.disabled = true;
+  if (!email || !password) { showFieldError(errEl,'Preencha e-mail e senha.'); return; }
+  if (!supabaseReady) { showFieldError(errEl,'Supabase não configurado. Cole suas chaves no HTML.'); return; }
+  btn.innerHTML = '<span class="spinner"></span> Entrando…'; btn.disabled = true;
   errEl.style.display = 'none';
-  const { data, error } = await _db.auth.signInWithPassword({ email, password });
-  if (error) {
-    showError(errEl, 'E-mail ou senha incorretos.');
-    btn.innerHTML = 'Acessar'; btn.disabled = false; return;
-  }
-  await loadUserData(data.user);
-  closeModal();
-  showToast(`Bem-vindo, ${currentProfile?.full_name?.split(' ')[0] || 'usuário'}!`, 'success');
+  try {
+    const { data, error } = await _db.auth.signInWithPassword({ email, password });
+    if (error) { showFieldError(errEl,'E-mail ou senha incorretos.'); btn.innerHTML = 'Acessar'; btn.disabled = false; return; }
+    await loadUserData(data.user);
+    closeModal();
+    showToast(`Bem-vindo, ${currentProfile?.full_name?.split(' ')[0] || 'usuário'}!`, 'success');
+  } catch(e) { showFieldError(errEl,'Erro de conexão. Verifique o Supabase.'); btn.innerHTML = 'Acessar'; btn.disabled = false; }
 }
-
-// ── LOGOUT ───────────────────────────────────────────────
+ 
 async function doLogout() {
-  await _db.auth.signOut();
-  clearUserState();
-  showToast('Sessão encerrada.', 'info');
+  if (_db) await _db.auth.signOut();
+  clearUserState(); showToast('Sessão encerrada.', 'info');
 }
-
-// ── SOLICITAR ACESSO ─────────────────────────────────────
+ 
 async function doRequestAccess() {
   const name = document.getElementById('req-name').value.trim();
   const email = document.getElementById('req-email').value.trim();
@@ -1109,22 +1056,47 @@ async function doRequestAccess() {
   const envSlug = document.getElementById('req-env').value;
   const errEl = document.getElementById('req-error');
   const btn = document.getElementById('btn-request');
-  if (!name || !email || !envSlug) { showError(errEl, 'Preencha os campos obrigatórios.'); return; }
-  btn.innerHTML = '<span class="spinner"></span> Enviando...'; btn.disabled = true;
-  const slugs = envSlug === 'both' ? ['docs','academy'] : [envSlug];
-  const { data: envs } = await _db.from('environments').select('id,slug').in('slug', slugs);
-  if (!envs?.length) { showError(errEl, 'Erro ao identificar ambiente.'); btn.innerHTML = 'Enviar solicitação'; btn.disabled = false; return; }
-  const { error } = await _db.from('access_requests').insert(envs.map(e => ({ email, full_name: name, company: company||null, job_title: jobtitle||null, environment_id: e.id })));
-  if (error) { showError(errEl, 'Erro ao enviar. Tente novamente.'); btn.innerHTML = 'Enviar solicitação'; btn.disabled = false; return; }
-  closeModal();
-  showToast('Solicitação enviada! O admin analisará em breve.', 'success');
+  if (!name || !email || !envSlug) { showFieldError(errEl,'Preencha os campos obrigatórios.'); return; }
+  if (!supabaseReady) {
+    closeModal();
+    showToast('Solicitação enviada (configure o Supabase para persistir).', 'info');
+    return;
+  }
+  btn.innerHTML = '<span class="spinner"></span> Enviando…'; btn.disabled = true;
+  try {
+    const slugs = envSlug === 'both' ? ['docs','academy'] : [envSlug];
+    const { data: envs } = await _db.from('environments').select('id,slug').in('slug', slugs);
+    if (!envs?.length) { showFieldError(errEl,'Erro ao identificar ambiente.'); btn.innerHTML = 'Enviar solicitação'; btn.disabled = false; return; }
+    const { error } = await _db.from('access_requests').insert(envs.map(e => ({ email, full_name: name, company: company||null, job_title: jobtitle||null, environment_id: e.id })));
+    if (error) throw error;
+    closeModal(); showToast('Solicitação enviada! O admin analisará em breve.', 'success');
+  } catch(e) { showFieldError(errEl,'Erro ao enviar. Tente novamente.'); btn.innerHTML = 'Enviar solicitação'; btn.disabled = false; }
 }
-
+ 
+// ── FORMULÁRIO DE CONTATO ────────────────────────────────
+let selectedAssunto = 'Vaga';
+function selectChip(btn) {
+  document.querySelectorAll('.form-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  selectedAssunto = btn.textContent;
+}
+function submitContactForm(e) {
+  e.preventDefault();
+  const nome = document.getElementById('c-nome').value.trim();
+  const empresa = document.getElementById('c-empresa').value.trim();
+  const email = document.getElementById('c-email').value.trim();
+  const mensagem = document.getElementById('c-mensagem').value.trim();
+  const subject = encodeURIComponent(`[${selectedAssunto}] ${nome}${empresa ? ' — ' + empresa : ''}`);
+  const body = encodeURIComponent(`${mensagem}\n\n—\n${nome}${empresa ? '\n' + empresa : ''}\n${email}`);
+  window.location.href = `mailto:fabiana@docspace.tec.br?subject=${subject}&body=${body}`;
+  document.getElementById('form-contato').style.display = 'none';
+  const success = document.getElementById('form-contato-success');
+  document.getElementById('form-success-msg').textContent = `Obrigada, ${nome}. Seu cliente de e-mail abriu com a mensagem pronta. Retorno em até 2 dias úteis.`;
+  success.style.display = 'block';
+}
+ 
 // ── MODAL ────────────────────────────────────────────────
-function openModal(tab = 'login') {
-  document.getElementById('auth-modal').classList.remove('hidden');
-  switchModalTab(tab);
-}
+function openModal(tab='login') { document.getElementById('auth-modal').classList.remove('hidden'); switchModalTab(tab); }
 function closeModal() { document.getElementById('auth-modal').classList.add('hidden'); }
 function closeModalOutside(e) { if (e.target === document.getElementById('auth-modal')) closeModal(); }
 function switchModalTab(tab) {
@@ -1133,47 +1105,69 @@ function switchModalTab(tab) {
     document.getElementById('tab-'+t).classList.toggle('active', t === tab);
   });
 }
-
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeBotPanel(); }});
-
+ 
 // ── BOT ──────────────────────────────────────────────────
 let botOpen = false;
-function toggleBot() {
-  botOpen = !botOpen;
-  document.getElementById('botPanel').classList.toggle('open', botOpen);
-  document.getElementById('botTriggerLabel').textContent = botOpen ? 'Fechar' : 'Pré-entrevista';
+function toggleBot() { botOpen = !botOpen; document.getElementById('botPanel').classList.toggle('open', botOpen); document.getElementById('botTriggerLabel').textContent = botOpen ? 'Fechar' : 'Pré-entrevista'; }
+function closeBotPanel() { botOpen = false; document.getElementById('botPanel').classList.remove('open'); document.getElementById('botTriggerLabel').textContent = 'Pré-entrevista'; }
+function switchBotTab(view, btn) { document.querySelectorAll('.bot-tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.bot-view').forEach(v => v.classList.remove('active')); btn.classList.add('active'); document.getElementById('view-'+view).classList.add('active'); }
+function toggleFaq(btn) { const item = btn.closest('.faq-item'); const was = item.classList.contains('open'); document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open')); if (!was) item.classList.add('open'); }
+ 
+// Respostas do bot nativo
+const botAnswers = {
+  'Por que contratar a Fabiana?': '**Fabiana Nonjah** tem 7+ anos em documentação SaaS com resultados mensuráveis:\n\n• −42% em tickets de suporte (KB SaaS)\n• Time-to-first-call: 47min → 9min (API Docs)\n• Pipeline de Release Notes: 8h → 25min\n\nEspecialista em docs-as-code, IA aplicada e automações com Power Automate + GitHub Actions.',
+  'Quais ferramentas ela domina?': 'Stack principal:\n\n• **Docs**: Docusaurus, MkDocs, GitBook, Confluence, WordPress\n• **APIs**: OpenAPI 3.1, Postman, Swagger\n• **IA**: Claude, GPT, Gemini, RAG, agentes customizados\n• **Automação**: Power Automate, GitHub Actions, SharePoint\n• **Gestão**: Azure DevOps, Jira, EasyDocs',
+  'Como ela usa IA na documentação?': 'Com **método**, não com mágica:\n\n• Agentes com persona e guardrails definidos\n• RAG sobre knowledge base proprietária\n• Prompts versionados como código (PR + changelog)\n• Geração assistida de release notes com revisão humana\n• FAQ inteligente para plataformas omnichannel\n\nIA como copiloto — a decisão editorial permanece com o tech writer.',
+  'Cases mais relevantes?': '**01 / Refatoração KB SaaS**\n→ −42% tickets, +3.1× artigos por sessão\n\n**02 / Docs-as-Code API Pública**\n→ Time-to-first-call: 47min → 9min\n\n**03 / Pipeline Release Notes IA**\n→ 8h → 25min por release\n\n**04 / Agente de Pré-entrevista (este aqui)**\n→ RAG sobre portfólio, responde 24/7',
+};
+ 
+function sendSuggestion(btn) {
+  const q = btn.textContent;
+  document.getElementById('chatSuggestions').style.display = 'none';
+  appendMessage(q, 'user');
+  setTimeout(() => {
+    const ans = botAnswers[q] || 'Para mais detalhes sobre esta pergunta, acesse o agente completo clicando em "Abrir agente ↗" acima.';
+    appendMessage(formatBotAnswer(ans), 'assistant');
+  }, 800);
 }
-function closeBotPanel() {
-  botOpen = false;
-  document.getElementById('botPanel').classList.remove('open');
-  document.getElementById('botTriggerLabel').textContent = 'Pré-entrevista';
+function sendChat() {
+  const input = document.getElementById('chatInput');
+  const q = input.value.trim();
+  if (!q) return;
+  input.value = '';
+  document.getElementById('chatSuggestions').style.display = 'none';
+  appendMessage(q, 'user');
+  setTimeout(() => {
+    const known = Object.keys(botAnswers).find(k => q.toLowerCase().includes(k.toLowerCase().split(' ')[1]));
+    const ans = known ? botAnswers[known] : `Boa pergunta sobre "${q}". Para uma resposta completa e personalizada, use o agente IA completo (botão "Abrir agente ↗" acima) ou entre em contato via WhatsApp na aba Agendar.`;
+    appendMessage(formatBotAnswer(ans), 'assistant');
+  }, 900);
 }
-function switchBotTab(view, btn) {
-  document.querySelectorAll('.bot-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.bot-view').forEach(v => v.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('view-'+view).classList.add('active');
+function appendMessage(text, role) {
+  const msgs = document.getElementById('chatMsgs');
+  const div = document.createElement('div');
+  div.className = `bot-msg ${role}`;
+  div.innerHTML = `<div class="bot-bubble ${role}">${text}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
 }
-function toggleFaq(btn) {
-  const item = btn.closest('.faq-item');
-  const was = item.classList.contains('open');
-  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
-  if (!was) item.classList.add('open');
+function formatBotAnswer(text) {
+  return text.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#f5f3ee">$1</strong>').replace(/\n/g, '<br>');
 }
-
-// ── HOME ─────────────────────────────────────────────────
-function goHome() { window.scrollTo({top:0,behavior:'smooth'}); }
-
+ 
 // ── HELPERS ──────────────────────────────────────────────
-function showError(el, msg) { el.textContent = msg; el.style.display = 'block'; }
-function showToast(msg, type = 'info') {
+function showFieldError(el, msg) { el.textContent = msg; el.style.display = 'block'; }
+function showToast(msg, type='info') {
   const toast = document.getElementById('toast');
   const inner = document.getElementById('toast-inner');
-  inner.className = 'toast-inner toast-' + type;
+  inner.className = 'toast-inner toast-'+type;
   inner.textContent = msg;
   toast.style.display = 'block';
-  setTimeout(() => { toast.style.display = 'none'; }, 4000);
+  setTimeout(() => { toast.style.display = 'none'; }, 4500);
 }
+function scrollToTop() { window.scrollTo({top:0,behavior:'smooth'}); }
 </script>
 </body>
 </html>
+ 
