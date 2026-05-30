@@ -1,737 +1,1179 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="DocSpace: Documentação como ativo estratégico de negócio. Por Fabiana Nonjah.">
-    <title>Fabiana Nonjah | Senior Tech Writer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/font/lucide.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #6366f1; }
-        * { box-sizing: border-box; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; color: #f8fafc; scroll-behavior: smooth; overflow-x: hidden; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Documentação como ativo estratégico de negócio. Fabiana Nonjah — Senior Tech Writer & Analista de Documentação de Software SaaS.">
+<title>Fabiana Nonjah · Senior Tech Writer & Analista de Documentação SaaS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<style>
+/* ═══════════════════════════════════════
+   DESIGN SYSTEM — Paper & Ink
+   DocSpace · Fabiana Nonjah · 2026
+═══════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --paper:oklch(97.2% .006 85);
+  --paper-2:oklch(93.5% .008 80);
+  --ink:oklch(14.5% 0 0);
+  --ink-soft:oklch(25.5% .005 90);
+  --rule:oklch(85% .006 80);
+  --indigo:#6366f1;
+  --font-display:"Syne",ui-sans-serif,system-ui,sans-serif;
+  --font-sans:"Plus Jakarta Sans",ui-sans-serif,system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,monospace;
+}
+html{font-family:var(--font-sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-feature-settings:"ss01","cv11";scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);overflow-x:hidden;line-height:1.5}
+::selection{background:var(--ink);color:var(--paper)}
+a{color:inherit}
 
-        .glass { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+/* Kicker */
+.kicker{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
 
-        /* Logo */
-        .logo-container { display: flex; flex-direction: column; cursor: pointer; }
-        .logo-text { font-weight: 800; font-size: 1.6rem; letter-spacing: -0.04em; display: flex; align-items: center; color: white; line-height: 1; }
-        .logo-cursor { width: 3px; height: 1.4rem; background-color: var(--primary); margin-left: 2px; animation: blink 1s step-end infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
-        .tagline { font-size: 0.65rem; color: #64748b; font-weight: 600; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+/* Hover underline — linha de progressão (não botão com caixa) */
+.hu{background-image:linear-gradient(currentColor,currentColor);background-size:0% 1px;background-repeat:no-repeat;background-position:0 100%;transition:background-size .35s ease;text-decoration:none;color:inherit}
+.hu:hover{background-size:100% 1px}
 
-        /* Nav */
-        .nav-center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 40px; }
-        .nav-link { font-size: 0.8rem; font-weight: 700; color: #94a3b8; transition: 0.2s; white-space: nowrap; background: none; border: none; cursor: pointer; }
-        .nav-link:hover { color: #f8fafc; }
-        .nav-label { color: #ef4444; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 900; }
+/* Grain texture */
+.grain{position:relative;isolation:isolate}
+.grain::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.05;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
 
-        /* Profile */
-        .profile-circle { width: 320px; height: 320px; border-radius: 50%; object-fit: cover; border: 4px solid #1e293b; filter: grayscale(100%); transition: 0.6s; }
-        .profile-circle:hover { filter: grayscale(0%); transform: scale(1.02); border-color: var(--primary); }
+/* Rules */
+.rule-b{border-bottom:1px solid var(--rule)}
+.rule-t{border-top:1px solid var(--rule)}
 
-        /* Sidebar */
-        .sidebar { width: 272px; background: rgba(15,23,42,0.95); border-right: 1px solid rgba(255,255,255,0.05); padding-top: 96px; position: fixed; height: 100vh; overflow-y: auto; z-index: 40; }
-        .sidebar-link { display: block; padding: 10px 16px; border-radius: 12px; font-size: 0.82rem; font-weight: 600; color: #64748b; cursor: pointer; transition: 0.15s; text-align: left; background: none; border: none; width: 100%; }
-        .sidebar-link:hover { color: #f8fafc; background: rgba(99,102,241,0.08); }
-        .sidebar-link.active { color: #a5b4fc; background: rgba(99,102,241,0.15); }
-        .sidebar-section { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #334155; padding: 20px 16px 6px; }
+/* Hidden */
+.hidden{display:none!important}
 
-        /* Footer */
-        .footer-grid { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1000px; margin: 0 auto; width: 100%; }
-        @media (max-width: 768px) { 
-            .footer-grid { flex-direction: column; gap: 40px; text-align: center; align-items: center; }
-            .nav-center { display: none !important; }
-            .profile-circle { width: 220px; height: 220px; }
-        }
+/* ═══════════════════════════════════════
+   NAV TOPO FIXO
+═══════════════════════════════════════ */
+.site-nav{
+  position:sticky;top:0;z-index:100;
+  background:color-mix(in oklch,var(--paper) 92%,transparent);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+  padding:0 48px;
+  height:72px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:32px;
+}
 
-        /* Toast */
-        #toast { position: fixed; bottom: 24px; right: 24px; z-index: 200; transition: 0.3s; }
-        .toast-inner { padding: 14px 20px; border-radius: 16px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-        .toast-success { background: #052e16; color: #86efac; border: 1px solid #166534; }
-        .toast-error { background: #2d0a0a; color: #fca5a5; border: 1px solid #7f1d1d; }
-        .toast-info { background: #0c1a3a; color: #93c5fd; border: 1px solid #1e3a6e; }
+/* LOGO com cursor piscando */
+.logo-wrap{display:flex;flex-direction:column;text-decoration:none;gap:3px;cursor:pointer}
+.logo-wordmark{font-family:var(--font-display);font-size:1.35rem;font-weight:800;color:var(--ink);letter-spacing:-.04em;display:flex;align-items:center;line-height:1}
+.logo-wordmark span{color:var(--indigo)}
+.logo-cursor{width:2.5px;height:1.1rem;background:var(--indigo);margin-left:2px;animation:blink 1s step-end infinite;display:inline-block;border-radius:1px}
+@keyframes blink{50%{opacity:0}}
+/* EDITAR: Meta description da logo */
+.logo-meta{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);line-height:1}
 
-        /* Spinner */
-        .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.2); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+.site-nav-links{display:flex;align-items:center;gap:6px}
+.site-nav-links a,.site-nav-links button{font-family:var(--font-sans);font-size:13px;font-weight:500;color:color-mix(in oklch,var(--ink) 70%,transparent);text-decoration:none;background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:4px;transition:color .15s;white-space:nowrap}
+.site-nav-links a:hover,.site-nav-links button:hover{color:var(--ink)}
+.site-nav-links a.active{color:var(--ink);font-weight:600}
 
-        /* Locked environment card */
-        .env-locked { opacity: 0.5; cursor: not-allowed; }
-        .env-unlocked { cursor: pointer; }
-        .env-unlocked:hover { border-color: rgba(99,102,241,0.4) !important; }
-    </style>
+.btn-entrar{background:var(--ink)!important;color:var(--paper)!important;padding:8px 18px!important;font-size:12px!important;font-weight:700!important;border-radius:.25rem!important;margin-left:8px!important}
+.btn-entrar:hover{background:var(--ink-soft)!important;color:var(--paper)!important}
+
+/* ═══════════════════════════════════════
+   SUB-NAV — separado com espaço respeitoso
+═══════════════════════════════════════ */
+.sub-nav{
+  background:var(--paper);
+  border-bottom:1px solid var(--rule);
+  padding:20px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px;
+}
+.sub-nav-id{display:flex;flex-direction:column;gap:3px}
+/* EDITAR: Nome e cargo no sub-nav */
+.sub-nav-name{font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-.02em;line-height:1.2}
+.sub-nav-role{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-soft)}
+.sub-nav-links{display:flex;align-items:center;gap:28px}
+.sub-nav-links a{font-size:13px;font-weight:500;color:color-mix(in oklch,var(--ink) 65%,transparent);text-decoration:none;transition:color .15s}
+.sub-nav-links a:hover,.sub-nav-links a.active{color:var(--ink)}
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+.hero-wrap{border-bottom:1px solid var(--rule)}
+.hero-inner{
+  max-width:1400px;margin:0 auto;
+  padding:56px 48px 64px;
+  display:grid;
+  grid-template-columns:7fr 5fr;
+  gap:56px;
+  align-items:start;
+}
+/* EDITAR: Eyebrow do hero */
+.hero-eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:28px}
+
+/* Título hero — fonte fina como o Lovable */
+.hero-h1{
+  font-family:var(--font-display);
+  font-size:clamp(3rem,8.5vw,8rem);
+  font-weight:600;
+  line-height:.9;
+  letter-spacing:-.04em;
+  color:var(--ink);
+  margin-bottom:36px;
+}
+/* EDITAR: Texto itálico do título */
+.hero-h1 em{font-style:italic;font-weight:300}
+
+/* EDITAR: Bio principal */
+.hero-bio{font-size:17px;font-weight:400;color:var(--ink-soft);line-height:1.7;max-width:480px;margin-bottom:40px}
+.hero-bio strong{color:var(--ink);font-weight:600}
+
+.hero-btns{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:0}
+
+/* Botão fill — preto */
+.btn-fill{
+  background:var(--ink);color:var(--paper);
+  padding:14px 28px;
+  font-family:var(--font-sans);font-size:14px;font-weight:500;
+  border:none;cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:background .15s;
+}
+.btn-fill:hover{background:var(--ink-soft)}
+
+/* Stroke button */
+.btn-stroke{
+  background:transparent;color:var(--ink);
+  padding:13px 24px;
+  font-family:var(--font-sans);font-size:14px;font-weight:500;
+  border:1px solid var(--ink);cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:all .15s;
+}
+.btn-stroke:hover{background:var(--ink);color:var(--paper)}
+
+/* LINKS do hero como texto sublinhado */
+.hero-link{font-size:13px;font-weight:400;color:var(--ink);text-decoration:none}
+
+/* ═══════════════════════════════════════
+   FOTO CIRCULAR — nítida, sem sobrepor título
+═══════════════════════════════════════ */
+.hero-photo-col{display:flex;flex-direction:column;gap:0;align-items:stretch;align-self:start;margin-top:8px}
+.hero-photo-frame{
+  width:100%;
+  max-width:360px;
+  aspect-ratio:1/1;
+  border-radius:50%;
+  overflow:hidden;
+  border:3px solid var(--paper-2);
+  box-shadow:0 2px 24px rgba(0,0,0,.1);
+  background:var(--paper-2);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto;
+}
+.hero-photo-frame img{
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:top center;
+  display:block;
+  /* Nitidez máxima */
+  image-rendering:-webkit-optimize-contrast;
+  image-rendering:crisp-edges;
+}
+.hero-photo-placeholder{font-family:var(--font-display);font-size:72px;font-weight:800;color:color-mix(in oklch,var(--ink) 18%,var(--paper-2));letter-spacing:-.04em}
+/* EDITAR: Badge disponível */
+.hero-avail{
+  background:var(--ink);
+  padding:16px 20px;
+  margin-top:0;
+  width:100%;max-width:360px;
+  margin-left:auto;margin-right:auto;
+}
+.hero-avail .kicker{color:color-mix(in oklch,var(--paper) 65%,transparent);font-size:.62rem;margin-bottom:4px}
+.hero-avail-title{font-family:var(--font-display);font-size:16px;font-weight:500;color:var(--paper);letter-spacing:-.01em}
+
+/* ═══════════════════════════════════════
+   MARQUEE — faixa preta com competências reais
+═══════════════════════════════════════ */
+.marquee-wrap{background:var(--ink);overflow:hidden;padding:18px 0;border-top:none}
+.marquee-inner{display:inline-flex;white-space:nowrap;animation:marquee 50s linear infinite}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* EDITAR: Itens da faixa — competências do currículo */
+.marquee-item{
+  font-family:var(--font-display);
+  font-size:20px;
+  font-weight:400;
+  color:var(--paper); /* branco sobre preto, bem visível */
+  padding:0 24px;
+  display:inline-flex;align-items:center;gap:16px;
+}
+.marquee-sep{color:color-mix(in oklch,var(--paper) 35%,transparent);font-size:14px}
+
+/* ═══════════════════════════════════════
+   NUMBERS
+═══════════════════════════════════════ */
+.numbers-wrap{border-bottom:1px solid var(--rule)}
+.numbers{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.num-cell{padding:52px 48px 44px;border-right:1px solid var(--rule)}
+.num-cell:last-child{border-right:none}
+/* EDITAR: Valores dos números */
+.num-val{font-family:var(--font-display);font-size:clamp(2.8rem,5vw,4rem);font-weight:500;color:var(--ink);letter-spacing:-.04em;line-height:1}
+.num-label{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-top:10px}
+
+/* ═══════════════════════════════════════
+   CASES
+═══════════════════════════════════════ */
+.section-outer{border-bottom:1px solid var(--rule)}
+.section-wrap{max-width:1400px;margin:0 auto;padding:72px 48px}
+.section-header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:56px}
+.sec-tag{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:12px}
+.sec-h2{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);font-weight:500;letter-spacing:-.03em;color:var(--ink);line-height:.95}
+.sec-h2 em{font-style:italic;font-weight:300}
+
+.cases-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule)}
+.case-item{background:var(--paper);padding:40px 40px 44px;transition:background .2s;cursor:default}
+.case-item:hover{background:var(--paper-2)}
+.case-meta{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:22px}
+.case-num,.case-cat{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+/* EDITAR: Título de cada case */
+.case-title{font-family:var(--font-display);font-size:clamp(1.4rem,2.2vw,2rem);font-weight:500;color:var(--ink);margin-bottom:14px;line-height:1.05;letter-spacing:-.02em}
+/* EDITAR: Descrição do case */
+.case-desc{font-size:15px;font-weight:400;color:var(--ink-soft);line-height:1.65;margin-bottom:18px}
+/* EDITAR: Resultado/métrica do case */
+.case-result{font-family:var(--font-mono);font-size:13px;color:var(--ink);font-weight:400}
+
+/* ═══════════════════════════════════════
+   IA SECTION — preto real, texto branco nítido
+═══════════════════════════════════════ */
+.ia-section{background:#0d0d0d} /* preto real — não cinza */
+.ia-top{max-width:1400px;margin:0 auto;padding:80px 48px;display:grid;grid-template-columns:7fr 5fr;gap:80px;align-items:flex-end;border-bottom:1px solid rgba(255,255,255,.08)}
+.ia-kicker{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:16px}
+.ia-h2{font-family:var(--font-display);font-size:clamp(3rem,6.5vw,6rem);font-weight:500;line-height:.95;letter-spacing:-.04em;color:#f5f3ee} /* branco creme para maior contraste */
+.ia-h2 em{font-style:italic;font-weight:300}
+.ia-desc{font-size:17px;font-weight:400;line-height:1.7;color:rgba(245,243,238,.75);margin-bottom:28px}
+
+.btn-stroke-light{
+  background:transparent;color:#f5f3ee;
+  padding:13px 24px;
+  font-family:var(--font-sans);font-size:14px;font-weight:500;
+  border:1px solid rgba(245,243,238,.35);
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:all .15s;
+}
+.btn-stroke-light:hover{border-color:rgba(245,243,238,.7);background:rgba(245,243,238,.06)}
+
+.ia-grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.06)}
+.ia-card{background:#0d0d0d;padding:40px 40px 44px}
+.ia-card-n{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.ia-card-num{font-family:var(--font-mono);font-size:.7rem;color:rgba(255,255,255,.3);letter-spacing:.16em}
+.ia-dot{width:8px;height:8px;border-radius:50%;background:#f5f3ee;opacity:.25}
+/* EDITAR: Título de cada card IA */
+.ia-card-t{font-family:var(--font-display);font-size:1.4rem;font-weight:500;color:#f5f3ee;margin-bottom:12px;line-height:1.1;letter-spacing:-.02em}
+/* EDITAR: Descrição de cada card IA */
+.ia-card-d{font-size:14px;font-weight:400;color:rgba(245,243,238,.55);line-height:1.65}
+
+.stack-section{background:#0d0d0d;border-top:1px solid rgba(255,255,255,.07);padding:44px 48px 56px}
+.stack-inner{max-width:1400px;margin:0 auto}
+.stack-kicker{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:20px}
+.stack-tags{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+/* EDITAR: Tags da stack */
+.stack-tag{font-family:var(--font-mono);font-size:11px;color:rgba(245,243,238,.55);padding:7px 14px;border:1px solid rgba(255,255,255,.12)}
+
+/* ═══════════════════════════════════════
+   CURSO
+═══════════════════════════════════════ */
+.curso-section{border-bottom:1px solid var(--rule)}
+.curso-inner{max-width:1400px;margin:0 auto;padding:72px 48px;display:grid;grid-template-columns:5fr 7fr;gap:80px;align-items:flex-end}
+.curso-h{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);font-weight:500;color:var(--ink);line-height:.95;letter-spacing:-.03em}
+.curso-h em{font-style:italic;font-weight:300}
+/* EDITAR: Descrição do curso */
+.curso-desc{font-size:17px;font-weight:400;color:var(--ink-soft);line-height:1.7;margin-bottom:28px}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer{border-top:1px solid var(--rule);padding:64px 48px 28px;background:var(--paper)}
+.footer-inner{max-width:1400px;margin:0 auto}
+.footer-grid{display:grid;grid-template-columns:5fr 3fr 4fr;gap:48px;margin-bottom:64px}
+.footer-col-label{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:20px}
+.footer-tagline{font-family:var(--font-display);font-size:clamp(1.8rem,3vw,2.8rem);font-weight:500;color:var(--ink);letter-spacing:-.03em;line-height:1}
+.footer-tagline em{font-style:italic;font-weight:300}
+/* EDITAR: E-mail do footer */
+.footer-email{font-size:17px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:2px;margin-top:20px;display:inline-block}
+.footer-link{display:block;font-size:14px;font-weight:400;color:var(--ink-soft);text-decoration:none;margin-bottom:12px;transition:color .15s}
+.footer-link:hover{color:var(--ink)}
+.footer-bottom{border-top:1px solid var(--rule);padding-top:20px;display:flex;justify-content:space-between;align-items:center}
+.footer-copy{font-size:12px;color:var(--ink-soft)}
+.footer-status{font-family:var(--font-mono);font-size:11px;color:var(--ink-soft);letter-spacing:.05em}
+
+/* ═══════════════════════════════════════
+   MODAL DE AUTH
+═══════════════════════════════════════ */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:24px}
+.modal-box{background:var(--paper);width:100%;max-width:440px;padding:48px;position:relative}
+.modal-tabs{display:flex;gap:0;border-bottom:1px solid var(--rule);margin-bottom:36px}
+.modal-tab{flex:1;padding:12px;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;background:none;border:none;cursor:pointer;color:var(--ink-soft);border-bottom:2px solid transparent;transition:all .15s;margin-bottom:-1px}
+.modal-tab.active{color:var(--ink);border-bottom-color:var(--ink)}
+.modal-title{font-family:var(--font-display);font-size:1.8rem;font-weight:600;letter-spacing:-.03em;margin-bottom:8px}
+.modal-sub{font-size:14px;color:var(--ink-soft);margin-bottom:28px}
+.form-group{margin-bottom:18px}
+.form-label{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:6px}
+.form-input{width:100%;border:1px solid var(--rule);background:var(--paper);color:var(--ink);padding:12px 14px;font-family:var(--font-sans);font-size:14px;outline:none;transition:border-color .15s}
+.form-input:focus{border-color:var(--ink)}
+.form-error{font-size:12px;color:#c0392b;margin-top:6px;display:none}
+.modal-close{position:absolute;top:20px;right:20px;background:none;border:none;cursor:pointer;font-size:20px;color:var(--ink-soft);line-height:1}
+.modal-close:hover{color:var(--ink)}
+select.form-input{appearance:none;cursor:pointer}
+
+/* ═══════════════════════════════════════
+   BOT FLUTUANTE — fundo PRETO real
+═══════════════════════════════════════ */
+/* Botão que alterna entre Pré-entrevista e Fechar */
+.bot-trigger{
+  position:fixed;bottom:24px;right:24px;z-index:300;
+  background:#0d0d0d; /* preto real */
+  color:#f5f3ee;
+  padding:14px 20px;
+  font-family:var(--font-mono);font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 8px 32px rgba(0,0,0,.3);
+  transition:background .15s;
+}
+.bot-trigger:hover{background:#1a1a1a}
+.bot-ping{position:relative;width:8px;height:8px;flex-shrink:0}
+.bot-ping-outer{position:absolute;inset:0;border-radius:50%;background:#f5f3ee;opacity:.65;animation:ping 1.5s cubic-bezier(0,0,.2,1) infinite}
+.bot-ping-inner{position:absolute;inset:0;border-radius:50%;background:#f5f3ee}
+@keyframes ping{75%,100%{transform:scale(2.2);opacity:0}}
+
+/* Painel do bot — fundo preto real */
+.bot-panel{
+  position:fixed;bottom:80px;right:24px;z-index:299;
+  background:#0d0d0d;
+  border:1px solid rgba(255,255,255,.1);
+  width:min(420px,calc(100vw - 48px));
+  display:none;flex-direction:column;
+  box-shadow:0 24px 64px rgba(0,0,0,.5);
+  max-height:calc(100vh - 120px);
+}
+.bot-panel.open{display:flex}
+
+/* Abas do bot */
+.bot-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.08)}
+.bot-tab{
+  flex:1;padding:10px 6px;
+  font-family:var(--font-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.4);
+  background:transparent;border:none;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all .15s;
+}
+.bot-tab.active,.bot-tab:hover{color:#f5f3ee;border-bottom-color:var(--indigo)}
+
+/* Header do bot */
+.bot-header{padding:14px 18px 12px;background:#0d0d0d}
+.bot-header-tag{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:3px}
+.bot-header-title{font-family:var(--font-display);font-size:15px;font-weight:600;color:#f5f3ee;letter-spacing:-.01em}
+
+/* Views */
+.bot-view{display:none;flex-direction:column;flex:1;min-height:0}
+.bot-view.active{display:flex}
+
+/* Chat view — iframe do agente real */
+.bot-iframe{width:100%;flex:1;border:none;min-height:420px;display:block;background:#0d0d0d}
+
+/* FAQ view */
+.bot-faq{flex:1;overflow-y:auto;padding:12px 16px}
+.faq-item{border-bottom:1px solid rgba(255,255,255,.07)}
+.faq-q{width:100%;text-align:left;padding:12px 0;background:transparent;border:none;cursor:pointer;font-size:13px;font-weight:500;color:#f5f3ee;font-family:var(--font-sans);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.faq-q:hover{color:rgba(245,243,238,.75)}
+.faq-icon{flex-shrink:0;color:rgba(255,255,255,.3);transition:transform .2s;font-size:15px}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-a{font-size:13px;color:rgba(245,243,238,.6);line-height:1.65;padding:0 0 12px;display:none}
+.faq-item.open .faq-a{display:block}
+
+/* Agendar view */
+.bot-schedule{flex:1;padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+.schedule-title{font-family:var(--font-display);font-size:17px;font-weight:600;color:#f5f3ee;margin-bottom:2px}
+.schedule-sub{font-size:13px;color:rgba(245,243,238,.55);line-height:1.6;margin-bottom:8px}
+/* EDITAR: Links de agendamento */
+.schedule-btn{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid rgba(255,255,255,.12);color:#f5f3ee;text-decoration:none;font-size:13px;font-weight:500;transition:all .15s;font-family:var(--font-sans)}
+.schedule-btn:hover{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.04)}
+.schedule-icon{font-size:18px;flex-shrink:0}
+.schedule-info-title{font-weight:600;font-size:13px;margin-bottom:2px}
+.schedule-info-sub{font-size:11px;color:rgba(245,243,238,.45)}
+
+/* Fechar bar — dentro do painel, fundo preto, texto branco */
+.bot-close-bar{border-top:1px solid rgba(255,255,255,.08);padding:10px 16px;flex-shrink:0;background:#0d0d0d}
+.bot-close-btn{
+  width:100%;
+  background:rgba(255,255,255,.05);
+  color:#f5f3ee;
+  border:1px solid rgba(255,255,255,.12);
+  padding:10px;
+  font-family:var(--font-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;transition:all .15s;
+}
+.bot-close-btn:hover{background:rgba(255,255,255,.1)}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+#toast{position:fixed;bottom:24px;left:24px;z-index:400;display:none}
+.toast-inner{padding:12px 18px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.toast-success{background:#f0fff4;color:#276749;border:1px solid #9ae6b4}
+.toast-error{background:#fff5f5;color:#c53030;border:1px solid #fc8181}
+.toast-info{background:#ebf8ff;color:#2c5282;border:1px solid #90cdf4}
+
+/* ═══════════════════════════════════════
+   SPINNER
+═══════════════════════════════════════ */
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.25);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ═══════════════════════════════════════
+   RESPONSIVO MOBILE
+═══════════════════════════════════════ */
+@media(max-width:768px){
+  .site-nav{padding:0 20px;height:60px}
+  .site-nav-links{gap:4px}
+  .site-nav-links a,.site-nav-links button{font-size:11px;padding:5px 7px}
+  .sub-nav{padding:14px 20px}
+  .hero-inner{grid-template-columns:1fr;padding:32px 20px 40px;gap:32px}
+  .hero-h1{font-size:3rem;margin-bottom:24px}
+  .hero-photo-col{order:-1}
+  .hero-photo-frame{max-width:200px;margin:0 auto}
+  .hero-avail{max-width:200px}
+  .numbers{grid-template-columns:repeat(2,1fr)}
+  .num-cell{padding:32px 20px}
+  .section-wrap{padding:40px 20px}
+  .cases-grid{grid-template-columns:1fr}
+  .ia-top{grid-template-columns:1fr;padding:48px 20px;gap:32px}
+  .ia-h2{font-size:3rem}
+  .ia-grid{grid-template-columns:1fr;padding:0 0}
+  .ia-card{padding:28px 20px}
+  .stack-section{padding:32px 20px 40px}
+  .curso-inner{grid-template-columns:1fr;padding:40px 20px;gap:24px}
+  .footer-grid{grid-template-columns:1fr;gap:32px}
+  footer{padding:40px 20px 20px}
+  .footer-bottom{flex-direction:column;gap:8px;text-align:center}
+  .bot-trigger{bottom:16px;right:16px;padding:11px 16px;font-size:.62rem}
+  .bot-panel{bottom:68px;right:16px;width:calc(100vw - 32px)}
+  .modal-box{padding:32px 24px}
+}
+</style>
 </head>
-<body>
+<body class="grain">
 
-<!-- ═══════════════════════════════════════════════════════════
-     HEADER / NAV
-═══════════════════════════════════════════════════════════ -->
-<nav class="fixed top-0 w-full z-50 glass px-8 md:px-12 py-5 flex items-center justify-between min-h-[80px]">
-    <div class="logo-container" onclick="goHome()">
-        <div class="logo-text">Doc<span class="text-indigo-500">Space</span><div class="logo-cursor"></div></div>
-        <span id="header-tagline" class="tagline hidden">Documentação como ativo estratégico de negócio</span>
+<!-- ══════════════════════════════════════
+     NAV TOPO FIXO
+══════════════════════════════════════ -->
+<header class="site-nav" id="site-nav">
+  <!-- EDITAR: Logo e meta description -->
+  <div class="logo-wrap" onclick="goHome()" style="cursor:pointer">
+    <div class="logo-wordmark">
+      Doc<span>Space</span><div class="logo-cursor"></div>
     </div>
+    <span class="logo-meta">Documentação como ativo estratégico de negócio</span>
+  </div>
 
-    <div class="hidden lg:flex nav-center">
-        <span class="nav-label">Explorar</span>
-        <button onclick="gateCheck('docs')" class="nav-link">Documentação Técnica</button>
-        <button onclick="gateCheck('academy')" class="nav-link">Academy Tech Writer</button>
+  <nav class="site-nav-links">
+    <a href="index.html" class="active hu">Portfólio</a>
+    <button onclick="gateCheck('docs')" class="hu">Documentação Técnica</button>
+    <button onclick="gateCheck('academy')" class="hu">Academy Tech Writer</button>
+    <!-- Auth area — muda após login -->
+    <div id="auth-area">
+      <button class="btn-entrar" onclick="openModal('login')">Entrar</button>
     </div>
+  </nav>
+</header>
 
-    <div class="flex items-center gap-6">
-        <div class="flex gap-3 text-[10px] font-black text-slate-600">
-            <button class="hover:text-white transition">PT</button>
-            <button class="hover:text-white transition">EN</button>
-            <button class="hover:text-white transition">ES</button>
-        </div>
-        <!-- Auth Area: muda entre "Entrar" e nome do usuário -->
-        <div id="auth-area">
-            <button onclick="openAuthModal('login')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-full text-xs font-bold transition shadow-lg shadow-indigo-500/20">Entrar</button>
-        </div>
-    </div>
-</nav>
-
-
-<!-- ═══════════════════════════════════════════════════════════
-     AMBIENTE: PORTFÓLIO (Público)
-═══════════════════════════════════════════════════════════ -->
-<main id="view-portfolio" class="pt-44 pb-20 px-6 max-w-6xl mx-auto">
-
-    <!-- Hero -->
-    <header class="flex flex-col md:flex-row items-center gap-16 mb-36">
-        <div class="flex-1 text-center md:text-left">
-            <p class="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-4">Senior Technical Writer & Documentation Analyst</p>
-            <h1 class="text-5xl md:text-7xl font-black mb-8 tracking-tighter leading-[0.95] text-white">
-                Simplificando<br>o que é <span class="text-indigo-500">complexo.</span>
-            </h1>
-            <p class="text-lg text-slate-400 leading-relaxed max-w-xl mb-10">
-                <strong class="text-white">Fabiana Nonjah.</strong> Especialista em unir a curiosidade investigativa do jornalismo com o pragmatismo da engenharia para criar documentação escalável focada em clientes SaaS e eficiência operacional.
-            </p>
-            <div class="flex flex-wrap gap-4 justify-center md:justify-start">
-                <button onclick="gateCheck('docs')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3 rounded-full text-sm font-bold transition shadow-xl shadow-indigo-500/25">Ver Documentação</button>
-                <button onclick="gateCheck('academy')" class="border border-slate-700 hover:border-indigo-500 text-slate-300 hover:text-white px-8 py-3 rounded-full text-sm font-bold transition">Academy</button>
-            </div>
-        </div>
-        <div class="shrink-0">
-            <img src="https://via.placeholder.com/400/1e293b/6366f1?text=FN" alt="Fabiana Nonjah" class="profile-circle shadow-2xl">
-        </div>
-    </header>
-
-    <!-- IA Assistant -->
-    <section class="mb-36">
-        <div class="text-center mb-10">
-            <p class="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-3">Demo Interativa</p>
-            <h2 class="text-3xl font-extrabold tracking-tight">IA Assistant: Pré-Entrevista</h2>
-            <p class="text-slate-400 mt-3 max-w-lg mx-auto text-sm">Converse com minha IA treinada para responder perguntas sobre minha experiência, projetos e habilidades.</p>
-        </div>
-        <div class="glass rounded-[2rem] overflow-hidden border border-white/5 shadow-2xl">
-            <div class="px-8 py-5 bg-slate-900/60 flex justify-between items-center border-b border-slate-800">
-                <h3 class="font-bold flex items-center gap-3 text-sm tracking-tight">
-                    <i class="lucide-bot text-indigo-400"></i> DocSpace IA — Assistente de Entrevista
-                </h3>
-                <span class="text-[10px] bg-indigo-500 text-white px-3 py-1 rounded-full font-bold">AO VIVO</span>
-            </div>
-            <iframe 
-                src="https://aistudio.google.com/apps/1e4ca1d4-e221-471a-bbeb-bfd85ab7c7d5?showPreview=true" 
-                class="w-full h-[580px] border-none bg-slate-950"
-                title="IA Assistant DocSpace"
-                loading="lazy">
-            </iframe>
-        </div>
-    </section>
-
-    <!-- Cases -->
-    <section class="mb-36">
-        <div class="flex justify-between items-center mb-12">
-            <div>
-                <p class="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2">Portfólio</p>
-                <h2 class="text-3xl font-extrabold tracking-tight">Cases em Destaque</h2>
-            </div>
-        </div>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div class="glass p-8 rounded-3xl group hover:border-indigo-500/30 transition cursor-pointer border border-transparent">
-                <div class="h-52 bg-slate-900 rounded-2xl mb-6 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1551288049-bbb652167014?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-40 group-hover:opacity-90 transition duration-700" alt="Case SaaS">
-                </div>
-                <span class="text-[10px] bg-indigo-500/20 text-indigo-400 px-3 py-1 rounded-full font-bold">SaaS · Redesign</span>
-                <h3 class="text-lg font-bold mt-4 mb-3">Arquitetura de Docs SaaS: Redesign Estrutural</h3>
-                <p class="text-sm text-slate-400 leading-relaxed">Otimização de fluxos de documentação para redução de churn e melhoria do processo de Onboarding em plataforma B2B.</p>
-            </div>
-            <div class="glass p-8 rounded-3xl group hover:border-indigo-500/30 transition cursor-pointer border border-transparent">
-                <div class="h-52 bg-slate-900 rounded-2xl mb-6 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-40 group-hover:opacity-90 transition duration-700" alt="Case E-learning">
-                </div>
-                <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full font-bold">LMS · UX Writing</span>
-                <h3 class="text-lg font-bold mt-4 mb-3">Plataforma E-learning: Arquitetura de Informação</h3>
-                <p class="text-sm text-slate-400 leading-relaxed">Arquitetura de informação e UX Writing para trilhas educacionais técnicas de alta complexidade, com foco em retenção.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Acesso Restrito: cards dos ambientes -->
-    <section class="mb-20">
-        <div class="text-center mb-12">
-            <p class="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-3">Ambientes com acesso controlado</p>
-            <h2 class="text-3xl font-extrabold tracking-tight">Explorar o DocSpace</h2>
-            <p class="text-slate-400 mt-3 text-sm">Solicite acesso para acessar os ambientes restritos.</p>
-        </div>
-        <div class="grid md:grid-cols-2 gap-8">
-            <!-- Docs SaaS -->
-            <div id="card-docs" class="glass p-8 rounded-3xl border border-transparent transition" onclick="gateCheck('docs')">
-                <div class="flex items-start justify-between mb-6">
-                    <div class="w-12 h-12 rounded-2xl bg-indigo-500/20 flex items-center justify-center">
-                        <i class="lucide-file-text text-indigo-400 text-xl"></i>
-                    </div>
-                    <span id="badge-docs" class="text-[10px] bg-slate-800 text-slate-500 px-3 py-1 rounded-full font-bold">ACESSO NECESSÁRIO</span>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Documentação Técnica</h3>
-                <p class="text-sm text-slate-400 leading-relaxed">Manuais, tutoriais, FAQs, Release Notes e documentação de APIs de software SaaS.</p>
-                <div class="mt-6 flex items-center gap-2 text-indigo-400 text-sm font-bold">
-                    <i class="lucide-arrow-right"></i> Acessar ambiente
-                </div>
-            </div>
-            <!-- Academy -->
-            <div id="card-academy" class="glass p-8 rounded-3xl border border-transparent transition" onclick="gateCheck('academy')">
-                <div class="flex items-start justify-between mb-6">
-                    <div class="w-12 h-12 rounded-2xl bg-violet-500/20 flex items-center justify-center">
-                        <i class="lucide-graduation-cap text-violet-400 text-xl"></i>
-                    </div>
-                    <span id="badge-academy" class="text-[10px] bg-slate-800 text-slate-500 px-3 py-1 rounded-full font-bold">ACESSO NECESSÁRIO</span>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Academy Tech Writer</h3>
-                <p class="text-sm text-slate-400 leading-relaxed">Curso completo de formação em Tech Writing com módulos, aulas em vídeo, materiais e certificação.</p>
-                <div class="mt-6 flex items-center gap-2 text-violet-400 text-sm font-bold">
-                    <i class="lucide-arrow-right"></i> Acessar Academy
-                </div>
-            </div>
-        </div>
-    </section>
-</main>
-
-
-<!-- ═══════════════════════════════════════════════════════════
-     AMBIENTE RESTRITO (Docs e Academy)
-═══════════════════════════════════════════════════════════ -->
-<div id="view-restricted" class="hidden">
-    <aside class="sidebar">
-        <div id="sidebar-nav" class="pb-12"></div>
-    </aside>
-    <main class="pl-[272px] pt-32 pr-8 pb-20 min-h-screen">
-        <div id="doc-content" class="max-w-3xl mx-auto"></div>
-    </main>
+<!-- ══════════════════════════════════════
+     SUB-NAV (espaçado do nav principal)
+══════════════════════════════════════ -->
+<div class="sub-nav">
+  <!-- EDITAR: Identidade no sub-nav -->
+  <div class="sub-nav-id">
+    <span class="sub-nav-name">Fabiana Nonjah</span>
+    <span class="sub-nav-role">Senior Tech Writer · Documentação SaaS</span>
+  </div>
+  <nav class="sub-nav-links">
+    <a href="#sobre" class="hu">Sobre</a>
+    <a href="#cases" class="hu">Cases</a>
+    <a href="#ia" class="hu">IA & Automações</a>
+    <a href="#contato" class="hu">Contato</a>
+  </nav>
 </div>
 
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section class="hero-wrap">
+  <div class="hero-inner">
 
-<!-- ═══════════════════════════════════════════════════════════
-     RODAPÉ
-═══════════════════════════════════════════════════════════ -->
-<footer id="main-footer" class="border-t border-slate-900 py-20 bg-[#010411]">
-    <div class="footer-grid px-8">
-        <div>
-            <p class="font-bold text-xl mb-2 tracking-tighter">DocSpace</p>
-            <p class="text-[10px] text-slate-600 font-bold uppercase tracking-widest max-w-[200px] leading-relaxed">Documentação como ativo estratégico de negócio</p>
-        </div>
-        <div class="flex gap-16">
-            <div class="flex flex-col gap-4">
-                <p class="text-slate-700 uppercase text-[10px] font-black tracking-widest">Explorar</p>
-                <button onclick="gateCheck('docs')" class="text-sm font-semibold text-slate-500 hover:text-white text-left transition">Documentação Técnica</button>
-                <button onclick="gateCheck('academy')" class="text-sm font-semibold text-slate-500 hover:text-white text-left transition">Academy</button>
-            </div>
-            <div class="flex flex-col gap-4">
-                <p class="text-slate-700 uppercase text-[10px] font-black tracking-widest">Contato</p>
-                <a href="https://linkedin.com/in/SEUPERFIL" target="_blank" class="text-sm font-semibold text-slate-500 hover:text-white transition">LinkedIn</a>
-                <a href="mailto:fabiana.nonjah@outlook.com" class="text-sm font-semibold text-slate-500 hover:text-white transition">E-mail</a>
-            </div>
-        </div>
+    <!-- Coluna esquerda -->
+    <div>
+      <!-- EDITAR: Eyebrow -->
+      <p class="hero-eyebrow">Portfólio · Edição 2026</p>
+
+      <!-- EDITAR: Título principal -->
+      <h1 class="hero-h1">
+        Documentação<br>
+        <em>que move</em><br>
+        produto.
+      </h1>
+
+      <!-- EDITAR: Bio principal -->
+      <p class="hero-bio">
+        Sou <strong>Fabiana Nonjah</strong>, Analista de Documentação de Software Sênior com 7+ anos em empresas SaaS.
+        Especialista em documentação técnica, gestão de bases de conhecimento e comunicação orientada à adoção do produto.
+        Apoiada por IA generativa e pipelines automatizados que entregam mais rápido, sem perder o cuidado editorial.
+      </p>
+
+      <!-- EDITAR: Botões e links do hero -->
+      <div class="hero-btns">
+        <a href="#cases" class="btn-fill">Ver cases →</a>
+        <!-- EDITAR: Link LinkedIn -->
+        <a href="https://www.linkedin.com/in/fabiana-nonjah-techwriter/" target="_blank" rel="noreferrer" class="hero-link hu">LinkedIn ↗</a>
+        <!-- EDITAR: Link GitHub -->
+        <a href="https://github.com/Fabiana444" target="_blank" rel="noreferrer" class="hero-link hu">GitHub ↗</a>
+      </div>
     </div>
-    <p class="text-center text-slate-800 text-xs mt-16">© 2025 Fabiana Nonjah · DocSpace · Todos os direitos reservados</p>
+
+    <!-- Coluna direita — foto circular -->
+    <div class="hero-photo-col">
+      <div class="hero-photo-frame">
+        <!-- EDITAR: URL da foto — use Supabase Storage para manter privada -->
+        <!-- Opção 1: foto local -->
+        <img src="assets/img/fabiana-profile.jpg" alt="Fabiana Nonjah" id="hero-photo">
+        <!-- Opção 2: Supabase (descomente e cole a URL)
+        <img src="https://SEU_PROJETO.supabase.co/storage/v1/object/public/assets/fabiana-profile.jpg" alt="Fabiana Nonjah" id="hero-photo">
+        -->
+      </div>
+      <!-- EDITAR: Badge disponível -->
+      <div class="hero-avail">
+        <p class="kicker" style="color:rgba(245,243,238,.6);margin-bottom:4px">Disponível</p>
+        <p class="hero-avail-title">Para vagas remotas</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FAIXA MARQUEE — competências reais
+══════════════════════════════════════ -->
+<section class="marquee-wrap">
+  <!-- EDITAR: Adicione ou remova competências da faixa -->
+  <div class="marquee-inner">
+    <span class="marquee-item">Documentação SaaS <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Knowledge Base Management <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Docs-as-Code <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">OpenAPI / Swagger <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Release Notes <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">FAQ Inteligente <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">RAG & Agentes IA <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Power Automate <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">GitHub Actions <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Confluence <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">WordPress <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Azure DevOps <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Jira <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Postman <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Prompt Engineering <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Arquitetura de Informação <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">UX Writing <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Onboarding SaaS <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Guided Walkthrough <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Docusaurus <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">MkDocs <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">SharePoint <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Claude · GPT · Gemini <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Markdown / MDX <span class="marquee-sep">✦</span></span>
+    <!-- Duplicata para loop contínuo -->
+    <span class="marquee-item">Documentação SaaS <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Knowledge Base Management <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Docs-as-Code <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">OpenAPI / Swagger <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Release Notes <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">FAQ Inteligente <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">RAG & Agentes IA <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Power Automate <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">GitHub Actions <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Confluence <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">WordPress <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Azure DevOps <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Jira <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Postman <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Prompt Engineering <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Arquitetura de Informação <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">UX Writing <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Onboarding SaaS <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Guided Walkthrough <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Docusaurus <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">MkDocs <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">SharePoint <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Claude · GPT · Gemini <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Markdown / MDX <span class="marquee-sep">✦</span></span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     NUMBERS
+══════════════════════════════════════ -->
+<div class="numbers-wrap">
+  <div class="numbers">
+    <!-- EDITAR: Números e descrições -->
+    <div class="num-cell"><p class="num-val">7+</p><p class="num-label">Anos em docs SaaS</p></div>
+    <div class="num-cell"><p class="num-val">50+</p><p class="num-label">Produtos documentados</p></div>
+    <div class="num-cell"><p class="num-val">−42%</p><p class="num-label">Tickets evitados (best case)</p></div>
+    <div class="num-cell"><p class="num-val">2</p><p class="num-label">Agentes IA em produção</p></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CASES
+══════════════════════════════════════ -->
+<section class="section-outer" id="cases">
+  <div class="section-wrap">
+    <div class="section-header">
+      <div>
+        <p class="sec-tag">Seção 02</p>
+        <h2 class="sec-h2">Cases <em>selecionados</em></h2>
+      </div>
+      <a href="#" class="hu" style="font-size:13px;color:var(--ink);white-space:nowrap;text-decoration:none">Todos os cases →</a>
+    </div>
+    <div class="cases-grid">
+      <!-- EDITAR: Case 01 -->
+      <article class="case-item">
+        <div class="case-meta"><span class="case-num">01 / 04</span><span class="case-cat">B2B SaaS · 800+ artigos</span></div>
+        <h3 class="case-title">Refatoração de Knowledge Base SaaS</h3>
+        <p class="case-desc">Reestruturação de KB IA-friendly com taxonomia nova, busca semântica e geração assistida de artigos. Implementado na Smartspace com instrumentação para medir impacto real em suporte.</p>
+        <p class="case-result">→ −42% em tickets de suporte</p>
+      </article>
+      <!-- EDITAR: Case 02 -->
+      <article class="case-item">
+        <div class="case-meta"><span class="case-num">02 / 04</span><span class="case-cat">Developer Experience</span></div>
+        <h3 class="case-title">Docs-as-Code para API Pública</h3>
+        <p class="case-desc">OpenAPI versionado, Docusaurus + CI lintando exemplos. Onboarding self-service de devs com playground interativo e snippets em múltiplas linguagens.</p>
+        <p class="case-result">→ Time-to-first-call de 47min → 9min</p>
+      </article>
+      <!-- EDITAR: Case 03 -->
+      <article class="case-item">
+        <div class="case-meta"><span class="case-num">03 / 04</span><span class="case-cat">Automação · LLM Ops</span></div>
+        <h3 class="case-title">Pipeline de Release Notes com IA</h3>
+        <p class="case-desc">GitHub Action integrado com Power Automate lê PRs, LLM classifica e redige draft, tech writer revisa em Markdown. Human-in-the-loop com auditoria completa.</p>
+        <p class="case-result">→ 8h → 25min por release</p>
+      </article>
+      <!-- EDITAR: Case 04 -->
+      <article class="case-item">
+        <div class="case-meta"><span class="case-num">04 / 04</span><span class="case-cat">IA Aplicada · Pessoal</span></div>
+        <h3 class="case-title">Agente de Pré-entrevista</h3>
+        <p class="case-desc">RAG sobre o portfólio para responder recrutadores em tempo real. Persona com guardrails, base de conhecimento versionada. Direto no canto inferior direito desta página.</p>
+        <p class="case-result">→ Disponível neste site</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     IA & AUTOMAÇÕES — fundo PRETO real
+══════════════════════════════════════ -->
+<section class="ia-section" id="ia">
+  <div class="ia-top">
+    <div>
+      <!-- EDITAR: Tag e título da seção IA -->
+      <p class="ia-kicker">Seção 03 — IA & Automações</p>
+      <h2 class="ia-h2">IA com<br><em>método,</em> não<br>com mágica.</h2>
+    </div>
+    <div>
+      <!-- EDITAR: Descrição da seção IA -->
+      <p class="ia-desc">Construo agentes, prompts versionados e pipelines que aceleram entregas de documentação sem perder voz, precisão técnica ou rastreabilidade. IA como copiloto — não como autora.</p>
+      <a href="#contato" class="btn-stroke-light">Ver workflows →</a>
+    </div>
+  </div>
+  <div class="ia-grid">
+    <!-- EDITAR: Cards de automação -->
+    <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">01</span><span class="ia-dot"></span></div><h3 class="ia-card-t">Agentes de IA</h3><p class="ia-card-d">Bots com persona, guardrails e base de conhecimento controlada. Em produção: pré-entrevista (este site) e estruturas de conteúdo para FAQ inteligente omnichannel.</p></div>
+    <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">02</span><span class="ia-dot"></span></div><h3 class="ia-card-t">RAG sobre conteúdo proprietário</h3><p class="ia-card-d">Vetorização da knowledge base + retrieval para respostas ancoradas em fonte. Sem alucinação maquiada de autoridade. Implementado com estrutura de conteúdo controlada.</p></div>
+    <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">03</span><span class="ia-dot"></span></div><h3 class="ia-card-t">Prompt Library versionada</h3><p class="ia-card-d">Prompts tratados como código: revisão por PR, testes de regressão, changelog. Voz de marca preservada release após release. Parte do fluxo Documentar Solução no Jira.</p></div>
+    <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">04</span><span class="ia-dot"></span></div><h3 class="ia-card-t">CI/CD para Documentação</h3><p class="ia-card-d">GitHub Actions com lint de Markdown, validação de OpenAPI, link-checker e geração assistida de release notes. Integrado com Power Automate e SharePoint.</p></div>
+    <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">05</span><span class="ia-dot"></span></div><h3 class="ia-card-t">Geração assistida + revisão humana</h3><p class="ia-card-d">LLM rascunha, humano edita, métrica audita. Aceleração real sem terceirizar julgamento editorial. Fluxo com auditoria e rastreabilidade garantidas.</p></div>
+    <div class="ia-card"><div class="ia-card-n"><span class="ia-card-num">06</span><span class="ia-dot"></span></div><h3 class="ia-card-t">Métricas de documentação</h3><p class="ia-card-d">Cobertura por endpoint, time-to-first-call, deflection de tickets, taxa de busca sem resultado. Dado guia roadmap e justifica investimento em docs.</p></div>
+  </div>
+  <div class="stack-section">
+    <div class="stack-inner">
+      <!-- EDITAR: Stack técnica -->
+      <p class="stack-kicker">Stack em uso</p>
+      <div class="stack-tags">
+        <span class="stack-tag">OpenAI · GPT</span>
+        <span class="stack-tag">Anthropic · Claude</span>
+        <span class="stack-tag">Google · Gemini</span>
+        <span class="stack-tag">Power Automate</span>
+        <span class="stack-tag">GitHub Actions</span>
+        <span class="stack-tag">SharePoint</span>
+        <span class="stack-tag">Confluence</span>
+        <span class="stack-tag">WordPress</span>
+        <span class="stack-tag">Docusaurus</span>
+        <span class="stack-tag">MkDocs</span>
+        <span class="stack-tag">OpenAPI 3.1</span>
+        <span class="stack-tag">Postman</span>
+        <span class="stack-tag">Swagger</span>
+        <span class="stack-tag">Azure DevOps</span>
+        <span class="stack-tag">Jira</span>
+        <span class="stack-tag">Markdown lint</span>
+        <span class="stack-tag">Vale prose linter</span>
+        <span class="stack-tag">Mermaid</span>
+      </div>
+      <a href="#contato" class="btn-stroke-light">Quero aplicar isso no meu produto →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     CURSO
+══════════════════════════════════════ -->
+<section class="curso-section">
+  <div class="curso-inner">
+    <div>
+      <p class="sec-tag">Seção 04 — Em construção</p>
+      <!-- EDITAR: Título do curso -->
+      <h2 class="curso-h">Curso<br><em>Tech Writer</em></h2>
+    </div>
+    <div>
+      <!-- EDITAR: Descrição do curso -->
+      <p class="curso-desc">Programa de preparação para profissionais que querem entrar (ou se reposicionar) em documentação de software. Da escrita técnica ao docs-as-code, passando por IA aplicada, métricas e portfólio.</p>
+      <a href="#" onclick="openModal('request')" class="btn-fill">Entrar na lista →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SOBRE
+══════════════════════════════════════ -->
+<section class="section-outer" id="sobre">
+  <div class="section-wrap">
+    <p class="sec-tag" style="margin-bottom:12px">Sobre</p>
+    <div style="display:grid;grid-template-columns:5fr 7fr;gap:80px;align-items:start">
+      <div>
+        <!-- EDITAR: Título sobre -->
+        <h2 class="sec-h2">Fabiana<br><em>Nonjah.</em></h2>
+      </div>
+      <div>
+        <!-- EDITAR: Bio completa -->
+        <p style="font-size:17px;font-weight:400;color:var(--ink-soft);line-height:1.7;margin-bottom:20px">
+          Analista de Documentação de Software Sênior com 7+ anos em empresas SaaS. Comecei escrevendo manuais
+          que ninguém lia e fui descobrindo que o problema raramente é o leitor — é o sistema que produz o conteúdo.
+        </p>
+        <p style="font-size:17px;font-weight:400;color:var(--ink-soft);line-height:1.7;margin-bottom:20px">
+          Desde então, conduzo documentação em produtos SaaS como um ecossistema: arquitetura de informação,
+          docs-as-code, métricas, IA aplicada e revisão editorial caminhando juntos.
+        </p>
+        <p style="font-size:17px;font-weight:400;color:var(--ink-soft);line-height:1.7">
+          Em <a href="https://docspace.tec.br" target="_blank" class="hu" style="color:var(--ink);font-weight:500">docspace.tec.br</a> estou
+          construindo a base pública dos meus projetos e um curso de preparação para quem quer entrar em tech writing — sobretudo no Brasil.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FOOTER / CONTATO
+══════════════════════════════════════ -->
+<footer id="contato">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-col-label">Vamos conversar</p>
+        <div class="footer-tagline">Documentação<br><em>que move</em><br>produto.</div>
+        <!-- EDITAR: E-mail de contato -->
+        <a href="mailto:fabiana@docspace.tec.br" class="footer-email hu">fabiana@docspace.tec.br →</a>
+      </div>
+      <div>
+        <p class="footer-col-label">Navegação</p>
+        <!-- EDITAR: Links de navegação do footer -->
+        <a href="#cases" class="footer-link hu">Cases</a>
+        <a href="#ia" class="footer-link hu">IA & Automações</a>
+        <a href="#" class="footer-link hu">Curso Tech Writer</a>
+        <a href="#sobre" class="footer-link hu">Sobre</a>
+      </div>
+      <div>
+        <p class="footer-col-label">Outros canais</p>
+        <!-- EDITAR: Links dos canais -->
+        <a href="https://www.linkedin.com/in/fabiana-nonjah-techwriter/" target="_blank" rel="noreferrer" class="footer-link hu">LinkedIn · /in/fabiana-nonjah-techwriter</a>
+        <a href="https://github.com/Fabiana444" target="_blank" rel="noreferrer" class="footer-link hu">GitHub · /Fabiana444</a>
+        <a href="https://docspace.tec.br" target="_blank" rel="noreferrer" class="footer-link hu">docspace.tec.br</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Fabiana Nonjah. Tipografia: Syne & Plus Jakarta Sans.</span>
+      <!-- EDITAR: Status do footer -->
+      <span class="footer-status">v2.0 · Brasil 🇧🇷 · disponível para vagas remotas</span>
+    </div>
+  </div>
 </footer>
 
+<!-- ══════════════════════════════════════
+     MODAL DE AUTH (LOGIN / SOLICITAR)
+══════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="auth-modal" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
 
-<!-- ═══════════════════════════════════════════════════════════
-     MODAL DE AUTENTICAÇÃO
-═══════════════════════════════════════════════════════════ -->
-<div id="auth-modal" class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="glass p-10 rounded-[2.5rem] w-full max-w-md relative border border-white/5 shadow-2xl">
-        
-        <button onclick="closeAuthModal()" class="absolute top-8 right-8 text-slate-500 hover:text-white transition">
-            <i class="lucide-x" style="font-size:20px"></i>
-        </button>
-
-        <!-- Tabs -->
-        <div class="flex bg-slate-900 p-1.5 rounded-2xl mb-8 border border-slate-800">
-            <button id="tab-login" onclick="setAuthMode('login')" class="flex-1 py-3 rounded-xl text-xs font-bold transition">Entrar</button>
-            <button id="tab-request" onclick="setAuthMode('request')" class="flex-1 py-3 rounded-xl text-xs font-bold transition">Solicitar Acesso</button>
-        </div>
-
-        <!-- FORM: Login -->
-        <div id="form-login">
-            <h2 class="text-xl font-black mb-2 tracking-tight">Bem-vindo de volta</h2>
-            <p class="text-slate-400 text-sm mb-8">Entre com sua conta para acessar os ambientes.</p>
-            <div class="space-y-4">
-                <input id="login-email" type="email" placeholder="seu@email.com" 
-                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white placeholder-slate-600 focus:border-indigo-500 transition">
-                <input id="login-password" type="password" placeholder="Senha" 
-                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white placeholder-slate-600 focus:border-indigo-500 transition">
-                <p id="login-error" class="text-red-400 text-xs hidden"></p>
-                <button id="btn-login" onclick="doLogin()" 
-                    class="w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-2xl font-bold text-sm transition shadow-xl shadow-indigo-500/20 flex items-center justify-center gap-2">
-                    Acessar
-                </button>
-            </div>
-            <p class="text-center text-slate-500 text-xs mt-6">
-                Não tem acesso? <button onclick="setAuthMode('request')" class="text-indigo-400 hover:text-indigo-300 font-bold">Solicite aqui</button>
-            </p>
-        </div>
-
-        <!-- FORM: Solicitar Acesso -->
-        <div id="form-request" class="hidden">
-            <h2 class="text-xl font-black mb-2 tracking-tight">Solicitar Acesso</h2>
-            <p class="text-slate-400 text-sm mb-8">Preencha o formulário. O admin entrará em contato.</p>
-            <div class="space-y-3">
-                <input id="req-name" type="text" placeholder="Nome completo *" 
-                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white placeholder-slate-600 focus:border-indigo-500 transition">
-                <input id="req-email" type="email" placeholder="E-mail *" 
-                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white placeholder-slate-600 focus:border-indigo-500 transition">
-                <input id="req-company" type="text" placeholder="Empresa" 
-                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white placeholder-slate-600 focus:border-indigo-500 transition">
-                <input id="req-jobtitle" type="text" placeholder="Cargo" 
-                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white placeholder-slate-600 focus:border-indigo-500 transition">
-                <select id="req-environment" 
-                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-slate-400 focus:border-indigo-500 transition">
-                    <option value="">Qual ambiente deseja acessar? *</option>
-                    <option value="docs">Documentação Técnica</option>
-                    <option value="academy">Academy Tech Writer</option>
-                    <option value="both">Ambos</option>
-                </select>
-                <textarea id="req-justification" placeholder="Por que você deseja acessar este conteúdo?" rows="3"
-                    class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 outline-none text-sm text-white placeholder-slate-600 focus:border-indigo-500 transition resize-none"></textarea>
-                <p id="req-error" class="text-red-400 text-xs hidden"></p>
-                <button id="btn-request" onclick="doRequestAccess()" 
-                    class="w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-2xl font-bold text-sm transition shadow-xl flex items-center justify-center gap-2">
-                    Enviar Solicitação
-                </button>
-            </div>
-        </div>
+    <!-- Tabs -->
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login" onclick="switchModalTab('login')">Entrar</button>
+      <button class="modal-tab" id="tab-request" onclick="switchModalTab('request')">Solicitar acesso</button>
     </div>
+
+    <!-- LOGIN -->
+    <div id="form-login">
+      <h2 class="modal-title">Bem-vindo de volta</h2>
+      <p class="modal-sub">Entre para acessar Documentação Técnica e Academy.</p>
+      <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <input id="login-email" type="email" class="form-input" placeholder="seu@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Senha</label>
+        <input id="login-password" type="password" class="form-input" placeholder="••••••••">
+      </div>
+      <p class="form-error" id="login-error"></p>
+      <button class="btn-fill" style="width:100%;justify-content:center;margin-top:8px" id="btn-login" onclick="doLogin()">
+        Acessar
+      </button>
+      <p style="font-size:13px;color:var(--ink-soft);margin-top:20px;text-align:center">
+        Não tem acesso? <button onclick="switchModalTab('request')" style="background:none;border:none;cursor:pointer;color:var(--ink);font-weight:600;font-size:13px;text-decoration:underline">Solicite aqui</button>
+      </p>
+    </div>
+
+    <!-- SOLICITAR ACESSO -->
+    <div id="form-request" class="hidden">
+      <h2 class="modal-title">Solicitar acesso</h2>
+      <p class="modal-sub">O administrador analisará e entrará em contato.</p>
+      <div class="form-group">
+        <label class="form-label">Nome completo *</label>
+        <input id="req-name" type="text" class="form-input" placeholder="Seu nome">
+      </div>
+      <div class="form-group">
+        <label class="form-label">E-mail *</label>
+        <input id="req-email" type="email" class="form-input" placeholder="seu@email.com">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="form-group">
+          <label class="form-label">Empresa</label>
+          <input id="req-company" type="text" class="form-input" placeholder="Empresa">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cargo</label>
+          <input id="req-jobtitle" type="text" class="form-input" placeholder="Seu cargo">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ambiente desejado *</label>
+        <select id="req-env" class="form-input">
+          <option value="">Selecione...</option>
+          <option value="docs">Documentação Técnica</option>
+          <option value="academy">Academy Tech Writer</option>
+          <option value="both">Ambos</option>
+        </select>
+      </div>
+      <p class="form-error" id="req-error"></p>
+      <button class="btn-fill" style="width:100%;justify-content:center;margin-top:8px" id="btn-request" onclick="doRequestAccess()">
+        Enviar solicitação
+      </button>
+    </div>
+  </div>
 </div>
 
+<!-- ══════════════════════════════════════
+     BOT FLUTUANTE — fundo PRETO, texto branco
+══════════════════════════════════════ -->
+<div class="bot-panel" id="botPanel">
+  <div class="bot-tabs">
+    <button class="bot-tab active" onclick="switchBotTab('chat',this)">Chat</button>
+    <button class="bot-tab" onclick="switchBotTab('faq',this)">FAQ</button>
+    <button class="bot-tab" onclick="switchBotTab('agendar',this)">Agendar</button>
+  </div>
+  <div class="bot-header">
+    <p class="bot-header-tag">Agente IA</p>
+    <p class="bot-header-title">Bot de Pré-entrevista</p>
+  </div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     TOAST NOTIFICATION
-═══════════════════════════════════════════════════════════ -->
-<div id="toast" class="hidden">
-    <div id="toast-inner" class="toast-inner">
-        <span id="toast-msg"></span>
+  <!-- CHAT — iframe do agente real -->
+  <div class="bot-view active" id="view-chat">
+    <!-- EDITAR: URL do agente de IA -->
+    <iframe
+      class="bot-iframe"
+      src="https://aistudio.google.com/apps/1e4ca1d4-e221-471a-bbeb-bfd85ab7c7d5?showPreview=true"
+      title="Bot de Pré-entrevista — Fabiana Nonjah"
+      allow="microphone"
+    ></iframe>
+  </div>
+
+  <!-- FAQ -->
+  <div class="bot-view" id="view-faq">
+    <div class="bot-faq">
+      <!-- EDITAR: Perguntas e respostas do FAQ -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Por que contratar a Fabiana? <span class="faq-icon">+</span></button>
+        <p class="faq-a">7+ anos em documentação SaaS, domínio de docs-as-code, IA aplicada e automação de pipelines. Entrega documentação que reduz tickets e acelera onboarding com método — não só texto bem escrito.</p>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Quais ferramentas ela domina? <span class="faq-icon">+</span></button>
+        <p class="faq-a">Confluence, WordPress, Azure DevOps, Jira, Postman, Swagger, Docusaurus, MkDocs, Power Automate, SharePoint, GitHub Actions, Claude, GPT, Gemini, RAG, OpenAPI 3.1, Markdown/MDX.</p>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Como ela usa IA na documentação? <span class="faq-icon">+</span></button>
+        <p class="faq-a">Agentes com persona e guardrails, RAG sobre knowledge base, prompts versionados como código, geração assistida de release notes com revisão humana, estruturas de conteúdo para FAQ inteligente omnichannel.</p>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Está disponível para vagas? <span class="faq-icon">+</span></button>
+        <p class="faq-a">Sim. Disponível para vagas remotas e projetos pontuais de documentação SaaS e consultoria em IA aplicada. Resposta em até 2 dias úteis.</p>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Cases mais relevantes? <span class="faq-icon">+</span></button>
+        <p class="faq-a">Refatoração de KB SaaS com 800+ artigos (−42% tickets), docs-as-code para API pública (47min → 9min), pipeline de release notes com IA (8h → 25min), e este agente de pré-entrevista rodando em produção.</p>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Qual sua experiência com SaaS? <span class="faq-icon">+</span></button>
+        <p class="faq-a">7+ anos em empresas SaaS, incluindo Smartspace (plataformas omnichannel) e NDD Tech. Especialista em documentação funcional, APIs, FAQs e materiais de onboarding para times de implantação, suporte e CS.</p>
+      </div>
     </div>
+  </div>
+
+  <!-- AGENDAR -->
+  <div class="bot-view" id="view-agendar">
+    <div class="bot-schedule">
+      <p class="schedule-title">Agendar conversa</p>
+      <p class="schedule-sub">Prefere uma conversa rápida? Escolha o canal abaixo:</p>
+      <!-- EDITAR: Número do WhatsApp e e-mail -->
+      <a href="https://wa.me/5549991503538?text=Ol%C3%A1%20Fabiana%2C%20vi%20seu%20portf%C3%B3lio%20no%20DocSpace%20e%20gostaria%20de%20conversar%20sobre%20uma%20oportunidade." target="_blank" rel="noreferrer" class="schedule-btn">
+        <span class="schedule-icon">💬</span>
+        <div>
+          <div class="schedule-info-title">WhatsApp</div>
+          <div class="schedule-info-sub">Resposta rápida em horário comercial</div>
+        </div>
+      </a>
+      <a href="mailto:fabiana@docspace.tec.br?subject=Oportunidade%20via%20DocSpace&body=Ol%C3%A1%20Fabiana%2C%0A%0AVi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar..." class="schedule-btn">
+        <span class="schedule-icon">✉️</span>
+        <div>
+          <div class="schedule-info-title">E-mail</div>
+          <div class="schedule-info-sub">fabiana@docspace.tec.br · até 2 dias úteis</div>
+        </div>
+      </a>
+      <a href="https://www.linkedin.com/in/fabiana-nonjah-techwriter/" target="_blank" rel="noreferrer" class="schedule-btn">
+        <span class="schedule-icon">🔗</span>
+        <div>
+          <div class="schedule-info-title">LinkedIn</div>
+          <div class="schedule-info-sub">/in/fabiana-nonjah-techwriter</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Botão Fechar dentro do painel — fundo preto, texto branco -->
+  <div class="bot-close-bar">
+    <button class="bot-close-btn" onclick="closeBotPanel()">● Fechar</button>
+  </div>
 </div>
 
+<!-- Botão flutuante — alterna entre Pré-entrevista e Fechar -->
+<button class="bot-trigger" id="botTrigger" onclick="toggleBot()">
+  <div class="bot-ping"><div class="bot-ping-outer"></div><div class="bot-ping-inner"></div></div>
+  <span id="botTriggerLabel">Pré-entrevista</span>
+</button>
 
-<!-- ═══════════════════════════════════════════════════════════
+<!-- Toast -->
+<div id="toast"><div id="toast-inner" class="toast-inner"></div></div>
+
+<!-- ══════════════════════════════════════
      JAVASCRIPT
-═══════════════════════════════════════════════════════════ -->
+══════════════════════════════════════ -->
 <script>
-// ── CONFIGURAÇÃO SUPABASE ───────────────────────────────────
-// Substitua pelos valores do seu projeto em supabase.com → Settings → API
-const SUPABASE_URL = 'https://nukxorxurwzaxrlrfxrn.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_xyNrCwzJd-bTg-FG_lsXug_x1D90wUA';
+// ── SUPABASE ─────────────────────────────────────────────
+// EDITAR: Substitua com suas chaves reais do Supabase
+const SUPABASE_URL = 'https://SUA_URL.supabase.co';
+const SUPABASE_KEY = 'SUA_ANON_KEY';
 const _db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ── ESTADO GLOBAL ───────────────────────────────────────────
 let currentUser = null;
 let currentProfile = null;
-let userAccessList = [];  // slugs dos ambientes que o usuário tem acesso
+let userAccessList = [];
 
-// ── INICIALIZAÇÃO ───────────────────────────────────────────
+// ── INICIALIZAÇÃO ────────────────────────────────────────
 window.addEventListener('load', async () => {
-    await restoreSession();
+  await restoreSession();
+  // Fallback da foto se não carregar
+  const photo = document.getElementById('hero-photo');
+  if (photo) {
+    photo.onerror = () => {
+      photo.style.display = 'none';
+      photo.parentElement.innerHTML = '<span class="hero-photo-placeholder">FN</span>';
+    };
+  }
 });
 
-// Monitora mudanças de autenticação (login/logout em outras abas)
 _db.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_IN' && session) {
-        await loadUserData(session.user);
-    } else if (event === 'SIGNED_OUT') {
-        clearUserState();
-    }
+  if (event === 'SIGNED_IN' && session) await loadUserData(session.user);
+  else if (event === 'SIGNED_OUT') clearUserState();
 });
 
-// ── SESSÃO ──────────────────────────────────────────────────
 async function restoreSession() {
-    const { data: { session } } = await _db.auth.getSession();
-    if (session?.user) {
-        await loadUserData(session.user);
-    }
+  const { data: { session } } = await _db.auth.getSession();
+  if (session?.user) await loadUserData(session.user);
 }
 
 async function loadUserData(user) {
-    currentUser = user;
-
-    // Busca o perfil (role, nome, etc.)
-    const { data: profile } = await _db
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-    
-    currentProfile = profile;
-
-    // Busca os ambientes que o usuário tem acesso
-    const { data: accesses } = await _db
-        .from('user_access')
-        .select('is_active, environments!inner(slug)')
-        .eq('user_id', user.id)
-        .eq('is_active', true);
-
-    userAccessList = accesses?.map(a => a.environments.slug) ?? [];
-
-    updateAuthUI();
-    updateEnvironmentCards();
+  currentUser = user;
+  const { data: profile } = await _db.from('profiles').select('*').eq('id', user.id).single();
+  currentProfile = profile;
+  const { data: accesses } = await _db
+    .from('user_access')
+    .select('is_active, environments!inner(slug)')
+    .eq('user_id', user.id)
+    .eq('is_active', true);
+  userAccessList = accesses?.map(a => a.environments.slug) ?? [];
+  updateAuthUI();
 }
 
 function clearUserState() {
-    currentUser = null;
-    currentProfile = null;
-    userAccessList = [];
-    updateAuthUI();
-    updateEnvironmentCards();
+  currentUser = null; currentProfile = null; userAccessList = [];
+  updateAuthUI();
 }
 
-// ── UI: AUTH AREA ────────────────────────────────────────────
 function updateAuthUI() {
-    const area = document.getElementById('auth-area');
-    if (currentUser) {
-        const name = currentProfile?.full_name || currentUser.email;
-        const isAdmin = currentProfile?.role === 'admin';
-        area.innerHTML = `
-            <div class="flex items-center gap-3">
-                ${isAdmin ? `<span class="text-[10px] bg-indigo-500/20 text-indigo-400 px-2 py-1 rounded-full font-bold">ADMIN</span>` : ''}
-                <span class="text-sm text-slate-300 font-semibold hidden md:block">${name.split(' ')[0]}</span>
-                <button onclick="doLogout()" class="border border-slate-700 hover:border-red-500 text-slate-400 hover:text-red-400 px-4 py-2 rounded-full text-xs font-bold transition">Sair</button>
-            </div>
-        `;
-    } else {
-        area.innerHTML = `
-            <button onclick="openAuthModal('login')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-full text-xs font-bold transition shadow-lg shadow-indigo-500/20">Entrar</button>
-        `;
-    }
+  const area = document.getElementById('auth-area');
+  if (currentUser) {
+    const name = currentProfile?.full_name || currentUser.email.split('@')[0];
+    const isAdmin = currentProfile?.role === 'admin';
+    area.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px">
+        ${isAdmin ? '<span style="font-size:10px;font-family:var(--font-mono);color:var(--indigo);letter-spacing:.1em;text-transform:uppercase">Admin</span>' : ''}
+        <span style="font-size:13px;font-weight:500">${name.split(' ')[0]}</span>
+        <button onclick="doLogout()" style="font-size:12px;font-weight:600;color:var(--ink-soft);background:none;border:1px solid var(--rule);padding:6px 12px;cursor:pointer;font-family:var(--font-sans);border-radius:.25rem" onmouseover="this.style.borderColor='var(--ink)'" onmouseout="this.style.borderColor='var(--rule)'">Sair</button>
+      </div>`;
+  } else {
+    area.innerHTML = '<button class="btn-entrar" onclick="openModal(\'login\')">Entrar</button>';
+  }
 }
 
-// ── UI: CARDS DE AMBIENTE ────────────────────────────────────
-function updateEnvironmentCards() {
-    const hasDocsAccess = userAccessList.includes('docs') || currentProfile?.role === 'admin';
-    const hasAcademyAccess = userAccessList.includes('academy') || currentProfile?.role === 'admin';
-
-    const cardDocs = document.getElementById('card-docs');
-    const badgeDocs = document.getElementById('badge-docs');
-    if (hasDocsAccess) {
-        badgeDocs.textContent = 'ACESSO LIBERADO';
-        badgeDocs.className = 'text-[10px] bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full font-bold';
-        cardDocs.className = cardDocs.className.replace('env-locked','') + ' env-unlocked';
-    }
-
-    const cardAcademy = document.getElementById('card-academy');
-    const badgeAcademy = document.getElementById('badge-academy');
-    if (hasAcademyAccess) {
-        badgeAcademy.textContent = 'ACESSO LIBERADO';
-        badgeAcademy.className = 'text-[10px] bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full font-bold';
-        cardAcademy.className = cardAcademy.className.replace('env-locked','') + ' env-unlocked';
-    }
-}
-
-// ── GATE CHECK: Verifica acesso antes de abrir ambiente ──────
+// ── AUTH GATE ────────────────────────────────────────────
 async function gateCheck(envSlug) {
-    if (!currentUser) {
-        openAuthModal('login');
-        return;
-    }
-    const hasAccess = userAccessList.includes(envSlug) || currentProfile?.role === 'admin';
-    if (!hasAccess) {
-        showToast(`Você não tem acesso ao ambiente ${envSlug === 'docs' ? 'Documentação' : 'Academy'}. Solicite acesso.`, 'error');
-        openAuthModal('request');
-        return;
-    }
-    showView(envSlug);
+  if (!currentUser) { openModal('login'); return; }
+  const hasAccess = userAccessList.includes(envSlug) || currentProfile?.role === 'admin';
+  if (!hasAccess) {
+    showToast('Solicite acesso para visualizar este ambiente.', 'info');
+    openModal('request');
+    return;
+  }
+  window.location.href = envSlug === 'docs' ? 'docs.html' : 'academy.html';
 }
 
-// ── NAVEGAÇÃO ENTRE VIEWS ────────────────────────────────────
-function showView(view) {
-    const portfolio = document.getElementById('view-portfolio');
-    const restricted = document.getElementById('view-restricted');
-    const footer = document.getElementById('main-footer');
-    const tagline = document.getElementById('header-tagline');
-
-    if (view === 'portfolio') {
-        portfolio.classList.remove('hidden');
-        restricted.classList.add('hidden');
-        footer.classList.remove('hidden');
-        tagline.classList.add('hidden');
-    } else {
-        portfolio.classList.add('hidden');
-        restricted.classList.remove('hidden');
-        footer.classList.add('hidden');
-        tagline.classList.remove('hidden');
-        buildRestrictedView(view);
-    }
-    window.scrollTo(0, 0);
-}
-
-function goHome() {
-    showView('portfolio');
-}
-
-// ── AMBIENTE RESTRITO: Conteúdo ──────────────────────────────
-function buildRestrictedView(env) {
-    const nav = document.getElementById('sidebar-nav');
-    const content = document.getElementById('doc-content');
-
-    if (env === 'docs') {
-        nav.innerHTML = `
-            <div class="sidebar-section">Documentação SaaS</div>
-            <button class="sidebar-link active">Início</button>
-            <div class="sidebar-section">Manuais</div>
-            <button class="sidebar-link">Guia de Início Rápido</button>
-            <button class="sidebar-link">Manual do Usuário</button>
-            <div class="sidebar-section">Tutoriais</div>
-            <button class="sidebar-link">Primeiros Passos</button>
-            <div class="sidebar-section">Release Notes</div>
-            <button class="sidebar-link">v2.0.0 — Maio 2025</button>
-            <div class="sidebar-section">FAQs</div>
-            <button class="sidebar-link">Perguntas Frequentes</button>
-        `;
-        content.innerHTML = `
-            <div class="mb-4 flex items-center gap-2">
-                <button onclick="goHome()" class="text-slate-500 hover:text-white text-sm transition flex items-center gap-1"><i class="lucide-home"></i> Home</button>
-                <span class="text-slate-700">/</span>
-                <span class="text-slate-400 text-sm">Documentação Técnica</span>
-            </div>
-            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full font-bold">PÚBLICO</span>
-            <h1 class="text-4xl font-black tracking-tight mt-6 mb-4">Documentação Técnica</h1>
-            <p class="text-slate-400 leading-relaxed text-lg mb-8">Bem-vindo à área de Documentação SaaS. Selecione um item no menu lateral para começar.</p>
-            <div class="grid gap-6">
-                <div class="glass p-6 rounded-2xl border border-white/5">
-                    <h3 class="font-bold mb-2 flex items-center gap-2"><i class="lucide-file-text text-indigo-400"></i> Manuais e Tutoriais</h3>
-                    <p class="text-slate-400 text-sm">Documentação completa de software SaaS, guias de início rápido e tutoriais passo a passo.</p>
-                </div>
-                <div class="glass p-6 rounded-2xl border border-white/5">
-                    <h3 class="font-bold mb-2 flex items-center gap-2"><i class="lucide-tag text-amber-400"></i> Release Notes</h3>
-                    <p class="text-slate-400 text-sm">Notas de versão com versionamento semântico e histórico completo de mudanças.</p>
-                </div>
-                <div class="glass p-6 rounded-2xl border border-white/5">
-                    <h3 class="font-bold mb-2 flex items-center gap-2"><i class="lucide-help-circle text-emerald-400"></i> FAQs</h3>
-                    <p class="text-slate-400 text-sm">Perguntas frequentes organizadas por categoria e com busca integrada.</p>
-                </div>
-            </div>
-        `;
-    } else if (env === 'academy') {
-        nav.innerHTML = `
-            <div class="sidebar-section">Academy Tech Writer</div>
-            <button class="sidebar-link active">Início</button>
-            <div class="sidebar-section">Módulo 1</div>
-            <button class="sidebar-link">Fundamentos de Tech Writing</button>
-            <button class="sidebar-link">Ferramentas Essenciais</button>
-            <div class="sidebar-section">Módulo 2</div>
-            <button class="sidebar-link">Documentação SaaS</button>
-            <button class="sidebar-link">APIs e Swagger</button>
-            <div class="sidebar-section">Módulo 3</div>
-            <button class="sidebar-link">IA aplicada à Documentação</button>
-        `;
-        content.innerHTML = `
-            <div class="mb-4 flex items-center gap-2">
-                <button onclick="goHome()" class="text-slate-500 hover:text-white text-sm transition flex items-center gap-1"><i class="lucide-home"></i> Home</button>
-                <span class="text-slate-700">/</span>
-                <span class="text-slate-400 text-sm">Academy Tech Writer</span>
-            </div>
-            <span class="text-[10px] bg-violet-500/20 text-violet-400 px-3 py-1 rounded-full font-bold">ACADEMY</span>
-            <h1 class="text-4xl font-black tracking-tight mt-6 mb-4">Academy Tech Writer</h1>
-            <p class="text-slate-400 leading-relaxed text-lg mb-8">Formação completa para Technical Writers. Selecione um módulo no menu lateral para começar.</p>
-            <div class="grid gap-6">
-                <div class="glass p-6 rounded-2xl border border-white/5">
-                    <div class="flex justify-between items-start mb-3">
-                        <h3 class="font-bold flex items-center gap-2"><i class="lucide-play-circle text-violet-400"></i> Módulo 1: Fundamentos</h3>
-                        <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded-full">2 aulas</span>
-                    </div>
-                    <p class="text-slate-400 text-sm">Bases teóricas e práticas do Technical Writing moderno.</p>
-                </div>
-                <div class="glass p-6 rounded-2xl border border-white/5">
-                    <div class="flex justify-between items-start mb-3">
-                        <h3 class="font-bold flex items-center gap-2"><i class="lucide-code text-indigo-400"></i> Módulo 2: Docs SaaS</h3>
-                        <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded-full">2 aulas</span>
-                    </div>
-                    <p class="text-slate-400 text-sm">Documentação de produtos digitais e APIs REST.</p>
-                </div>
-                <div class="glass p-6 rounded-2xl border border-white/5">
-                    <div class="flex justify-between items-start mb-3">
-                        <h3 class="font-bold flex items-center gap-2"><i class="lucide-bot text-emerald-400"></i> Módulo 3: IA na Documentação</h3>
-                        <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded-full">1 aula</span>
-                    </div>
-                    <p class="text-slate-400 text-sm">Automação, prompts e ferramentas de IA para documentação técnica.</p>
-                </div>
-            </div>
-        `;
-    }
-}
-
-// ── LOGIN ─────────────────────────────────────────────────────
+// ── LOGIN ────────────────────────────────────────────────
 async function doLogin() {
-    const email = document.getElementById('login-email').value.trim();
-    const password = document.getElementById('login-password').value;
-    const errEl = document.getElementById('login-error');
-    const btn = document.getElementById('btn-login');
-
-    if (!email || !password) {
-        errEl.textContent = 'Preencha e-mail e senha.';
-        errEl.classList.remove('hidden');
-        return;
-    }
-
-    btn.innerHTML = '<div class="spinner"></div> Entrando...';
-    btn.disabled = true;
-    errEl.classList.add('hidden');
-
-    const { data, error } = await _db.auth.signInWithPassword({ email, password });
-
-    if (error) {
-        errEl.textContent = error.message === 'Invalid login credentials'
-            ? 'E-mail ou senha incorretos.'
-            : 'Erro ao entrar. Tente novamente.';
-        errEl.classList.remove('hidden');
-        btn.innerHTML = 'Acessar';
-        btn.disabled = false;
-        return;
-    }
-
-    await loadUserData(data.user);
-    closeAuthModal();
-    showToast(`Bem-vindo, ${currentProfile?.full_name?.split(' ')[0] || 'usuário'}!`, 'success');
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  const btn = document.getElementById('btn-login');
+  if (!email || !password) { showError(errEl, 'Preencha e-mail e senha.'); return; }
+  btn.innerHTML = '<span class="spinner"></span> Entrando...';
+  btn.disabled = true;
+  errEl.style.display = 'none';
+  const { data, error } = await _db.auth.signInWithPassword({ email, password });
+  if (error) {
+    showError(errEl, 'E-mail ou senha incorretos.');
+    btn.innerHTML = 'Acessar'; btn.disabled = false; return;
+  }
+  await loadUserData(data.user);
+  closeModal();
+  showToast(`Bem-vindo, ${currentProfile?.full_name?.split(' ')[0] || 'usuário'}!`, 'success');
 }
 
-// ── LOGOUT ────────────────────────────────────────────────────
+// ── LOGOUT ───────────────────────────────────────────────
 async function doLogout() {
-    await _db.auth.signOut();
-    clearUserState();
-    showView('portfolio');
-    showToast('Você saiu da sua conta.', 'info');
+  await _db.auth.signOut();
+  clearUserState();
+  showToast('Sessão encerrada.', 'info');
 }
 
-// ── SOLICITAR ACESSO ─────────────────────────────────────────
+// ── SOLICITAR ACESSO ─────────────────────────────────────
 async function doRequestAccess() {
-    const name = document.getElementById('req-name').value.trim();
-    const email = document.getElementById('req-email').value.trim();
-    const company = document.getElementById('req-company').value.trim();
-    const jobtitle = document.getElementById('req-jobtitle').value.trim();
-    const envSlug = document.getElementById('req-environment').value;
-    const justification = document.getElementById('req-justification').value.trim();
-    const errEl = document.getElementById('req-error');
-    const btn = document.getElementById('btn-request');
-
-    if (!name || !email || !envSlug) {
-        errEl.textContent = 'Preencha os campos obrigatórios (nome, e-mail e ambiente).';
-        errEl.classList.remove('hidden');
-        return;
-    }
-
-    btn.innerHTML = '<div class="spinner"></div> Enviando...';
-    btn.disabled = true;
-    errEl.classList.add('hidden');
-
-    // Busca o ID do ambiente
-    const slugsToFetch = envSlug === 'both' ? ['docs', 'academy'] : [envSlug];
-    const { data: envs } = await _db.from('environments').select('id, slug').in('slug', slugsToFetch);
-
-    if (!envs || envs.length === 0) {
-        errEl.textContent = 'Erro ao identificar o ambiente. Tente novamente.';
-        errEl.classList.remove('hidden');
-        btn.innerHTML = 'Enviar Solicitação';
-        btn.disabled = false;
-        return;
-    }
-
-    // Insere uma solicitação para cada ambiente selecionado
-    const requests = envs.map(env => ({
-        email,
-        full_name: name,
-        company: company || null,
-        job_title: jobtitle || null,
-        environment_id: env.id,
-        justification: justification || null,
-    }));
-
-    const { error } = await _db.from('access_requests').insert(requests);
-
-    if (error) {
-        errEl.textContent = 'Erro ao enviar solicitação. Tente novamente.';
-        errEl.classList.remove('hidden');
-        btn.innerHTML = 'Enviar Solicitação';
-        btn.disabled = false;
-        return;
-    }
-
-    closeAuthModal();
-    showToast('Solicitação enviada! O administrador analisará em breve.', 'success');
+  const name = document.getElementById('req-name').value.trim();
+  const email = document.getElementById('req-email').value.trim();
+  const company = document.getElementById('req-company').value.trim();
+  const jobtitle = document.getElementById('req-jobtitle').value.trim();
+  const envSlug = document.getElementById('req-env').value;
+  const errEl = document.getElementById('req-error');
+  const btn = document.getElementById('btn-request');
+  if (!name || !email || !envSlug) { showError(errEl, 'Preencha os campos obrigatórios.'); return; }
+  btn.innerHTML = '<span class="spinner"></span> Enviando...'; btn.disabled = true;
+  const slugs = envSlug === 'both' ? ['docs','academy'] : [envSlug];
+  const { data: envs } = await _db.from('environments').select('id,slug').in('slug', slugs);
+  if (!envs?.length) { showError(errEl, 'Erro ao identificar ambiente.'); btn.innerHTML = 'Enviar solicitação'; btn.disabled = false; return; }
+  const { error } = await _db.from('access_requests').insert(envs.map(e => ({ email, full_name: name, company: company||null, job_title: jobtitle||null, environment_id: e.id })));
+  if (error) { showError(errEl, 'Erro ao enviar. Tente novamente.'); btn.innerHTML = 'Enviar solicitação'; btn.disabled = false; return; }
+  closeModal();
+  showToast('Solicitação enviada! O admin analisará em breve.', 'success');
 }
 
-// ── MODAL ─────────────────────────────────────────────────────
-function openAuthModal(mode = 'login') {
-    document.getElementById('auth-modal').classList.remove('hidden');
-    setAuthMode(mode);
+// ── MODAL ────────────────────────────────────────────────
+function openModal(tab = 'login') {
+  document.getElementById('auth-modal').classList.remove('hidden');
+  switchModalTab(tab);
+}
+function closeModal() { document.getElementById('auth-modal').classList.add('hidden'); }
+function closeModalOutside(e) { if (e.target === document.getElementById('auth-modal')) closeModal(); }
+function switchModalTab(tab) {
+  ['login','request'].forEach(t => {
+    document.getElementById('form-'+t).classList.toggle('hidden', t !== tab);
+    document.getElementById('tab-'+t).classList.toggle('active', t === tab);
+  });
 }
 
-function closeAuthModal() {
-    document.getElementById('auth-modal').classList.add('hidden');
-    // Limpa erros
-    document.getElementById('login-error').classList.add('hidden');
-    document.getElementById('req-error').classList.add('hidden');
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeBotPanel(); }});
+
+// ── BOT ──────────────────────────────────────────────────
+let botOpen = false;
+function toggleBot() {
+  botOpen = !botOpen;
+  document.getElementById('botPanel').classList.toggle('open', botOpen);
+  document.getElementById('botTriggerLabel').textContent = botOpen ? 'Fechar' : 'Pré-entrevista';
+}
+function closeBotPanel() {
+  botOpen = false;
+  document.getElementById('botPanel').classList.remove('open');
+  document.getElementById('botTriggerLabel').textContent = 'Pré-entrevista';
+}
+function switchBotTab(view, btn) {
+  document.querySelectorAll('.bot-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.bot-view').forEach(v => v.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('view-'+view).classList.add('active');
+}
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const was = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!was) item.classList.add('open');
 }
 
-function setAuthMode(mode) {
-    const formLogin = document.getElementById('form-login');
-    const formRequest = document.getElementById('form-request');
-    const tabLogin = document.getElementById('tab-login');
-    const tabRequest = document.getElementById('tab-request');
+// ── HOME ─────────────────────────────────────────────────
+function goHome() { window.scrollTo({top:0,behavior:'smooth'}); }
 
-    if (mode === 'login') {
-        formLogin.classList.remove('hidden');
-        formRequest.classList.add('hidden');
-        tabLogin.className = 'flex-1 py-3 rounded-xl bg-indigo-600 text-white text-xs font-bold transition';
-        tabRequest.className = 'flex-1 py-3 rounded-xl text-slate-500 text-xs font-bold transition';
-    } else {
-        formLogin.classList.add('hidden');
-        formRequest.classList.remove('hidden');
-        tabLogin.className = 'flex-1 py-3 rounded-xl text-slate-500 text-xs font-bold transition';
-        tabRequest.className = 'flex-1 py-3 rounded-xl bg-indigo-600 text-white text-xs font-bold transition';
-    }
-}
-
-// Fecha modal ao clicar fora
-document.getElementById('auth-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeAuthModal();
-});
-
-// Enter para fazer login
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !document.getElementById('form-login').classList.contains('hidden') && !document.getElementById('auth-modal').classList.contains('hidden')) {
-        doLogin();
-    }
-});
-
-// ── TOAST ─────────────────────────────────────────────────────
+// ── HELPERS ──────────────────────────────────────────────
+function showError(el, msg) { el.textContent = msg; el.style.display = 'block'; }
 function showToast(msg, type = 'info') {
-    const toast = document.getElementById('toast');
-    const inner = document.getElementById('toast-inner');
-    const msgEl = document.getElementById('toast-msg');
-
-    inner.className = `toast-inner toast-${type}`;
-    msgEl.textContent = msg;
-    toast.classList.remove('hidden');
-
-    setTimeout(() => { toast.classList.add('hidden'); }, 4000);
+  const toast = document.getElementById('toast');
+  const inner = document.getElementById('toast-inner');
+  inner.className = 'toast-inner toast-' + type;
+  inner.textContent = msg;
+  toast.style.display = 'block';
+  setTimeout(() => { toast.style.display = 'none'; }, 4000);
 }
 </script>
-
 </body>
 </html>
