@@ -505,7 +505,7 @@ select.m-form-input{cursor:pointer;appearance:none}
     </div>
     <div class="hero-photo-col">
       <div class="hero-photo-frame">
-        <img src="assets/img/fabiana-profile.jpg" alt="Fabiana Nonjah" id="hero-photo" onerror="this.style.display='none';this.parentElement.innerHTML='<span class=\'hero-photo-placeholder\'>https://nukxorxurwzaxrlrfxrn.supabase.co/storage/v1/object/public/portfolio/hero-photo-2.jpg.png</span>'">
+        <img src="assets/img/fabiana-profile.jpg" alt="Fabiana Nonjah" id="hero-photo" onerror="this.style.display='none';this.parentElement.innerHTML='<span class=\'hero-photo-placeholder\'>FN</span>'">
       </div>
       <div class="hero-avail">
         <p class="kicker" style="color:rgba(245,243,238,.6);margin-bottom:4px">Disponível</p>
@@ -705,7 +705,7 @@ select.m-form-input{cursor:pointer;appearance:none}
         docspace.tec.br ↗ <span class="onde-link-arrow">↗</span>
       </a>
       <div class="onde-link" style="cursor:pointer" onclick="toggleBot()">
-        Chat aqui no site ↗ <span class="onde-link-arrow" style="font-size:.8rem;color:var(--indigo)">●</span>
+        Chat aqui no site <span class="onde-link-arrow" style="font-size:.8rem;color:var(--indigo)">●</span>
       </div>
     </div>
   </div>
@@ -903,9 +903,9 @@ select.m-form-input{cursor:pointer;appearance:none}
   <div class="bot-view" id="view-faq">
     <div class="bot-faq">
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Por que contratar a Fabiana? <span class="faq-icon">+</span></button><p class="faq-a">7+ anos em documentação SaaS, domínio de docs-as-code, IA aplicada e automação de pipelines com Power Automate e GitHub Actions. Entrega documentação que reduz tickets e acelera onboarding — com método e métricas.</p></div>
-      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Quais ferramentas ela domina? <span class="faq-icon">+</span></button><p class="faq-a">Confluence, WordPress, Azure DevOps, Jira, Postman, Swagger, Power Automate, SharePoint, GitHub Actions, RAG, Markdown/MDX, EasyDocs.</p></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Quais ferramentas ela domina? <span class="faq-icon">+</span></button><p class="faq-a">Confluence, WordPress, Azure DevOps, Jira, Postman, Swagger, Docusaurus, MkDocs, Power Automate, SharePoint, GitHub Actions, Claude, GPT, Gemini, RAG, OpenAPI 3.1, Markdown/MDX, EasyDocs.</p></div>
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Como ela usa IA na documentação? <span class="faq-icon">+</span></button><p class="faq-a">Agentes com persona e guardrails, RAG sobre knowledge base, prompts versionados como código, geração assistida de release notes com revisão humana, estruturas de conteúdo para FAQ inteligente omnichannel.</p></div>
-      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Está disponível para vagas? <span class="faq-icon">+</span></button><p class="faq-a">Sim. Disponível para vagas remotas e projetos pontuais de documentação SaaS e consultoria em IA aplicada. Use o formulário de contato ou o WhatsApp na aba Agendar.</p></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Está disponível para vagas? <span class="faq-icon">+</span></button><p class="faq-a">Sim. Disponível para vagas remotas e projetos pontuais de documentação SaaS e consultoria em IA aplicada. Resposta em até 2 dias úteis. Use o formulário de contato ou o WhatsApp na aba Agendar.</p></div>
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Cases mais relevantes? <span class="faq-icon">+</span></button><p class="faq-a">Refatoração de KB SaaS com 800+ artigos (−42% tickets), docs-as-code para API pública (47min → 9min), pipeline de release notes com IA (8h → 25min), e este agente de pré-entrevista em produção.</p></div>
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Experiência com SaaS? <span class="faq-icon">+</span></button><p class="faq-a">7+ anos em empresas SaaS: Smartspace (plataformas omnichannel, 4 anos) e NDD Tech (3 anos). Especialista em documentação funcional, APIs, FAQs e materiais de onboarding para times de implantação, suporte e CS.</p></div>
     </div>
@@ -946,8 +946,8 @@ select.m-form-input{cursor:pointer;appearance:none}
 <script>
 // ── SUPABASE ─────────────────────────────────────────────
 // EDITAR: Substitua com suas chaves reais
-const SUPABASE_URL = 'https://nukxorxurwzaxrlrfxrn.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_xyNrCwzJd-bTg-FG_lsXug_x1D90wUA';
+const SUPABASE_URL = 'https://SUA_URL.supabase.co';
+const SUPABASE_KEY = 'SUA_ANON_KEY';
  
 let _db = null;
 // Inicializa Supabase com tolerância a falha de configuração
@@ -968,7 +968,7 @@ window.addEventListener('load', async () => {
   const photo = document.getElementById('hero-photo');
   if (photo) photo.onerror = () => {
     photo.style.display = 'none';
-    photo.parentElement.innerHTML = '<span class="https://nukxorxurwzaxrlrfxrn.supabase.co/storage/v1/object/public/portfolio/hero-photo-2.jpg.png">FN</span>';
+    photo.parentElement.innerHTML = '<span class="hero-photo-placeholder">FN</span>';
   };
 });
  
